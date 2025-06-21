@@ -1,0 +1,562 @@
+{% extends 'layout/sysFaculty/sysFaculty_layout.html' %}
+
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}myPUPQC || Iskahub Management{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/bs-stepper/bs-stepper.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/animate-css/animate.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/bootstrap-select/bootstrap-select.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/tagify/tagify.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/dropzone/dropzone.css' %}" />
+
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+
+<script src="{% static 'vendor/libs/cleavejs/cleave.js' %}"></script>
+<script src="{% static 'vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/bs-stepper/bs-stepper.js' %}"></script>
+
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+
+<script src="{% static 'vendor/libs/dropzone/dropzone.js' %}"></script>
+
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+
+<script src="{% static 'js/ui-popover.js' %}"></script>
+<script src="{% static 'js/extended-ui-sweetalert2.js' %}"></script>
+<script src="{% static 'js/form-validation.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'myClient/js/moderator/table/tables-publish-basic.js' %}"></script>
+<script src="{% static 'myClient/js/moderator/table/tables-reject-basic.js' %}"></script>
+<script src="{% static 'myClient/js/moderator/table/tables-reported-basic.js' %}"></script>
+
+
+<script src="{% static 'myClient/js/moderator/table/content-tab.js' %}"></script>
+
+{% endblock page_js %}
+{{ block.super }}
+
+
+{% block content %}
+<div style="width: 90%; margin: 0 auto; box-sizing: border-box;">
+  <h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">
+      <a href="{% url 'sys-faculty-Homepage' %}" class="text-muted fw-light">{% translate "Home" %}</a> /
+    </span>
+    <a href="{% url 'sys-moderator-PostManagement' %}" class="text-dark">
+      {% translate "Iskahub Management" %}
+    </a>
+  </h4>
+
+  <div class="card mb-4">
+    <div class="card-header p-0">
+      <div class="nav-align-top">
+        <ul class="nav nav-tabs nav-fill" role="tablist">
+          <!-- Pending Tab -->
+          <li class="nav-item">
+            <button
+              type="button"
+              class="nav-link active"
+              role="tab"
+              data-bs-toggle="tab"
+              data-bs-target="#pending"
+              aria-controls="pending"
+              aria-selected="true"
+            >
+              Pending For Post Container
+            </button>
+          </li>
+
+          <!-- Published Tab -->
+          <li class="nav-item">
+            <button
+              type="button"
+              class="nav-link"
+              role="tab"
+              data-bs-toggle="tab"
+              data-bs-target="#published"
+              aria-controls="published"
+              aria-selected="false"
+            >
+              Published
+            </button>
+          </li>
+
+          <!-- Rejected Tab -->
+          <li class="nav-item">
+            <button
+              type="button"
+              class="nav-link"
+              role="tab"
+              data-bs-toggle="tab"
+              data-bs-target="#rejected"
+              aria-controls="rejected"
+              aria-selected="false"
+            >
+              Rejected
+            </button>
+          </li>
+
+          <!-- Reported Tab -->
+          <li class="nav-item">
+            <button
+              type="button"
+              class="nav-link"
+              role="tab"
+              data-bs-toggle="tab"
+              data-bs-target="#reported"
+              aria-controls="reported"
+              aria-selected="false"
+            >
+              Reported
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card-body">
+      <div class="tab-content">
+        <!-- Pending Tab Content -->
+        <div class="tab-pane fade show active" id="pending" role="tabpanel">
+          <!-- Main Card Container -->
+          <div class="card border rounded-3 shadow-sm" style="width: auto;">
+            <div class="card-body">
+              <!-- Poster Container Sorts -->
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <!-- Search Input -->
+                <div class="input-group" style="max-width: 480px;">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search Posts"
+                    aria-label="Search Posts"
+                  />
+                  <button class="btn btn-outline-secondary" type="button">
+                    <i class="mdi mdi-magnify"></i>
+                  </button>
+                </div>
+                <!-- Sort Dropdown -->
+                <div class="dropdown">
+                  <button
+                    class="btn btn-outline-secondary dropdown-toggle"
+                    type="button"
+                    id="sortDropdown"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Sort
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                    <li><a class="dropdown-item" href="#">Newest</a></li>
+                    <li><a class="dropdown-item" href="#">Oldest</a></li>
+                    <li><a class="dropdown-item" href="#">Most Liked</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Post Content Container (Fixed Height with Scroll) -->
+              <div style="height: 600px; overflow-y: auto;">
+                <!-- Post Container -->
+                <div class="card border-0 bg-transparent shadow-none">
+
+                  <!-- Post Item 1 -->
+                  <div
+                    class="card border rounded-3 p-3 mb-3 shadow-sm"
+                    style="background: #fff;"
+                  >
+                    <!-- Full-width Header -->
+                    <div
+                      class="card-header bg-transparent border-bottom-0 p-2 d-flex align-items-center w-100"
+                    >
+                      <div class="d-flex align-items-center flex-grow-1">
+                        <img
+                          src="{% static 'img/elements/2.jpg' %}"
+                          alt="User Avatar"
+                          class="rounded-circle me-2"
+                          style="width: 45px; height: 45px; object-fit: cover;"
+                        />
+                        <div>
+                          <h6
+                            class="mb-0 fw-semibold text-dark"
+                            style="font-size: 15px;"
+                          >
+                            John Doe
+                          </h6>
+                          <small class="text-muted" style="font-size: 12px;"
+                            >2 hours ago</small
+                          >
+                        </div>
+                      </div>
+                      <!-- Right-aligned Dropdown -->
+                      <div class="dropdown">
+                        <button
+                          class="btn btn-sm"
+                          type="button"
+                          id="dropdownMenuButton1"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          style="
+                            background: transparent;
+                            border: none;
+                            color: #6C757D;
+                            font-size: 20px;
+                          "
+                        >
+                          <i class="mdi mdi-dots-vertical"></i>
+                        </button>
+                        <ul
+                          class="dropdown-menu dropdown-menu-end"
+                          aria-labelledby="dropdownMenuButton1"
+                        >
+                          <li>
+                            <a class="dropdown-item text-danger" href="#"
+                              ><i class="mdi mdi-trash-can me-2"></i> Delete</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <!-- Post Content -->
+                    <div class="card-body p-2">
+                      <p
+                        class="mb-0 text-dark"
+                        style="font-size: 14px; line-height: 1.5;"
+                      >
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Nullam nec purus nec nunc ultricies lacinia.
+                      </p>
+                    </div>
+
+                    <!-- Clickable Post Image -->
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal">
+                      <img
+                        src="{% static 'img/elements/2.jpg' %}"
+                        alt="Post Image"
+                        class="card-img-top rounded-3 img-fluid"
+                        style="object-fit: cover; display: block; cursor: pointer;"
+                      />
+                    </a>
+
+                    <!-- Post Footer (optional buttons commented out) -->
+                    <div
+                      class="card-footer bg-transparent border-top-0 p-2 d-flex left-0"
+                    >
+                      {% comment %}
+                      <div class="d-flex align-items-center">
+                        <button
+                          type="button"
+                          class="btn rounded-pill btn-label-secondary"
+                          style="font-size: 14px;"
+                        >
+                          <i class="mdi mdi-heart-outline me-2"></i> Like
+                        </button>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <button
+                          type="button"
+                          class="btn rounded-pill btn-label-secondary"
+                          style="font-size: 14px;"
+                        >
+                          <i class="mdi mdi-share-variant me-2"></i> Share
+                        </button>
+                      </div>
+                      {% endcomment %}
+                    </div>
+
+                    <!-- Button Section -->
+                    <div class="d-flex justify-content-around mt-3">
+                      <button type="button" class="btn btn-success btn-publish">Publish</button>
+                      <button type="button" class="btn btn-danger btn-reject">Reject</button>
+                      <button type="button" class="btn btn-warning btn-report">Report</button>
+                    </div>
+                  </div>
+
+                  <!-- Post Item 2 -->
+                  <div
+                    class="card border rounded-3 p-3 mb-3 shadow-sm"
+                    style="background: #fff;"
+                  >
+                    <!-- Full-width Header -->
+                    <div
+                      class="card-header bg-transparent border-bottom-0 p-2 d-flex align-items-center w-100"
+                    >
+                      <div class="d-flex align-items-center flex-grow-1">
+                        <img
+                          src="{% static 'img/elements/2.jpg' %}"
+                          alt="User Avatar"
+                          class="rounded-circle me-2"
+                          style="width: 45px; height: 45px; object-fit: cover;"
+                        />
+                        <div>
+                          <h6
+                            class="mb-0 fw-semibold text-dark"
+                            style="font-size: 15px;"
+                          >
+                            John Doe
+                          </h6>
+                          <small class="text-muted" style="font-size: 12px;"
+                            >2 hours ago</small
+                          >
+                        </div>
+                      </div>
+                      <!-- Right-aligned Dropdown -->
+                      {% comment %}
+                      <div class="dropdown">
+                        <button
+                          class="btn btn-sm"
+                          type="button"
+                          id="dropdownMenuButton1"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                          style="
+                            background: transparent;
+                            border: none;
+                            color: #6C757D;
+                            font-size: 20px;
+                          "
+                        >
+                          <i class="mdi mdi-dots-vertical"></i>
+                        </button>
+                        <ul
+                          class="dropdown-menu dropdown-menu-end"
+                          aria-labelledby="dropdownMenuButton1"
+                        >
+                          <li>
+                            <a class="dropdown-item text-danger" href="#"
+                              ><i class="mdi mdi-trash-can me-2"></i> Delete</a
+                            >
+                          </li>
+                        </ul>
+                      </div>
+                      {% endcomment %}
+                    </div>
+
+                    <!-- Post Content -->
+                    <div class="card-body p-2">
+                      <p
+                        class="mb-0 text-dark"
+                        style="font-size: 14px; line-height: 1.5;"
+                      >
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                        Nullam nec purus nec nunc ultricies lacinia.
+                      </p>
+                    </div>
+
+                    <!-- Clickable Post Image -->
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal">
+                      <img
+                        src="{% static 'img/elements/2.jpg' %}"
+                        alt="Post Image"
+                        class="card-img-top rounded-3 img-fluid"
+                        style="object-fit: cover; display: block; cursor: pointer;"
+                      />
+                    </a>
+
+                    <!-- Post Footer (optional buttons commented out) -->
+                    <div
+                      class="card-footer bg-transparent border-top-0 p-2 d-flex left-0"
+                    >
+                      {% comment %}
+                      <div class="d-flex align-items-center">
+                        <button
+                          type="button"
+                          class="btn rounded-pill btn-label-secondary"
+                          style="font-size: 14px;"
+                        >
+                          <i class="mdi mdi-heart-outline me-2"></i> Like
+                        </button>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <button
+                          type="button"
+                          class="btn rounded-pill btn-label-secondary"
+                          style="font-size: 14px;"
+                        >
+                          <i class="mdi mdi-share-variant me-2"></i> Share
+                        </button>
+                      </div>
+                      {% endcomment %}
+                    </div>
+
+                    <!-- Button Section -->
+                    <div class="d-flex justify-content-around mt-3">
+                      <button type="button" class="btn btn-success btn-publish">Publish</button>
+                      <button type="button" class="btn btn-danger btn-reject">Reject</button>
+                      <button type="button" class="btn btn-warning btn-report">Report</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Bootstrap Modal for Full Image View -->
+          <div
+            class="modal fade"
+            id="imageModal"
+            tabindex="-1"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div
+                class="modal-content bg-transparent border-0 shadow-none"
+              >
+                <div class="modal-body p-0 text-center">
+                  <img
+                    src="{% static 'img/elements/2.jpg' %}"
+                    alt="Full Post Image"
+                    class="img-fluid rounded-3"
+                    style="max-width: 100%; height: auto;"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Published Tab Content -->
+        <div class="tab-pane fade" id="published" role="tabpanel">
+          <div class="card">
+            <h5 class="card-header">Publish Management</h5>
+            <div class="card-datatable dataTable_select text-nowrap">
+              <table
+                id="publishTable"
+                class="dt-select-table table table-bordered"
+              >
+                <thead>
+                  <tr>
+                    <th></th> <!-- Checkbox -->
+                    <th>ID</th> <!-- Hidden ID column -->
+                    <th>Image</th>
+                    <th>Caption</th>
+                    <th>Posted by</th>
+                    <th>Entity ID</th>
+                    <th>Date Submitted</th>
+                    <th>Date Publish</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rejected Tab Content -->
+        <div class="tab-pane fade" id="rejected" role="tabpanel">
+          <div class="card">
+            <h5 class="card-header">Reject Management</h5>
+            <div class="card-datatable dataTable_select text-nowrap">
+              <table
+                id="rejectTable"
+                class="dt-select-table table table-bordered"
+              >
+                <thead>
+                  <tr>
+                    <th></th> <!-- Checkbox -->
+                    <th>ID</th> <!-- Hidden ID column -->
+                    <th>Image</th>
+                    <th>Caption</th>
+                    <th>Posted by</th>
+                    <th>Entity ID</th>
+                    <th>Date Submitted</th>
+                    <th>Date Rejected</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reported Tab Content -->
+        <div class="tab-pane fade" id="reported" role="tabpanel">
+          <div class="card">
+            <h5 class="card-header">Reported Management</h5>
+            <div class="card-datatable dataTable_select text-nowrap">
+              <table
+                id="reportedTable"
+                class="dt-select-table table table-bordered"
+              >
+                <thead>
+                  <tr>
+                    <th></th> <!-- Checkbox -->
+                    <th>ID</th> <!-- Hidden ID column -->
+                    <th>Image</th>
+                    <th>Caption</th>
+                    <th>Posted by</th>
+                    <th>Entity ID</th>
+                    <th>Date Submitted</th>
+                    <th>Date Reported</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+</div>
+  <!-- All Modals -->
+  {% include 'sysClient/partials/moderator/modal_add_post.html' %}
+  {% include 'sysClient/partials/moderator/modal_edit_post.html' %}
+
+  {% include 'sysClient/partials/moderator/table_action_bar.html' %}
+
+
+  <!-- All sweet alert -->
+
+
+{% endblock %}

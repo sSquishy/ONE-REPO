@@ -1,0 +1,260 @@
+<!-- Modal for Adding Personnel -->
+<div class="modal fade" id="addPersonnelModal" tabindex="-1" aria-labelledby="addPersonnelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-add-personnel">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Add New Personnel</h3>
+          <p class="pt-1">Please enter the personnel details below.</p>
+        </div>
+        <form id="addPersonnelForm" class="row g-4" onsubmit="return false">
+          {% csrf_token %}
+          <!-- Personal Information -->
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="modalAddPersonnelFirstName" name="modalAddPersonnelFirstName" class="form-control" placeholder="John" required />
+              <label for="modalAddPersonnelFirstName">First Name</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="modalAddPersonnelLastName" name="modalAddPersonnelLastName" class="form-control" placeholder="Doe" required />
+              <label for="modalAddPersonnelLastName">Last Name</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="modalAddPersonnelMiddleInitial" name="modalAddPersonnelMiddleInitial" class="form-control" placeholder="D" />
+              <label for="modalAddPersonnelMiddleInitial">Middle Initial (Optional)</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="modalAddPersonnelSuffixName" name="modalAddPersonnelSuffixName" class="form-control" placeholder="Jr." />
+              <label for="modalAddPersonnelSuffixName">Suffix (Optional)</label>
+            </div>
+          </div>
+
+          <!-- Birth Information -->
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalAddPersonnelBirthMonth" name="modalAddPersonnelBirthMonth" class="form-select" required>
+                <option value="">Select Month</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+              <label for="modalAddPersonnelBirthMonth">Birth Month</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalAddPersonnelBirthDay" name="modalAddPersonnelBirthDay" class="form-select" required>
+                <option value="">Select Day</option>
+              </select>
+              <label for="modalAddPersonnelBirthDay">Birth Day</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalAddPersonnelBirthYear" name="modalAddPersonnelBirthYear" class="form-select" required>
+                <option value="">Select Year</option>
+              </select>
+              <label for="modalAddPersonnelBirthYear">Birth Year</label>
+            </div>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="email" id="modalAddPersonnelEmail" name="modalAddPersonnelEmail" class="form-control" placeholder="example@domain.com" required />
+              <label for="modalAddPersonnelEmail">Personal Email</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="email" id="modalAddPersonnelWebmail" name="modalAddPersonnelWebmail" class="form-control" placeholder="personnel@domain.com" required />
+              <label for="modalAddPersonnelWebmail">PUP Webmail</label>
+            </div>
+          </div>
+
+          <!-- Personnel Information -->
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="modalAddPersonnelNumber" name="modalAddPersonnelNumber" class="form-control" placeholder="P123456" required />
+              <label for="modalAddPersonnelNumber">Employee Number</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="text" id="modalAddPersonnelMobile" name="modalAddPersonnelMobile" class="form-control" placeholder="+63 912 345 6789" required />
+              <label for="modalAddPersonnelMobile">Mobile Number</label>
+            </div>
+          </div>
+          <!-- Additional Information -->
+          <div class="col-12">
+            <h6 class="mt-1 mb-3">Additional Information</h6>
+
+
+            <div class="form-floating form-floating-outline mt-3">
+              <textarea id="modalAddPersonnelRemarks" name="modalAddPersonnelRemarks" class="form-control" placeholder="Remarks"></textarea>
+              <label for="modalAddPersonnelRemarks">Remarks</label>
+            </div>
+          </div>
+
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary me-sm-3 me-1" id="addPersonnelSubmitButton">Add Personnel</button>
+            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Date population functions
+  function populateAddDays(month, year) {
+    const daySelect = document.getElementById('modalAddPersonnelBirthDay');
+    daySelect.innerHTML = '<option value="">Select Day</option>';
+
+    if (month && year) {
+      const daysInMonth = new Date(year, month, 0).getDate();
+      for (let i = 1; i <= daysInMonth; i++) {
+        daySelect.innerHTML += `<option value="${i}">${i}</option>`;
+      }
+    }
+  }
+
+  // Function to populate the day dropdown based on the selected month and year for Personnel
+  function populatePersonnelDays() {
+    const month = document.getElementById('modalAddPersonnelBirthMonth').value;
+    const year = document.getElementById('modalAddPersonnelBirthYear').value;
+    const daySelect = document.getElementById('modalAddPersonnelBirthDay');
+
+    // Clear existing options
+    daySelect.innerHTML = '<option value="">Select Day</option>';
+
+    // Determine the number of days in the selected month and year
+    if (month) {
+        const daysInMonth = new Date(year || new Date().getFullYear(), month, 0).getDate();
+        for (let i = 1; i <= daysInMonth; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            daySelect.appendChild(option);
+        }
+    }
+  }
+
+  // Function to populate the year dropdown for Personnel
+  function populatePersonnelYears() {
+    const yearSelect = document.getElementById('modalAddPersonnelBirthYear');
+    const currentYear = new Date().getFullYear();
+    const startYear = currentYear - 100; // 100-year range
+
+    // Populate years from startYear to currentYear
+    for (let year = currentYear; year >= startYear; year--) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearSelect.appendChild(option);
+    }
+  }
+
+  // Call these functions when the modal loads
+  document.addEventListener('DOMContentLoaded', function () {
+    populatePersonnelYears();
+    document.getElementById('modalAddPersonnelBirthMonth').addEventListener('change', populatePersonnelDays);
+    document.getElementById('modalAddPersonnelBirthYear').addEventListener('change', populatePersonnelDays);
+  });
+
+
+  // Form validation and submission (updated version)
+  document.getElementById('addPersonnelSubmitButton').addEventListener('click', function () {
+    const invalidFields = [...document.querySelectorAll('#addPersonnelForm [required]')]
+      .filter(field => !field.value.trim());
+
+    if (invalidFields.length) {
+      invalidFields.forEach(field => field.classList.add('is-invalid'));
+      Swal.fire({
+        title: 'Missing Information',
+        text: 'Please fill in all required fields.',
+        icon: 'error',
+        customClass: {
+          confirmButton: 'btn btn-danger waves-effect waves-light'
+        },
+        buttonsStyling: false
+      });
+      return;
+    }
+
+    // Confirmation Dialog
+    Swal.fire({
+      title: 'Add New Personnel?',
+      text: "Confirm to create new personnel record.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Confirm Add',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+        cancelButton: 'btn btn-outline-secondary waves-effect'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Simulated AJAX submission
+        Swal.fire({
+          title: 'Success!',
+          text: 'New personnel record created.',
+          icon: 'success',
+          customClass: {
+            confirmButton: 'btn btn-success waves-effect'
+          },
+          buttonsStyling: false
+        }).then(() => {
+          const modal = bootstrap.Modal.getInstance(document.getElementById('addPersonnelModal'));
+          if (modal) modal.hide();
+          document.getElementById('addPersonnelForm').reset();
+
+          // Reset date dropdowns
+          document.getElementById('modalAddPersonnelBirthDay').innerHTML = '<option value="">Select Day</option>';
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire({
+          title: 'Cancelled',
+          text: 'Personnel creation aborted.',
+          icon: 'error',
+          customClass: {
+            confirmButton: 'btn btn-secondary waves-effect'
+          },
+          buttonsStyling: false
+        });
+      }
+    });
+  });
+
+  // Initialize date inputs
+  document.addEventListener('DOMContentLoaded', () => {
+    populateAddYears();
+
+    const updateDays = () => populateAddDays(
+      document.getElementById('modalAddPersonnelBirthMonth').value,
+      document.getElementById('modalAddPersonnelBirthYear').value
+    );
+
+    document.getElementById('modalAddPersonnelBirthMonth').addEventListener('change', updateDays);
+    document.getElementById('modalAddPersonnelBirthYear').addEventListener('change', updateDays);
+  });
+</script>

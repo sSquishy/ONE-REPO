@@ -1,0 +1,111 @@
+<!-- Modal for Editing How To -->
+<div class="modal fade" id="editHowToModal" tabindex="-1" aria-labelledby="editHowToModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-edit-howto">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Edit How To</h3>
+          <p class="pt-1">Update the how-to details below.</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form id="editHowToForm" class="row g-4" onsubmit="return false">
+          <!-- Title -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="editHowToTitle" name="editHowToTitle" class="form-control" placeholder="Title" required />
+              <label for="editHowToTitle">Title</label>
+            </div>
+          </div>
+          <!-- Link -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <input type="url" id="editHowToLink" name="editHowToLink" class="form-control" placeholder="Link" required />
+              <label for="editHowToLink">Link</label>
+            </div>
+          </div>
+          <!-- Status -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <select id="editHowToStatus" name="editHowToStatus" class="form-select" required>
+                <option value="" disabled selected>Select Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Draft">Draft</option>
+              </select>
+              <label for="editHowToStatus">Status</label>
+            </div>
+          </div>
+          <!-- Submit and Cancel -->
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary me-3" id="submitEditHowTo">Update</button>
+            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Simple validation and submission logic for the Edit How To form
+  document.getElementById('submitEditHowTo').addEventListener('click', function () {
+    let isValid = true;
+    // Validate all required fields
+    document.querySelectorAll('#editHowToForm [required]').forEach((field) => {
+      if (field.value.trim() === "") {
+        field.classList.add('is-invalid');
+        isValid = false;
+      } else {
+        field.classList.remove('is-invalid');
+      }
+    });
+
+    if (!isValid) {
+      Swal.fire({
+        title: 'Incomplete Information',
+        text: 'Please fill out all required fields correctly.',
+        icon: 'error',
+        customClass: { confirmButton: 'btn btn-danger' },
+        buttonsStyling: false
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: 'Update How To?',
+      text: 'Confirm to update the how-to details.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Update!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        confirmButton: 'btn btn-primary me-3',
+        cancelButton: 'btn btn-outline-secondary'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Updated!',
+          text: 'How To details have been successfully updated.',
+          customClass: { confirmButton: 'btn btn-success' },
+          buttonsStyling: false
+        }).then(() => {
+          // Hide the modal and reset the form after successful update.
+          const modal = bootstrap.Modal.getInstance(document.getElementById('editHowToModal'));
+          modal.hide();
+          document.getElementById('editHowToForm').reset();
+          document.querySelectorAll('#editHowToForm [required]').forEach((field) => {
+            field.classList.remove('is-invalid');
+          });
+        });
+      }
+    });
+  });
+
+
+
+</script>

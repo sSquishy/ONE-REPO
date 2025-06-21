@@ -1,0 +1,55 @@
+<!-- filepath: c:\Users\Cera\Desktop\OJT Projects\myPUPQC_AI\sysAdmin\apps\myPUPQC\Templates\sysClient\ai_chatbot\ai_student.html -->
+
+<!-- Load CSS and JS -->
+<link rel="stylesheet" href="{% static 'myClient/css/ai_chatbot/ai_student.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="{% static 'myClient/js/ai_chatbot/ai_student.js' %}"></script>
+
+<div class="chat-wrapper">
+  <!-- Minimized Chat Bookmark -->
+  <div class="chat-bookmark" id="chatBookmark">
+    <span class="bookmark-icon">
+      <img src="https://cdn-icons-png.flaticon.com/512/9081/9081491.png" alt="AI Icon" width="20" height="20">
+    </span>
+    <span class="bookmark-title">myPUPQC AI</span>
+  </div>
+
+  <!-- Expanded Chat View -->
+  <div class="chat-container" id="chatContainer">
+    <div class="chat-header">
+      <span class="header-icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/9081/9081491.png" alt="AI Icon" width="20" height="20">
+      </span>
+      <span class="header-title">
+        myPUPQC AI <span class="student-text">(Student)</span>
+      </span>
+      <button class="close-chat" id="closeChat" aria-label="Close Chat">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="chat-content">
+      <div class="messages-container" id="messagesContainer">
+        <!-- Messages dynamically inserted here -->
+      </div>
+
+      <!-- Rendered AI Response (Markdown Support) -->
+      <div class="rendered-response" id="chat_response">
+        <!-- AI responses rendered with Markdown will appear here -->
+      </div>
+
+      <div class="chat-footer">
+        <div class="input-area">
+          <input type="text" id="userInput" placeholder="Type your message here..." aria-label="User message input">
+          <button id="sendButton" aria-label="Send Message">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7D0A0A">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

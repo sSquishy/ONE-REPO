@@ -1,0 +1,81 @@
+<<<<<<< Updated upstream
+<script src="https://cdn.botpress.cloud/webchat/v2.4/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2025/03/31/21/20250331210100-32KZ206L.js"></script>
+
+=======
+{% comment %}
+<link rel="stylesheet" href="{% static 'myClient/css/ai_chatbot/ai_alumni.css' %}">
+<script src="{% static 'myClient/js/ai_chatbot/ai_alumni.js' %}"></script>
+>>>>>>> Stashed changes
+
+<<<<<<< Updated upstream
+<div class="chat-container">
+  <button id="toggleBtn" class="chat-toggle-btn"></button>
+  <div id="chatBubble" class="chat-bubble">
+=======
+<div class="chat-wrapper">
+  <div class="chat-bookmark" id="chatBookmark">
+    <span class="bookmark-icon">
+      <img src="https://cdn-icons-png.flaticon.com/512/9081/9081491.png" alt="AI Icon" width="20" height="20">
+    </span>
+    <span class="bookmark-title">PUPSTAR</span>
+  </div>
+
+  <div class="chat-container" id="chatContainer">
+>>>>>>> Stashed changes
+    <div class="chat-header">
+      <span>myPUPQC Chatbot</span>
+  
+    </div>
+    <div class="chat-body">
+        <!-- Chatbot's Welcome Message -->
+        <div class="message-container received-container">
+          <div class="profile-icon">C</div>
+          <div class="message received">WWelcome, PUPian! 🎓 We're glad to have you here! How can I assist you with myPUPQC AI?</div>
+        </div>
+    </div>
+    <div class="chat-footer">
+      <input type="text" id="chatInput" placeholder="Type a message..." />
+      <button id="sendBtn">➤</button>
+    </div>
+  </div>
+</div> {% endcomment %}
+
+<script src="https://cdn.botpress.cloud/webchat/v2.4/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2025/03/31/21/20250331210100-32KZ206L.js"></script>
+<script>
+  // JavaScript to handle chat functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const chatBookmark = document.getElementById('chatBookmark');
+    const chatContainer = document.getElementById('chatContainer');
+    const closeChat = document.getElementById('closeChat');
+    const sendButton = document.getElementById('sendButton');
+    const userInput = document.getElementById('userInput');
+    const messagesContainer = document.getElementById('messagesContainer');
+
+    // Show chat container when bookmark is clicked
+    chatBookmark.addEventListener('click', function() {
+      chatContainer.style.display = 'block';
+      chatBookmark.style.display = 'none';
+    });
+
+    // Close chat container
+    closeChat.addEventListener('click', function() {
+      chatContainer.style.display = 'none';
+      chatBookmark.style.display = 'block';
+    });
+
+    // Send message when send button is clicked
+    sendButton.addEventListener('click', function() {
+      const userMessage = userInput.value;
+      if (userMessage.trim()) {
+        addMessageToChat(userMessage, 'user');
+        userInput.value = '';
+        // Simulate bot response after a short delay
+        setTimeout(() => {
+          addMessageToChat("This is a simulated bot response.", 'bot');
+        }, 1000);
+      }
+    });
+
+    // Function to add messages to the chat

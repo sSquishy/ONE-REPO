@@ -1,0 +1,107 @@
+<!-- Modal for Adding How To -->
+<div class="modal fade" id="addHowToModal" tabindex="-1" aria-labelledby="addHowToModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-add-howto">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Add How To</h3>
+          <p class="pt-1">Please provide the how-to details below.</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form id="addHowToForm" class="row g-4" onsubmit="return false">
+          <!-- Title -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="howToTitle" name="howToTitle" class="form-control" placeholder="Title" required />
+              <label for="howToTitle">Title</label>
+            </div>
+          </div>
+          <!-- Link -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <input type="url" id="howToLink" name="howToLink" class="form-control" placeholder="Link" required />
+              <label for="howToLink">Link</label>
+            </div>
+          </div>
+          <!-- Status -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <select id="howToStatus" name="howToStatus" class="form-select" required>
+                <option value="" disabled selected>Select Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Draft">Draft</option>
+              </select>
+              <label for="howToStatus">Status</label>
+            </div>
+          </div>
+          <!-- Submit and Cancel -->
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary me-3" id="submitHowTo">Submit</button>
+            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // Simple validation for the How To form
+  document.getElementById('submitHowTo').addEventListener('click', function () {
+    let isValid = true;
+    document.querySelectorAll('#addHowToForm [required]').forEach((field) => {
+      if (field.value.trim() === "") {
+        field.classList.add('is-invalid');
+        isValid = false;
+      } else {
+        field.classList.remove('is-invalid');
+      }
+    });
+
+    if (!isValid) {
+      Swal.fire({
+        title: 'Incomplete Information',
+        text: 'Please ensure all fields are filled out correctly.',
+        icon: 'error',
+        customClass: { confirmButton: 'btn btn-danger' },
+        buttonsStyling: false
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: 'Save How To?',
+      text: 'Confirm to save the how-to details.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Save!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        confirmButton: 'btn btn-primary me-3',
+        cancelButton: 'btn btn-outline-secondary'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Saved!',
+          text: 'How To details have been successfully saved.',
+          customClass: { confirmButton: 'btn btn-success' },
+          buttonsStyling: false
+        }).then(() => {
+          const modal = bootstrap.Modal.getInstance(document.getElementById('addHowToModal'));
+          modal.hide();
+          document.getElementById('addHowToForm').reset();
+          document.querySelectorAll('#addHowToForm [required]').forEach((field) => {
+            field.classList.remove('is-invalid');
+          });
+        });
+      }
+    });
+  });
+</script>

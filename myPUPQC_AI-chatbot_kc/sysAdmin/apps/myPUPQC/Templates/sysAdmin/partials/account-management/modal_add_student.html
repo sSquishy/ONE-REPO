@@ -1,0 +1,334 @@
+<!-- Modal for Adding Student -->
+<div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-add-student">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Add Student Information</h3>
+          <p class="pt-1">Please provide the student details below.</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form id="addStudentForm" class="row g-4" onsubmit="return false">
+          <!-- Student Number -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="studentNumber" name="studentNumber" class="form-control" placeholder="Student Number" required />
+              <label for="studentNumber">Student Number</label>
+            </div>
+          </div>
+
+          <!-- Program (Dropdown) -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <select id="program" name="program" class="form-select" required>
+                <option value="" disabled selected>Select Program</option>
+                <option value="BSIT">BSIT</option>
+                <option value="BSCS">BSCS</option>
+                <option value="BSIS">BSIS</option>
+              </select>
+              <label for="program">Program</label>
+            </div>
+          </div>
+
+          <!-- First Name -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="firstName" name="firstName" class="form-control" placeholder="First Name" required />
+              <label for="firstName">First Name</label>
+            </div>
+          </div>
+
+          <!-- Last Name -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Last Name" required />
+              <label for="lastName">Last Name</label>
+            </div>
+          </div>
+
+          <!-- Middle Name (Optional) -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="middleName" name="middleName" class="form-control" placeholder="Middle Name" />
+              <label for="middleName">Middle Name (Optional)</label>
+            </div>
+          </div>
+
+          <!-- Suffix (Optional) -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="suffix" name="suffix" class="form-control" placeholder="Suffix" />
+              <label for="suffix">Suffix (Optional)</label>
+            </div>
+          </div>
+
+          <!-- Birth Information -->
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalAddStudentBirthMonth" name="modalAddStudentBirthMonth" class="form-select" required>
+                <option value="">Select Month</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+              <label for="modalAddStudentBirthMonth">Birth Month</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalAddStudentBirthDay" name="modalAddStudentBirthDay" class="form-select" required>
+                <option value="">Select Day</option>
+                <!-- Days will be dynamically populated -->
+              </select>
+              <label for="modalAddStudentBirthDay">Birth Day</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalAddStudentBirthYear" name="modalAddStudentBirthYear" class="form-select" required>
+                <option value="">Select Year</option>
+                <!-- Years will be dynamically populated -->
+              </select>
+              <label for="modalAddStudentBirthYear">Birth Year</label>
+            </div>
+          </div>
+
+          <!-- Additional Information -->
+          <div class="col-12">
+            <h6 class="mt-4 mb-3">Additional Information</h6>
+            <!-- Mobile Number (Philippine Format) -->
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="text" id="mobileNumber" name="mobileNumber" class="form-control" placeholder="Mobile Number" required />
+              <label for="mobileNumber">Mobile Number (e.g., +63 912 345 6789)</label>
+            </div>
+
+            <!-- Personal Email -->
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="email" id="personalEmail" name="personalEmail" class="form-control" placeholder="Personal Email" required />
+              <label for="personalEmail">Personal Email</label>
+            </div>
+
+            <!-- PUP Webmail -->
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="email" id="pupWebmail" name="pupWebmail" class="form-control" placeholder="PUP Webmail" required />
+              <label for="pupWebmail">PUP Webmail</label>
+            </div>
+          </div>
+
+          <!-- Submit and Reset -->
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary me-3" id="submitStudent">Submit</button>
+            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Function to validate a single field
+  function validateField(field) {
+    if (field.value.trim() === "") {
+      field.classList.add('is-invalid');
+    } else {
+      field.classList.remove('is-invalid');
+    }
+  }
+
+  // Real-time validation for required fields
+  document.querySelectorAll('#addStudentForm [required]').forEach((field) => {
+    field.addEventListener('input', () => validateField(field));
+  });
+
+  // Mobile Number Formatting: Accepts numbers only and auto-formats spacing for +63 912 345 6789
+  document.getElementById('mobileNumber').addEventListener('input', function (e) {
+    let input = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
+    if (input.startsWith('0')) {
+      input = '63' + input.substring(1); // Replace leading '0' with '63'
+    }
+    if (input.startsWith('63')) {
+      input = '+' + input;
+    }
+    // Format the number into: +63 912 345 6789
+    const formattedNumber = input.replace(/(\+\d{2})(\d{3})(\d{3})(\d{4})/, '$1 $2 $3 $4');
+    e.target.value = formattedNumber;
+  });
+
+  // Validate Philippine phone number format
+  function validatePhoneNumber(phoneNumber) {
+    const regex = /^\+63 \d{3} \d{3} \d{4}$/; // Matches +63 912 345 6789
+    return regex.test(phoneNumber);
+  }
+
+  // Validate PUP Webmail format
+  function validateWebmail(webmail) {
+    const regex = /^[^\s@]+@iskolarngbayan\.pup\.edu\.ph$/; // Matches @iskolarngbayan.pup.edu.ph
+    return regex.test(webmail);
+  }
+
+  // Validate Student Number format
+  function validateStudentNumber(studentNumber) {
+    const regex = /^\d{4}-\d{5}-[A-Za-z]{2}-\d$/; // Matches xxxx-xxxxx-xx-x
+    return regex.test(studentNumber);
+  }
+
+  // Validate email format
+  function validateEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email regex
+    return regex.test(email);
+  }
+
+  // Form submission logic
+  document.getElementById('submitStudent').addEventListener('click', function () {
+    let isValid = true;
+
+    // Validate all required fields
+    document.querySelectorAll('#addStudentForm [required]').forEach((field) => {
+      validateField(field);
+      if (field.classList.contains('is-invalid')) {
+        isValid = false;
+      }
+    });
+
+    // Validate phone number format
+    const phoneNumber = document.getElementById('mobileNumber').value;
+    if (!validatePhoneNumber(phoneNumber)) {
+      document.getElementById('mobileNumber').classList.add('is-invalid');
+      isValid = false;
+    } else {
+      document.getElementById('mobileNumber').classList.remove('is-invalid');
+    }
+
+    // Validate student number format
+    const studentNumber = document.getElementById('studentNumber').value;
+    if (!validateStudentNumber(studentNumber)) {
+      document.getElementById('studentNumber').classList.add('is-invalid');
+      isValid = false;
+    } else {
+      document.getElementById('studentNumber').classList.remove('is-invalid');
+    }
+
+    // Validate personal email format
+    const personalEmail = document.getElementById('personalEmail').value;
+    if (!validateEmail(personalEmail)) {
+      document.getElementById('personalEmail').classList.add('is-invalid');
+      isValid = false;
+    } else {
+      document.getElementById('personalEmail').classList.remove('is-invalid');
+    }
+
+    // Validate PUP webmail format
+    const pupWebmail = document.getElementById('pupWebmail').value;
+    if (!validateWebmail(pupWebmail)) {
+      document.getElementById('pupWebmail').classList.add('is-invalid');
+      isValid = false;
+    } else {
+      document.getElementById('pupWebmail').classList.remove('is-invalid');
+    }
+
+    if (!isValid) {
+      // Show error alert if validation fails
+      Swal.fire({
+        title: 'Incomplete or Invalid Information',
+        text: 'Please ensure all fields are valid.',
+        icon: 'error',
+        customClass: { confirmButton: 'btn btn-danger waves-effect' },
+        buttonsStyling: false
+      });
+      return;
+    }
+
+    // Confirmation prompt
+    Swal.fire({
+      title: 'Save Student?',
+      text: 'Confirm to save the student details.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Save!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+        cancelButton: 'btn btn-outline-secondary waves-effect'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Success alert
+        Swal.fire({
+          icon: 'success',
+          title: 'Saved!',
+          text: 'Student details have been successfully saved.',
+          customClass: { confirmButton: 'btn btn-success waves-effect' },
+          buttonsStyling: false
+        }).then(() => {
+          // Close modal
+          const modal = bootstrap.Modal.getInstance(document.getElementById('addStudentModal'));
+          modal.hide();
+
+          // Reset form
+          document.getElementById('addStudentForm').reset();
+          document.querySelectorAll('#addStudentForm [required]').forEach((field) => {
+            field.classList.remove('is-invalid');
+          });
+        });
+      }
+    });
+  });
+
+  // Function to populate the day dropdown based on the selected month and year
+  function populateAddDays() {
+    const month = document.getElementById('modalAddStudentBirthMonth').value;
+    const year = document.getElementById('modalAddStudentBirthYear').value;
+    const daySelect = document.getElementById('modalAddStudentBirthDay');
+
+    // Clear existing options
+    daySelect.innerHTML = '<option value="">Select Day</option>';
+
+    // Determine the number of days in the selected month and year
+    if (month) {
+      const daysInMonth = new Date(year || new Date().getFullYear(), month, 0).getDate();
+      for (let i = 1; i <= daysInMonth; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        daySelect.appendChild(option);
+      }
+    }
+  }
+
+  // Function to populate the year dropdown for Add Student
+  function populateAddYears() {
+    const yearSelect = document.getElementById('modalAddStudentBirthYear');
+    const currentYear = new Date().getFullYear();
+    const startYear = currentYear - 100; // 100-year range
+
+    // Populate years from startYear to currentYear
+    for (let year = currentYear; year >= startYear; year--) {
+      const option = document.createElement('option');
+      option.value = year;
+      option.textContent = year;
+      yearSelect.appendChild(option);
+    }
+  }
+
+  // Populate years when the modal is shown
+  document.getElementById('addStudentModal').addEventListener('shown.bs.modal', function () {
+    populateAddYears();
+  });
+
+  // Populate days when the month or year dropdowns are changed
+  document.getElementById('modalAddStudentBirthMonth').addEventListener('change', populateAddDays);
+  document.getElementById('modalAddStudentBirthYear').addEventListener('change', populateAddDays);
+</script>

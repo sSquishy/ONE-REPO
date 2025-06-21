@@ -1,0 +1,240 @@
+<!-- Modal for Editing Alumni -->
+<div class="modal fade" id="editAlumniModal" tabindex="-1" aria-labelledby="editAlumniModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-edit-alumni">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Edit Alumni Information</h3>
+          <p class="pt-1">Update the alumni details below.</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form id="editAlumniForm" class="row g-4" onsubmit="return false">
+          <!-- Alumni Number -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="editAlumniNumber" name="alumniNumber" class="form-control" placeholder="Alumni Number" required />
+              <label for="editAlumniNumber">Alumni Number</label>
+            </div>
+          </div>
+
+          <!-- Program (Dropdown) -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <select id="editProgram" name="program" class="form-select" required>
+                <option value="" disabled selected>Select Program</option>
+                <option value="BSIT">BSIT</option>
+                <option value="BSCS">BSCS</option>
+                <option value="BSIS">BSIS</option>
+              </select>
+              <label for="editProgram">Program</label>
+            </div>
+          </div>
+
+          <!-- First Name -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="editFirstName" name="firstName" class="form-control" placeholder="First Name" required />
+              <label for="editFirstName">First Name</label>
+            </div>
+          </div>
+
+          <!-- Last Name -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="editLastName" name="lastName" class="form-control" placeholder="Last Name" required />
+              <label for="editLastName">Last Name</label>
+            </div>
+          </div>
+
+          <!-- Middle Name (Optional) -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="editMiddleName" name="middleName" class="form-control" placeholder="Middle Name" />
+              <label for="editMiddleName">Middle Name (Optional)</label>
+            </div>
+          </div>
+
+          <!-- Suffix (Optional) -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="editSuffix" name="suffix" class="form-control" placeholder="Suffix" />
+              <label for="editSuffix">Suffix (Optional)</label>
+            </div>
+          </div>
+
+          <!-- Birth Information -->
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalEditAlumniBirthMonth" name="birthMonth" class="form-select" required>
+                <option value="">Select Month</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+              <label for="modalEditAlumniBirthMonth">Birth Month</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalEditAlumniBirthDay" name="birthDay" class="form-select" required>
+                <option value="">Select Day</option>
+                <!-- Days will be dynamically populated -->
+              </select>
+              <label for="modalEditAlumniBirthDay">Birth Day</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalEditAlumniBirthYear" name="birthYear" class="form-select" required>
+                <option value="">Select Year</option>
+                <!-- Years will be dynamically populated -->
+              </select>
+              <label for="modalEditAlumniBirthYear">Birth Year</label>
+            </div>
+          </div>
+
+          <!-- Additional Information -->
+          <div class="col-12">
+            <h6 class="mt-4 mb-3">Additional Information</h6>
+            <!-- Mobile Number -->
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="text" id="editMobileNumber" name="mobileNumber" class="form-control" placeholder="Mobile Number" required />
+              <label for="editMobileNumber">Mobile Number (e.g., +63 912 345 6789)</label>
+            </div>
+
+            <!-- Personal Email -->
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="email" id="editPersonalEmail" name="personalEmail" class="form-control" placeholder="Personal Email" required />
+              <label for="editPersonalEmail">Personal Email</label>
+            </div>
+
+            <!-- PUP Webmail -->
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="email" id="editPupWebmail" name="pupWebmail" class="form-control" placeholder="PUP Webmail" required />
+              <label for="editPupWebmail">PUP Webmail</label>
+            </div>
+          </div>
+
+          <!-- Submit and Reset -->
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary me-3" id="submitEditAlumni">Save Changes</button>
+            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Edit Modal Specific Script
+  document.getElementById('submitEditAlumni').addEventListener('click', function () {
+    let isValid = true;
+
+    document.querySelectorAll('#editAlumniForm [required]').forEach((field) => {
+      validateField(field);
+      if (field.classList.contains('is-invalid')) isValid = false;
+    });
+
+    // Validate phone number format
+    const phoneNumber = document.getElementById('editMobileNumber').value;
+    if (!validatePhoneNumber(phoneNumber)) {
+      document.getElementById('editMobileNumber').classList.add('is-invalid');
+      isValid = false;
+    }
+
+    // Validate alumni number format
+    const alumniNumber = document.getElementById('editAlumniNumber').value;
+    if (!validateAlumniNumber(alumniNumber)) {
+      document.getElementById('editAlumniNumber').classList.add('is-invalid');
+      isValid = false;
+    }
+
+    // Validate emails
+    const personalEmail = document.getElementById('editPersonalEmail').value;
+    const pupWebmail = document.getElementById('editPupWebmail').value;
+    if (!validateEmail(personalEmail) || !validateWebmail(pupWebmail)) {
+      if (!validateEmail(personalEmail)) document.getElementById('editPersonalEmail').classList.add('is-invalid');
+      if (!validateWebmail(pupWebmail)) document.getElementById('editPupWebmail').classList.add('is-invalid');
+      isValid = false;
+    }
+
+    if (!isValid) {
+      Swal.fire({
+        title: 'Invalid Information',
+        text: 'Please correct the highlighted fields',
+        icon: 'error',
+        confirmButtonClass: 'btn btn-danger'
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: 'Update Alumni?',
+      text: 'Confirm to save changes',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Save Changes',
+      customClass: {
+        confirmButton: 'btn btn-primary me-3',
+        cancelButton: 'btn btn-outline-secondary'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Add your update logic here
+        Swal.fire({
+          title: 'Updated!',
+          text: 'Alumni record updated successfully',
+          icon: 'success',
+          confirmButtonClass: 'btn btn-success'
+        }).then(() => {
+          const modal = bootstrap.Modal.getInstance(document.getElementById('editAlumniModal'));
+          modal.hide();
+        });
+      }
+    });
+  });
+
+  // Date Population Functions for Edit Modal
+  function populateEditDays() {
+    const month = document.getElementById('modalEditAlumniBirthMonth').value;
+    const year = document.getElementById('modalEditAlumniBirthYear').value;
+    const daySelect = document.getElementById('modalEditAlumniBirthDay');
+
+    daySelect.innerHTML = '<option value="">Select Day</option>';
+    if (month) {
+      const daysInMonth = new Date(year || new Date().getFullYear(), month, 0).getDate();
+      for (let i = 1; i <= daysInMonth; i++) {
+        daySelect.innerHTML += `<option value="${i}">${i}</option>`;
+      }
+    }
+  }
+
+  function populateEditYears() {
+    const yearSelect = document.getElementById('modalEditAlumniBirthYear');
+    const currentYear = new Date().getFullYear();
+    for (let year = currentYear; year >= currentYear - 100; year--) {
+      yearSelect.innerHTML += `<option value="${year}">${year}</option>`;
+    }
+  }
+
+  // Initialize date fields when edit modal opens
+  document.getElementById('editAlumniModal').addEventListener('show.bs.modal', function() {
+    populateEditYears();
+    // Add logic here to pre-populate fields with existing data
+  });
+
+  document.getElementById('modalEditAlumniBirthMonth').addEventListener('change', populateEditDays);
+  document.getElementById('modalEditAlumniBirthYear').addEventListener('change', populateEditDays);
+</script>

@@ -1,0 +1,265 @@
+<!-- Modal for Editing Personnel -->
+<div class="modal fade" id="editPersonnelModal" tabindex="-1" aria-labelledby="editPersonnelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-edit-personnel">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Edit Personnel</h3>
+          <p class="pt-1">Please update the personnel details below.</p>
+        </div>
+        <form id="editPersonnelForm" class="row g-4" onsubmit="return false">
+          {% csrf_token %}
+          <!-- Personal Information -->
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="modalEditPersonnelFirstName" name="modalEditPersonnelFirstName" class="form-control" placeholder="John" required />
+              <label for="modalEditPersonnelFirstName">First Name</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="modalEditPersonnelLastName" name="modalEditPersonnelLastName" class="form-control" placeholder="Doe" required />
+              <label for="modalEditPersonnelLastName">Last Name</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="modalEditPersonnelMiddleInitial" name="modalEditPersonnelMiddleInitial" class="form-control" placeholder="D" />
+              <label for="modalEditPersonnelMiddleInitial">Middle Initial (Optional)</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="modalEditPersonnelSuffixName" name="modalEditPersonnelSuffixName" class="form-control" placeholder="Jr." />
+              <label for="modalEditPersonnelSuffixName">Suffix (Optional)</label>
+            </div>
+          </div>
+
+          <!-- Birth Information -->
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalEditPersonnelBirthMonth" name="modalEditPersonnelBirthMonth" class="form-select" required>
+                <option value="">Select Month</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+              <label for="modalEditPersonnelBirthMonth">Birth Month</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalEditPersonnelBirthDay" name="modalEditPersonnelBirthDay" class="form-select" required>
+                <option value="">Select Day</option>
+              </select>
+              <label for="modalEditPersonnelBirthDay">Birth Day</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="modalEditPersonnelBirthYear" name="modalEditPersonnelBirthYear" class="form-select" required>
+                <option value="">Select Year</option>
+              </select>
+              <label for="modalEditPersonnelBirthYear">Birth Year</label>
+            </div>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="email" id="modalEditPersonnelEmail" name="modalEditPersonnelEmail" class="form-control" placeholder="example@domain.com" required />
+              <label for="modalEditPersonnelEmail">Personal Email</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="email" id="modalEditPersonnelWebmail" name="modalEditPersonnelWebmail" class="form-control" placeholder="personnel@domain.com" required />
+              <label for="modalEditPersonnelWebmail">PUP Webmail</label>
+            </div>
+          </div>
+
+          <!-- Personnel Information -->
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="modalEditPersonnelNumber" name="modalEditPersonnelNumber" class="form-control" placeholder="P123456" required />
+              <label for="modalEditPersonnelNumber">Employee Number</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="text" id="modalEditPersonnelMobile" name="modalEditPersonnelMobile" class="form-control" placeholder="+63 912 345 6789" required />
+              <label for="modalEditPersonnelMobile">Mobile Number</label>
+            </div>
+          </div>
+
+          <!-- Additional Information -->
+          <div class="col-12">
+            <h6 class="mt-1 mb-3">Additional Information</h6>
+            <div class="form-floating form-floating-outline mt-3">
+              <textarea id="modalEditPersonnelRemarks" name="modalEditPersonnelRemarks" class="form-control" placeholder="Remarks"></textarea>
+              <label for="modalEditPersonnelRemarks">Remarks</label>
+            </div>
+          </div>
+
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary me-sm-3 me-1" id="editPersonnelSubmitButton">Save Changes</button>
+            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Shared date population functions
+  function populateDays(month, year, daySelectId) {
+    const daySelect = document.getElementById(daySelectId);
+    daySelect.innerHTML = '<option value="">Select Day</option>';
+
+    if (month && year) {
+      const daysInMonth = new Date(year, month, 0).getDate();
+      for (let i = 1; i <= daysInMonth; i++) {
+        daySelect.innerHTML += `<option value="${i}">${i}</option>`;
+      }
+    }
+  }
+
+  function populateYears(yearSelectId, range = 100) {
+    const yearSelect = document.getElementById(yearSelectId);
+    const currentYear = new Date().getFullYear();
+    const startYear = currentYear - range;
+
+    yearSelect.innerHTML = '<option value="">Select Year</option>';
+    for (let year = currentYear; year >= startYear; year--) {
+      yearSelect.innerHTML += `<option value="${year}">${year}</option>`;
+    }
+  }
+
+  // Initialize edit modal date controls
+  document.addEventListener('DOMContentLoaded', function () {
+    // Initialize years for both modals
+    populateYears('modalAddPersonnelBirthYear');
+    populateYears('modalEditPersonnelBirthYear');
+
+    // Edit modal date handlers
+    document.getElementById('modalEditPersonnelBirthMonth').addEventListener('change', function() {
+      populateDays(
+        this.value,
+        document.getElementById('modalEditPersonnelBirthYear').value,
+        'modalEditPersonnelBirthDay'
+      );
+    });
+
+    document.getElementById('modalEditPersonnelBirthYear').addEventListener('change', function() {
+      populateDays(
+        document.getElementById('modalEditPersonnelBirthMonth').value,
+        this.value,
+        'modalEditPersonnelBirthDay'
+      );
+    });
+  });
+
+  // Edit Personnel Form Handler
+  document.getElementById('editPersonnelSubmitButton').addEventListener('click', function () {
+    const invalidFields = [...document.querySelectorAll('#editPersonnelForm [required]')]
+      .filter(field => !field.value.trim());
+
+    if (invalidFields.length) {
+      invalidFields.forEach(field => field.classList.add('is-invalid'));
+      Swal.fire({
+        title: 'Missing Information',
+        text: 'Please fill in all required fields.',
+        icon: 'error',
+        customClass: {
+          confirmButton: 'btn btn-danger waves-effect waves-light'
+        },
+        buttonsStyling: false
+      });
+      return;
+    }
+
+    // Confirmation Dialog
+    Swal.fire({
+      title: 'Update Personnel?',
+      text: "Confirm to save changes to this record.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Save Changes',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+        cancelButton: 'btn btn-outline-secondary waves-effect'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Simulated AJAX submission
+        Swal.fire({
+          title: 'Updated!',
+          text: 'Personnel record has been updated.',
+          icon: 'success',
+          customClass: {
+            confirmButton: 'btn btn-success waves-effect'
+          },
+          buttonsStyling: false
+        }).then(() => {
+          const modal = bootstrap.Modal.getInstance(document.getElementById('editPersonnelModal'));
+          if (modal) modal.hide();
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire({
+          title: 'Cancelled',
+          text: 'Changes were not saved.',
+          icon: 'error',
+          customClass: {
+            confirmButton: 'btn btn-secondary waves-effect'
+          },
+          buttonsStyling: false
+        });
+      }
+    });
+  });
+
+  // Function to open edit modal with data
+  function openEditModal(personnelData) {
+    // Populate form fields with personnelData
+    document.getElementById('modalEditPersonnelFirstName').value = personnelData.firstName;
+    document.getElementById('modalEditPersonnelLastName').value = personnelData.lastName;
+    document.getElementById('modalEditPersonnelMiddleInitial').value = personnelData.middleInitial || '';
+    document.getElementById('modalEditPersonnelSuffixName').value = personnelData.suffix || '';
+
+    // Set birth date
+    const birthDate = new Date(personnelData.birthDate);
+    document.getElementById('modalEditPersonnelBirthMonth').value = birthDate.getMonth() + 1;
+    document.getElementById('modalEditPersonnelBirthYear').value = birthDate.getFullYear();
+    populateDays(
+      birthDate.getMonth() + 1,
+      birthDate.getFullYear(),
+      'modalEditPersonnelBirthDay'
+    );
+    setTimeout(() => {
+      document.getElementById('modalEditPersonnelBirthDay').value = birthDate.getDate();
+    }, 50);
+
+    // Set contact info
+    document.getElementById('modalEditPersonnelEmail').value = personnelData.email;
+    document.getElementById('modalEditPersonnelWebmail').value = personnelData.webmail;
+    document.getElementById('modalEditPersonnelNumber').value = personnelData.employeeNumber;
+    document.getElementById('modalEditPersonnelMobile').value = personnelData.mobile;
+    document.getElementById('modalEditPersonnelRemarks').value = personnelData.remarks || '';
+
+    // Show modal
+    new bootstrap.Modal(document.getElementById('editPersonnelModal')).show();
+  }
+</script>
