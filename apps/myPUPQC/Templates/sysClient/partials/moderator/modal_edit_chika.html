@@ -1,0 +1,483 @@
+<!-- Include this style block in your page head or above the modal -->
+<style>
+  .upload-progress-bar {
+    transition: width 0.4s ease;
+  }
+</style>
+<style>
+  .upload-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #f8f9fa;
+  }
+  .upload-thumbnail {
+    width: 80px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .upload-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .upload-details {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .upload-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .upload-filename {
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+  }
+  .upload-size {
+    font-size: 12px;
+    color: #6c757d;
+    margin-left: auto;
+  }
+  .upload-progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .upload-progress {
+    flex-grow: 1;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .upload-progress-bar {
+    height: 100%;
+    background: #0d6efd;
+    transition: width 0.3s ease;
+  }
+  .upload-percentage {
+    font-size: 12px;
+    color: #0d6efd;
+    min-width: 40px;
+    text-align: right;
+  }
+  .upload-remove {
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+    margin-left: 10px;
+  }
+  button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+</style>
+
+<!-- Edit Chika Modal -->
+<div class="modal fade" id="editChikaModal" tabindex="-1" aria-labelledby="editChikaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" style="max-width: 800px;">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Edit Chika</h3>
+          <p class="pt-1">Update the details and change the image if needed</p>
+        </div>
+
+        <!-- Chika Details -->
+        <div class="row g-4">
+          <!-- Title (Max 50 words) -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <input
+                type="text"
+                id="editChikaTitle"
+                name="editChikaTitle"
+                class="form-control required-field"
+                placeholder="Chika Title"
+              />
+              <label for="editChikaTitle">Title</label>
+              <small class="word-counter" id="editTitleCounter">0/50 words</small>
+            </div>
+          </div>
+
+          <!-- Start Date -->
+          <div class="col-md-6 col-12">
+            <div class="form-floating form-floating-outline">
+              <input
+                type="text"
+                class="form-control required-field"
+                placeholder="YYYY-MM-DD"
+                id="editChikaStartDate"
+                name="editChikaStartDate"
+              />
+              <label for="editChikaStartDate">Start Date</label>
+            </div>
+          </div>
+
+          <!-- End Date -->
+          <div class="col-md-6 col-12">
+            <div class="form-floating form-floating-outline">
+              <input
+                type="text"
+                class="form-control required-field"
+                placeholder="YYYY-MM-DD"
+                id="editChikaEndDate"
+                name="editChikaEndDate"
+              />
+              <label for="editChikaEndDate">End Date</label>
+            </div>
+          </div>
+
+          <!-- Status Dropdown -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <select id="editChikaStatus" name="editChikaStatus" class="form-select required-field">
+                <option value="" disabled selected>Select Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <label for="editChikaStatus">Status</label>
+            </div>
+          </div>
+        </div>
+        <br />
+
+        <!-- Image Upload Section -->
+        <div class="row">
+          <div class="col-12">
+            <!-- Dropzone Card -->
+            <div class="card mb-4" id="editChika-upload-section">
+              <h5 class="card-header">Image Upload</h5>
+              <div class="card-body">
+                <form
+                  action="/upload_chika"
+                  class="dropzone needsclick"
+                  id="editChika-dropzone"
+                >
+                  <div class="dz-message needsclick">
+                    Drop image here or click to upload
+                    <span class="note needsclick">(Supported formats: JPEG, PNG. Max file size: 5MB)</span>
+                  </div>
+                  <div class="fallback">
+                    <input name="file" type="file" />
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- Image Preview Container -->
+            <div id="editChika-upload-preview" class="mt-4" style="display: none;">
+              <div class="upload-item">
+                <div class="upload-thumbnail">
+                  <img src="" alt="Preview" id="editChika-uploaded-preview" />
+                </div>
+                <div class="upload-details">
+                  <div class="upload-header">
+                    <span class="upload-filename" id="editChika-uploaded-filename"></span>
+                    <span class="upload-size" id="editChika-uploaded-size"></span>
+                  </div>
+                  <div class="upload-progress-container">
+                    <div class="upload-progress">
+                      <div class="upload-progress-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="upload-percentage" id="editChika-upload-percentage">0%</span>
+                    <span class="upload-remove" id="editChika-remove-upload">×</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Image Preview Container -->
+          </div>
+        </div>
+        <!-- End Image Upload Section -->
+      </div>
+      <br />
+
+      <!-- Submit and Cancel Buttons -->
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-primary me-3" id="editChika-submit-upload">
+          Submit
+        </button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script to initialize Flatpickr and Dropzone, validate fields, and handle submit -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Utility to count words
+  function countWords(str) {
+    return str.trim().split(/\s+/).filter(word => word.length > 0).length;
+  }
+
+  // Reference elements
+  const submitBtn = document.getElementById("editChika-submit-upload");
+  const requiredFields = document.querySelectorAll(".required-field");
+  const uploadSection = document.getElementById("editChika-upload-section");
+  const previewContainer = document.getElementById("editChika-upload-preview");
+  const titleInput = document.getElementById("editChikaTitle");
+  const titleCounter = document.getElementById("editTitleCounter");
+
+  // Track the current file & upload status
+  let currentChikaFile = null;
+  let isFileFullyUploaded = false;
+
+  // Update word counter for Title field
+  titleInput.addEventListener("input", function () {
+    const words = countWords(this.value);
+    titleCounter.textContent = words + "/50 words";
+  });
+
+  // Initialize flatpickr for Start Date and End Date
+  const startPicker = flatpickr("#editChikaStartDate", {
+    dateFormat: "Y-m-d",
+    onChange: function (selectedDates) {
+      endPicker.set("minDate", selectedDates[0] || null);
+    }
+  });
+  const endPicker = flatpickr("#editChikaEndDate", {
+    dateFormat: "Y-m-d",
+    onChange: function (selectedDates) {
+      startPicker.set("maxDate", selectedDates[0] || null);
+    }
+  });
+
+  /**
+   * Validate required fields
+   * @return { isValid: boolean, missingFields: string[] }
+   */
+  function validateFields() {
+    let isValid = true;
+    let missingFields = [];
+
+    requiredFields.forEach(field => {
+      let fieldValue = field.value.trim();
+      let fieldName = field.parentNode.querySelector("label")?.textContent || field.placeholder;
+
+      if (field.tagName === "SELECT" && fieldValue === "") {
+        field.classList.add("is-invalid");
+        missingFields.push(fieldName);
+        isValid = false;
+      } else if (!fieldValue) {
+        field.classList.add("is-invalid");
+        missingFields.push(fieldName);
+        isValid = false;
+      } else {
+        field.classList.remove("is-invalid");
+      }
+    });
+
+    // Additional Title words count check (max 50 words)
+    if (titleInput.value.trim() && countWords(titleInput.value) > 50) {
+      titleInput.classList.add("is-invalid");
+      missingFields.push("Title (maximum 50 words)");
+      isValid = false;
+    } else {
+      titleInput.classList.remove("is-invalid");
+    }
+
+    // Check file presence & upload completion
+    if (!currentChikaFile) {
+      uploadSection.classList.add("border", "border-danger");
+      missingFields.push("Image Upload");
+      isValid = false;
+    } else {
+      uploadSection.classList.remove("border", "border-danger");
+      if (!isFileFullyUploaded) {
+        missingFields.push("Image still uploading");
+        isValid = false;
+      }
+    }
+
+    return { isValid, missingFields };
+  }
+
+  // Monitor fields in real-time
+  requiredFields.forEach(field => {
+    field.addEventListener("input", validateFields);
+    field.addEventListener("change", validateFields);
+  });
+
+  // Initialize Dropzone for image upload
+  var editChikaDropzone = new Dropzone("#editChika-dropzone", {
+    url: "/upload_chika",
+    maxFiles: 1,
+    maxFilesize: 5, // MB
+    acceptedFiles: "image/jpeg,image/png",
+    addRemoveLinks: false,
+    autoProcessQueue: true,
+    dictDefaultMessage: "Drop image here or click to upload",
+    dictInvalidFileType: "Invalid file type. Only JPEG/PNG allowed.",
+    previewTemplate: '<div style="display:none"></div>',
+    init: function () {
+      this.on("addedfile", function (file) {
+        // Hide dropzone area, show preview container
+        uploadSection.style.display = "none";
+        previewContainer.style.display = "block";
+
+        // Show a preview of the file
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById("editChika-uploaded-preview").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+
+        // Show filename & size
+        document.getElementById("editChika-uploaded-filename").textContent = file.name;
+        document.getElementById("editChika-uploaded-size").textContent =
+          (file.size / 1024 / 1024).toFixed(1) + " MB";
+
+        currentChikaFile = file;
+        isFileFullyUploaded = false;
+        validateFields();
+      });
+
+      // Live progress updates
+      this.on("uploadprogress", function (file, progress) {
+        const progressBar = document.querySelector(".upload-progress-bar");
+        const percentage = Math.round(progress);
+        progressBar.style.width = percentage + "%";
+        document.getElementById("editChika-upload-percentage").textContent = percentage + "%";
+      });
+
+      // Upload success => file fully uploaded
+      this.on("success", function (file, response) {
+        const progressBar = document.querySelector(".upload-progress-bar");
+        progressBar.style.width = "100%";
+        document.getElementById("editChika-upload-percentage").textContent = "100%";
+        isFileFullyUploaded = true;
+        validateFields();
+      });
+
+      // Handle upload errors
+      this.on("error", function (file, errorMessage) {
+        Swal.fire({
+          title: "Upload Error",
+          text: errorMessage || "There was a problem uploading your image.",
+          icon: "error",
+          customClass: {
+            confirmButton: "btn btn-primary waves-effect waves-light"
+          },
+          buttonsStyling: false
+        });
+      });
+
+      // If file is removed
+      this.on("removedfile", function () {
+        // Show dropzone area, hide preview container
+        uploadSection.style.display = "block";
+        previewContainer.style.display = "none";
+        currentChikaFile = null;
+        isFileFullyUploaded = false;
+        validateFields();
+      });
+    }
+  });
+
+  // Removing an uploaded file from the preview
+  document.getElementById("editChika-remove-upload").addEventListener("click", function () {
+    if (currentChikaFile) {
+      Swal.fire({
+        title: "Remove File?",
+        text: "Are you sure you want to remove this file?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, remove it!",
+        customClass: {
+          confirmButton: "btn btn-primary me-3 waves-effect waves-light",
+          cancelButton: "btn btn-outline-secondary waves-effect"
+        },
+        buttonsStyling: false
+      }).then(result => {
+        if (result.isConfirmed) {
+          editChikaDropzone.removeFile(currentChikaFile);
+          Swal.fire({
+            title: "Removed!",
+            text: "The file has been removed.",
+            icon: "success",
+            customClass: {
+              confirmButton: "btn btn-success waves-effect"
+            },
+            buttonsStyling: false
+          });
+        }
+      });
+    }
+  });
+
+  // Submit button handler
+  submitBtn.addEventListener("click", function () {
+    const { isValid, missingFields } = validateFields();
+
+    if (isValid) {
+      Swal.fire({
+        title: "Success!",
+        text: "Chika updated successfully.",
+        icon: "success",
+        customClass: {
+          confirmButton: "btn btn-primary waves-effect waves-light"
+        },
+        buttonsStyling: false
+      }).then(() => {
+        // Reset all fields
+        titleInput.value = "";
+        document.getElementById("editChikaStartDate").value = "";
+        document.getElementById("editChikaEndDate").value = "";
+        document.getElementById("editChikaStatus").selectedIndex = 0;
+        titleCounter.textContent = "0/50 words";
+        requiredFields.forEach(field => field.classList.remove("is-invalid"));
+
+        // Reset file upload
+        editChikaDropzone.removeAllFiles(true);
+        currentChikaFile = null;
+        isFileFullyUploaded = false;
+        uploadSection.style.display = "block";
+        previewContainer.style.display = "none";
+
+        // Close modal (assuming jQuery is present)
+        $("#editChikaModal").modal("hide");
+      });
+    } else {
+      Swal.fire({
+        title: "Error!",
+        text: "Please complete the following: " + missingFields.join(", "),
+        icon: "error",
+        customClass: {
+          confirmButton: "btn btn-primary waves-effect waves-light"
+        },
+        buttonsStyling: false
+      });
+    }
+  });
+
+  // When the modal is closed, reset everything
+  $("#editChikaModal").on("hidden.bs.modal", function () {
+    editChikaDropzone.removeAllFiles(true);
+    currentChikaFile = null;
+    isFileFullyUploaded = false;
+    requiredFields.forEach(field => {
+      field.value = "";
+      field.classList.remove("is-invalid");
+    });
+    titleCounter.textContent = "0/50 words";
+    uploadSection.style.display = "block";
+    previewContainer.style.display = "none";
+  });
+});
+</script>

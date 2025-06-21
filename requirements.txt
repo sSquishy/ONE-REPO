@@ -1,0 +1,22 @@
+asgiref
+Django
+gunicorn
+packaging
+python-dotenv
+sqlparse
+typing_extensions
+whitenoise
+fitz
+
+# For the OCR and PDF processing
+# and web scraping
+# and document processing
+PyPDF2
+pdfplumber
+pytesseract
+pillow
+python-docx
+beautifulsoup4
+langchain
+tiktoken
+langchain-community

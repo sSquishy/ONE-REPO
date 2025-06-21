@@ -1,0 +1,413 @@
+:root {
+  --primary-color: #6D2323;
+  --primary-color-light: #b13030;
+  --background-color: #ffffff;
+  --chat-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  --header-bg: var(--primary-color);
+  --footer-bg: #f8f8f8;
+  --received-bg: #e9ecef;
+  --sent-bg: var(--primary-color);
+  --sent-color: #ffffff;
+}
+  .chat-container {
+    position: fixed;
+    bottom: 35px;
+    right: 45px;
+    z-index: 1000;
+  }
+  
+  .chat-toggle-btn {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    padding: 14px;
+    width: 60px;
+    height: 60px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.chat-toggle-btn svg {
+    width: 28px;
+    height: 28px;
+    transition: transform 0.3s ease, opacity 0.2s ease;
+}
+
+.chat-toggle-btn.active {
+    background-color: var(--primary-color-light);
+    transform: scale(1.1);
+}
+  
+/* Chat Bubble */
+.chat-bubble {
+  display: none;
+  position: absolute;
+  bottom: 85px;
+  margin-right: 30px;
+  right: 0;
+  width: 335px;
+  background: var(--background-color);
+  border-radius: 5px;
+  box-shadow: var(--chat-shadow);
+  overflow: hidden;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); 
+}
+
+.chat-bubble.active {
+  display: block;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Chat Header */
+.chat-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color-light));
+  color: #fff;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 
+  0 0 10px rgba(128, 0, 0, 0.6); 
+  letter-spacing: 1px;
+  border-bottom: 4px solid #FABC3F;
+}
+.profile-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  transition: width 0.3s ease-in-out, padding 0.3s ease-in-out, background 0.3s ease-in-out;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.profile-indicator:hover {
+  width: 90px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  text-align: center;
+  color: white;
+}
+
+.chat-header span {
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Add a subtle text glow effect */
+.chat-header span {
+  text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.3);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.close-btn:hover {
+  transform: scale(1.2);
+}
+
+/* Chat Body */
+.chat-body {
+  padding: 16px;
+  height: 310px;  
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;  
+  gap: 10px;
+  background: #FFFAFA;
+}
+/* Chat Scrollbar (Custom for better UX) */
+.chat-body::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+.chat-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Messages */
+.message {
+  max-width: 75%;
+  padding: 12px 12px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  display: inline-block;
+  animation: fadeIn 0.3s ease-in-out;
+  text-align: left;
+}  
+/* Messages */
+.message-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;  
+  transform: translateY(5px);
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+from {
+    opacity: 0;
+    transform: translateY(5px);
+}
+to {
+    opacity: 1;
+    transform: translateY(0);
+}
+}
+.received {
+  background-color: var(--received-bg);
+  align-self: flex-start;
+  border-top-left-radius: 5px;
+}
+
+.sent {
+  background-color: var(--sent-bg);
+  color: var(--sent-color);
+  align-self: flex-end;
+  border-top-right-radius: 5px;
+  text-align: right;
+}
+
+/* Chat Footer */
+.chat-footer {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  padding-bottom: 15px;
+  background-color: var(--footer-bg);
+  border-top: 1px solid #ddd;
+}
+
+.chat-footer input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.chat-footer input:focus {
+  border-color: var(--primary-color);
+}
+
+.chat-footer button {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  margin-left: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-footer button:hover {
+  background-color: var(--primary-color-light);
+}
+
+/* Smooth Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Message Container */
+.message-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Profile Icons */
+.profile-icon {
+width: 32px;
+height: 32px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: bold;
+font-size: 14px;
+color: #fff;
+flex-shrink: 0;
+transition: transform 0.2s ease-in-out;
+}
+
+/* Chatbot (C) - Left side */
+.received-container {
+justify-content: flex-start;
+}
+
+.received-container .profile-icon {
+background-color: #6D2323;
+}
+
+/* User (U) - Right side */
+.sent-container {
+justify-content: flex-end;
+}
+
+.sent-container .profile-icon {
+background-color: #FABC3F;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 500px) {
+.message {
+    max-width: 85%;
+    font-size: 12px;
+    padding: 10px;
+}
+}
+
+.suggested-container {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  gap: 6px; 
+  margin-top: 10px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.suggested-btn {
+  background-color: rgb(238, 238, 238); 
+  border: 1px solid rgba(218, 218, 218, 0.37);
+  padding: 6px 10px; 
+  border-radius: 14px; 
+  cursor: pointer;
+  text-align: center;
+  font-size: 12px;
+  color: #777777;
+  transition: background-color 0.3s;
+  width: 60%;
+}
+
+.suggested-btn:hover,
+.highlighted-btn:hover  {
+  background-color: #cecece;
+}
+.highlighted-btn {
+  background-color: #e0e0e0; 
+  border: 1px solid rgba(218, 218, 218, 0.37);
+  padding: 6px 10px; 
+  border-radius: 14px; 
+  cursor: pointer;
+  text-align: center;
+  font-size: 12px;
+  color: #777777;
+  transition: background-color 0.3s;
+  width: 65%;
+}
+
+#toggleBtn {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: #6D2323; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); 
+}
+
+#toggleBtn svg {
+  fill: none; 
+  stroke: white; 
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+/* Hover Effect */
+#toggleBtn:hover {
+  transform: scale(1.1);
+  opacity: 0.9;
+  background-color: #8E1616; 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); 
+}
+
+#toggleBtn:hover svg {
+  fill: #FABC3F; 
+  stroke:  #FABC3F; 
+}
+
+#sendBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  width: 45px;  
+  height: 45px; 
+  margin: -5px;
+}
+
+#sendBtn svg {
+  fill: none; /* Default outline */
+  stroke: rgb(88, 0, 0); /* Default stroke color */
+  transition: fill 0.3s ease, stroke 0.3s ease;
+}
+
+/* Hover Effect */
+#sendBtn:hover {
+  transform: scale(1.1);
+  opacity: 0.9;
+}
+
+#sendBtn:hover svg {
+  fill:  rgb(88, 0, 0); /* Fill when hovered */
+  stroke:  rgb(88, 0, 0);/* Change stroke to gold */
+}
+

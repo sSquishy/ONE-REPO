@@ -1,0 +1,190 @@
+<!-- Add Role Modal -->
+<div class="modal fade" id="addRoleModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-simple modal-upgrade-plan">
+    <div class="modal-content p-2 p-md-5">
+      <div class="modal-body p-1">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+        <div class="text-center">
+          <h3 class="mb-2 pb-1">Assign System Role</h3>
+          <p class="mb-4">Select appropriate system access level</p>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-borderless w-75 mx-auto">
+            <tbody>
+              <!-- System Admin -->
+              <tr>
+                <td class="align-middle">
+                  <div class="fw-bold">System Administrator</div>
+                  <small class="text-muted">
+                    Full control over all system components including user management,
+                    system configuration, and database administration
+                  </small>
+                </td>
+                <td class="text-end align-middle">
+                  <label class="switch">
+                    <input type="checkbox" class="switch-input is-valid" id="systemAdminCheckbox" />
+                    <span class="switch-toggle-slider">
+                      <span class="switch-on"></span>
+                      <span class="switch-off"></span>
+                    </span>
+                  </label>
+                </td>
+              </tr>
+
+              <!-- Moderator -->
+              <tr>
+                <td class="align-middle">
+                  <div class="fw-bold">Moderator</div>
+                  <small class="text-muted">
+                    Content management privileges including schedule approval,
+                    content moderation, and audit log access
+                  </small>
+                </td>
+                <td class="text-end align-middle">
+                  <label class="switch">
+                    <input type="checkbox" class="switch-input is-valid" id="moderatorCheckbox" />
+                    <span class="switch-toggle-slider">
+                      <span class="switch-on"></span>
+                      <span class="switch-off"></span>
+                    </span>
+                  </label>
+                </td>
+              </tr>
+
+              <!-- Academic Head -->
+              <tr>
+                <td class="align-middle">
+                  <div class="fw-bold">Academic Head</div>
+                  <small class="text-muted">
+                    Manage academic programs, faculty members, and Scheduling of classes
+                  </small>
+                </td>
+                <td class="text-end align-middle">
+                  <label class="switch">
+                    <input type="checkbox" class="switch-input is-valid" id="academicHeadCheckbox" />
+                    <span class="switch-toggle-slider">
+                      <span class="switch-on"></span>
+                      <span class="switch-off"></span>
+                    </span>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-center gap-3 mt-4">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="saveRolesBtn">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+/**
+ * Role Change Confirmation
+ */
+
+'use strict';
+
+(function () {
+  const saveRolesBtn = document.querySelector('#saveRolesBtn'),
+        addRoleModal = document.getElementById('addRoleModal');
+
+  if (saveRolesBtn && addRoleModal) {
+    const checkboxes = {
+      systemAdmin: document.getElementById('systemAdminCheckbox'),
+      moderator: document.getElementById('moderatorCheckbox'),
+      academicHead: document.getElementById('academicHeadCheckbox')
+    };
+
+    let initialStates = {};
+
+    // Store initial states when modal opens
+    addRoleModal.addEventListener('show.bs.modal', function () {
+      initialStates = {
+        systemAdmin: checkboxes.systemAdmin.checked,
+        moderator: checkboxes.moderator.checked,
+        academicHead: checkboxes.academicHead.checked
+      };
+    });
+
+    // Save Role Changes Handler
+    saveRolesBtn.addEventListener('click', function () {
+      const currentStates = {
+        systemAdmin: checkboxes.systemAdmin.checked,
+        moderator: checkboxes.moderator.checked,
+        academicHead: checkboxes.academicHead.checked
+      };
+
+      // Check for changes
+      const hasChanges = Object.keys(initialStates).some(
+        key => initialStates[key] !== currentStates[key]
+      );
+
+      if (!hasChanges) {
+        Swal.fire({
+          icon: 'info',
+          title: 'No Changes',
+          text: 'No role modifications were made.',
+          customClass: {
+            confirmButton: 'btn btn-primary waves-effect waves-light'
+          },
+          buttonsStyling: false
+        });
+        return;
+      }
+
+      // Confirmation Dialog
+      Swal.fire({
+        title: 'Confirm Changes?',
+        text: 'You are about to update system access privileges.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, save changes!',
+        cancelButtonText: 'Cancel',
+        customClass: {
+          confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+          cancelButton: 'btn btn-outline-secondary waves-effect'
+        },
+        buttonsStyling: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Simulate save operation (replace with actual API call)
+          Swal.fire({
+            title: 'Changes Saved!',
+            text: 'Role permissions updated successfully.',
+            icon: 'success',
+            customClass: {
+              confirmButton: 'btn btn-success waves-effect'
+            }
+          }).then(() => {
+            // Close modal
+            const modalInstance = bootstrap.Modal.getInstance(addRoleModal);
+            if (modalInstance) modalInstance.hide();
+
+            // Update initial states
+            initialStates = { ...currentStates };
+          });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire({
+            title: 'Changes Discarded',
+            text: 'Role permissions remain unchanged.',
+            icon: 'error',
+            customClass: {
+              confirmButton: 'btn btn-secondary waves-effect'
+            }
+          });
+        }
+      });
+    });
+  }
+})();
+</script>

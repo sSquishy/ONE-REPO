@@ -1,0 +1,195 @@
+{% extends 'layout/sysAdmin/sysAdmin_layout_vertical.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}myScheduler | Profile Page{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/animate-css/animate.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/cleavejs/cleave.js' %}"></script>
+<script src="{% static 'vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'myPUPQC/js/settings/pages-account-settings-account.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div style="width: 90%; margin: 0 auto; box-sizing: border-box;">
+
+  <h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">{% translate "Account Settings" %} /</span> {% translate "Account" %}
+  </h4>
+
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="nav nav-pills flex-column flex-md-row mb-3 gap-2 gap-lg-0">
+        <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="mdi mdi-account-outline mdi-20px me-1"></i>Account</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'sysAdmin-Security-Page' %}"><i class="mdi mdi-lock-open-outline mdi-20px me-1"></i>Security</a></li>
+        {% comment %} <li class="nav-item"><a class="nav-link" href="{% url 'pages-account-settings-notifications' %}"><i class="mdi mdi-bell-outline mdi-20px me-1"></i>Notifications</a></li> {% endcomment %}
+      </ul>
+      <div class="card mb-4">
+        <h4 class="card-header">Profile Details</h4>
+        <!-- Account -->
+        <div class="card-body">
+          <div class="d-flex align-items-start align-items-sm-center gap-4">
+            <img src="{% static 'img/avatars/1.png' %}" alt="user-avatar" class="d-block w-px-120 h-px-120 rounded" id="uploadedAvatar" />
+            <div class="button-wrapper">
+              <label for="upload" class="btn btn-primary me-2 mb-3" tabindex="0">
+                <span class="d-none d-sm-block">Upload new photo</span>
+                <i class="mdi mdi-tray-arrow-up d-block d-sm-none"></i>
+                <input type="file" id="upload" class="account-file-input" hidden accept="image/png, image/jpeg" />
+              </label>
+              <button type="button" class="btn btn-outline-danger account-image-reset mb-3">
+                <i class="mdi mdi-reload d-block d-sm-none"></i>
+                <span class="d-none d-sm-block">Reset</span>
+              </button>
+
+              <div class="small">Allowed JPG, GIF or PNG. Max size of 800K</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body pt-2 mt-1">
+          <!-- Begin: Form Start -->
+          <form id="formAccountSettings" method="GET" onsubmit="return false">
+            <div class="row mt-2 gy-4">
+              <!-- Begin: Employee Number Field -->
+              <div class="col-md-6">
+                <div class="form-floating form-floating-outline">
+                  <input class="form-control" type="text" id="employeeNumber" name="employeeNumber" value="2321099" autofocus />
+                  <label for="employeeNumber">Employee Number</label>
+                </div>
+              </div>
+              <!-- End: Employee Number Field -->
+
+
+              <!-- Begin: First Name Field -->
+              <div class="col-md-6">
+                <div class="form-floating form-floating-outline">
+                  <input class="form-control" type="text" id="firstName" name="firstName" value="John" autofocus />
+                  <label for="firstName">First Name</label>
+                </div>
+              </div>
+              <!-- End: First Name Field -->
+
+              <!-- Begin: Last Name Field -->
+              <div class="col-md-6">
+                <div class="form-floating form-floating-outline">
+                  <input class="form-control" type="text" name="lastName" id="lastName" value="Doe" />
+                  <label for="lastName">Last Name</label>
+                </div>
+              </div>
+              <!-- End: Last Name Field -->
+
+              <!-- Begin: Middle Name Field -->
+              <div class="col-md-6">
+                <div class="form-floating form-floating-outline">
+                  <input class="form-control" type="text" id="middleName" name="middleName" value="Smith" />
+                  <label for="middleName">Middle Name</label>
+                </div>
+              </div>
+              <!-- End: Middle Name Field -->
+
+              <!-- Begin: Suffix Name Field -->
+              <div class="col-md-6">
+                <div class="form-floating form-floating-outline">
+                  <input class="form-control" type="text" id="suffixName" name="suffixName" value="Jr." />
+                  <label for="suffixName">Suffix Name</label>
+                </div>
+              </div>
+              <!-- End: Suffix Name Field -->
+
+              <!-- Begin: Contact (Phone Number) Field -->
+              <div class="col-md-6">
+                <div class="input-group input-group-merge">
+                  <div class="form-floating form-floating-outline">
+                    <input
+                      type="text"
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      value="9912 345 6789"
+                      class="form-control"
+                      placeholder="9XXX XXX XXXX"
+                      maxlength="13"
+                      required
+                    />
+                    <label for="phoneNumber">Phone Number (9XXX XXX XXXX)</label>
+                  </div>
+                  <span class="input-group-text">PH (+63)</span>
+                </div>
+              </div>
+              <!-- End: Contact (Phone Number) Field -->
+
+
+              <!-- Begin: Email Field -->
+              <div class="col-md-6">
+                <div class="form-floating form-floating-outline">
+                  <input class="form-control" type="text" id="email" name="email" value="john.doe@example.com" placeholder="john.doe@example.com" />
+                  <label for="email">E-mail</label>
+                </div>
+              </div>
+              <!-- End: Email Field -->
+
+              <!-- Begin: Webmail Field -->
+              <div class="col-md-6">
+                <div class="form-floating form-floating-outline">
+                  <input class="form-control" type="text" id="webmail" name="webmail" value="john.doe@university.edu" placeholder="john.doe@university.edu" />
+                  <label for="webmail">Webmail</label>
+                </div>
+              </div>
+              <!-- End: Webmail Field -->
+
+            </div>
+
+            <!-- Begin: Form Buttons -->
+            <div class="mt-4">
+              <button type="submit" class="btn btn-primary me-2">Save changes</button>
+              <button type="reset" class="btn btn-outline-secondary">Cancel</button>
+            </div>
+            <!-- End: Form Buttons -->
+
+          </form>
+          <!-- End: Form End -->
+        </div>
+                <!-- /Account -->
+      </div>
+      {% comment %} <div class="card">
+        <h5 class="card-header">Delete Account</h5>
+        <div class="card-body">
+          <div class="mb-3 col-12 mb-0">
+            <div class="alert alert-warning">
+              <h6 class="alert-heading mb-1">Are you sure you want to delete your account?</h6>
+              <p class="mb-0">Once you delete your account, there is no going back. Please be certain.</p>
+            </div>
+          </div>
+          <form id="formAccountDeactivation" onsubmit="return false">
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="checkbox" name="accountActivation" id="accountActivation" />
+              <label class="form-check-label" for="accountActivation">I confirm my account deactivation</label>
+            </div>
+            <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
+          </form>
+        </div>
+      </div> {% endcomment %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+<!-- Bootstrap Modal for Full Image View Displayed Like the Card (Bigger) -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: transparent; border: none; box-shadow: none;">
+      <div class="modal-body p-0 d-flex justify-content-center">
+        <!-- Card-style modal content (Bigger) -->
+        <div class="card shadow-none border" style="width: 700px; border-radius: 10px; overflow: hidden;">
+          <div class="p-2 pb-0" style="height: 300px; width: 100%;">
+            <img src="{% static 'img/elements/2.jpg' %}" class="img-fluid" style="width: 100%; height: 300px; object-fit: cover; border-radius: 10px;" alt="Your First Singing Lesson">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">Your First Singing Lesson</h5>
+            <p class="card-text">
+              In the same way as any other artistic domain, singing lends itself perfectly to self-teaching.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
