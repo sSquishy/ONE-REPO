@@ -1,0 +1,17 @@
+          /* ========== text truncation ========== */
+          .chat-title{
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+          }
+
+          .chat-desc{
+            display:-webkit-box;
+            -webkit-line-clamp:4;   /* 4-line clamp for WebKit & Chromium */
+            -webkit-box-orient:vertical;
+            overflow:hidden;
+            max-height:calc(1.5rem * 4);   /* fallback height (assuming 1.5rem line-height) */
+          }
+
+          /* if you want identical card footer height on extra-small screens:
+            .chat-card .btn{font-size:.875rem;}  (optional) */

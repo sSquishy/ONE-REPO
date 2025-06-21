@@ -1,0 +1,31 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "post": "https://via.placeholder.com/100?text=Image+1",
+      "title": "Chika Title 1",
+      "created_date": "2025-01-01",
+      "start_date": "2025-01-05",
+      "end_date": "2025-01-10",
+      "status": 1
+    },
+    {
+      "id": 2,
+      "post": "https://via.placeholder.com/100?text=Image+2",
+      "title": "Chika Title 2",
+      "created_date": "2025-02-01",
+      "start_date": "2025-02-05",
+      "end_date": "2025-02-10",
+      "status": 2
+    },
+    {
+      "id": 3,
+      "post": "https://via.placeholder.com/100?text=Image+3",
+      "title": "Chika Title 3",
+      "created_date": "2025-03-01",
+      "start_date": "2025-03-05",
+      "end_date": "2025-03-10",
+      "status": 3
+    }
+  ]
+}

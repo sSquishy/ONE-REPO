@@ -1,0 +1,214 @@
+<style>
+  .action-bar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 12px; /* Rounded corners for soft UI */
+  }
+
+  .selected-count {
+    font-weight: bold;
+    margin-right: 10px;
+    color: #333; /* Dark text color */
+  }
+
+  .btn-outline-primary {
+    border-color: #0d6efd; /* Bootstrap primary blue */
+    color: #0d6efd;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #0d6efd; /* Solid blue on hover */
+    color: #fff;
+  }
+
+  .btn-outline-success {
+    border-color: #198754; /* Bootstrap success green */
+    color: #198754;
+  }
+
+  .btn-outline-success:hover {
+    background-color: #198754; /* Solid green on hover */
+    color: #fff;
+  }
+
+  .btn-outline-danger {
+    border-color: #dc3545; /* Bootstrap danger red */
+    color: #dc3545;
+  }
+
+  .btn-outline-danger:hover {
+    background-color: #dc3545; /* Solid red on hover */
+    color: #fff;
+  }
+
+  .btn-outline-warning {
+    border-color: #ffc107; /* Bootstrap warning yellow */
+    color: #ffc107;
+  }
+
+  .btn-outline-warning:hover {
+    background-color: #ffc107; /* Solid yellow on hover */
+    color: #fff;
+  }
+
+  .btn-close-action {
+    background-color: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #333;
+  }
+</style>
+
+<!-- Action Bar for Slideshow Table -->
+<div id="actionBar" class="action-bar" style="display: none;">
+  <span id="selectedCount" class="selected-count"></span>
+  <button id="bulkEdit" class="btn btn-outline-warning">
+    <i class="mdi mdi-pencil-outline me-1"></i> Edit
+  </button>
+  <span class="divider"></span>
+  <button id="bulkDelete" class="btn btn-outline-danger">
+    <i class="mdi mdi-delete-outline me-1"></i> Delete
+  </button>
+  <button id="closeActionBar" class="btn btn-close-action">
+    <i class="mdi mdi-close"></i>
+  </button>
+</div>
+
+
+<!-- Action Bar for MyPUPQC Table -->
+<div id="mypupqcActionBar" class="action-bar" style="display: none;">
+  <span id="mypupqcSelectedCount" class="selected-count"></span>
+  <button id="mypupqcBulkEdit" class="btn btn-outline-warning">
+    <i class="mdi mdi-pencil-outline me-1"></i> Edit
+  </button>
+  <span class="divider"></span>
+  <button id="mypupqcBulkDelete" class="btn btn-outline-danger">
+    <i class="mdi mdi-delete-outline me-1"></i> Delete
+  </button>
+  <button id="mypupqcCloseActionBar" class="btn btn-close-action">
+    <i class="mdi mdi-close"></i>
+  </button>
+</div>
+
+
+<!-- Action Bar for Article Table (unchanged) -->
+<div id="article_actionBar" class="action-bar" style="display: none;">
+  <span id="article_selectedCount" class="selected-count"></span>
+  <button id="article_editSelected" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editArticleModal">
+    <i class="mdi mdi-pencil-outline me-1"></i> Edit
+  </button>
+  <span class="divider"></span>
+  <button id="article_deleteSelected" class="btn btn-outline-danger">
+    <i class="mdi mdi-delete-outline me-1"></i> Delete
+  </button>
+  <button id="article_closeActionBar" class="btn btn-close-action">
+    <i class="mdi mdi-close"></i>
+  </button>
+</div>
+
+<!-- Action Bar for FAQ Table -->
+<div id="faq_actionBar" class="action-bar" style="display: none;">
+  <span id="faq_selectedCount" class="selected-count"></span>
+
+  <!-- Same format as Article; opens the edit modal directly -->
+  <button id="faq_editSelected" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editFAQModal">
+    <i class="mdi mdi-pencil-outline me-1"></i> Edit
+  </button>
+
+  <span class="divider"></span>
+
+  <button id="faq_deleteSelected" class="btn btn-outline-danger">
+    <i class="mdi mdi-delete-outline me-1"></i> Delete
+  </button>
+
+  <button id="faq_closeActionBar" class="btn btn-close-action">
+    <i class="mdi mdi-close"></i>
+  </button>
+</div>
+
+<!-- Action Bar for How To Table -->
+<div id="howto_actionBar" class="action-bar" style="display: none;">
+  <span id="howto_selectedCount" class="selected-count"></span>
+
+  <!-- Same format as Article; opens the edit modal directly -->
+  <button id="howto_editSelected" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editHowtoModal">
+    <i class="mdi mdi-pencil-outline me-1"></i> Edit
+  </button>
+
+  <span class="divider"></span>
+
+  <button id="howto_deleteSelected" class="btn btn-outline-danger">
+    <i class="mdi mdi-delete-outline me-1"></i> Delete
+  </button>
+
+  <button id="howto_closeActionBar" class="btn btn-close-action">
+    <i class="mdi mdi-close"></i>
+  </button>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get all action bars
+    const actionBars = document.querySelectorAll(".action-bar");
+
+    // Function to deactivate all action bars
+    function deactivateAllActionBars() {
+      actionBars.forEach((bar) => {
+        bar.style.display = "none";
+      });
+    }
+
+    // Function to activate a specific action bar
+    function activateActionBar(actionBarId) {
+      deactivateAllActionBars(); // Deactivate all first
+      const actionBar = document.getElementById(actionBarId);
+      if (actionBar) {
+        actionBar.style.display = "flex"; // Or whatever display style you want
+      }
+    }
+
+    // Function to handle table selection
+    function handleTableSelection(tableId, actionBarId) {
+      const table = document.getElementById(tableId);
+      if (table) {
+        table.addEventListener("click", () => {
+          activateActionBar(actionBarId);
+        });
+      }
+    }
+
+    // Example: Map table IDs to their corresponding action bar IDs
+    const tableActionBarMap = {
+      slideshowTable: "actionBar",
+      mypupqcTable: "mypupqcActionBar",
+      articleTable: "article_actionBar",
+      faqTable: "faq_actionBar",
+      howtoTable: "howto_actionBar",
+    };
+
+    // Attach event listeners to tables
+    for (const [tableId, actionBarId] of Object.entries(tableActionBarMap)) {
+      handleTableSelection(tableId, actionBarId);
+    }
+
+    // Close action bar when the close button is clicked
+    actionBars.forEach((bar) => {
+      const closeButton = bar.querySelector(".btn-close-action");
+      if (closeButton) {
+        closeButton.addEventListener("click", () => {
+          bar.style.display = "none";
+        });
+      }
+    });
+  });
+</script>

@@ -1,0 +1,1139 @@
+<style>
+  /* -------------------------------
+     Existing Upload Preview Styles
+  --------------------------------*/
+  .upload-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #f8f9fa;
+  }
+  .upload-thumbnail {
+    width: 80px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .upload-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .upload-details {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .upload-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .upload-filename {
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+  }
+  .upload-size {
+    font-size: 12px;
+    color: #6c757d;
+    margin-left: auto;
+  }
+  .upload-progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .upload-progress {
+    flex-grow: 1;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .upload-progress-bar {
+    height: 100%;
+    background: #0d6efd;
+    transition: width 0.3s ease;
+  }
+  .upload-percentage {
+    font-size: 12px;
+    color: #0d6efd;
+    min-width: 40px;
+    text-align: right;
+  }
+  .upload-remove {
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+    margin-left: 10px;
+  }
+
+  /* -------------------------------
+     Modal and Layout Enhancements
+  --------------------------------*/
+  .modal-dialog {
+    max-width: 800px;
+  }
+  .modal-header h3 {
+    margin: 0;
+    font-weight: bold;
+  }
+
+  /* Make modal slightly wider (600px instead of 500px) */
+  .modal-dialog.modal-sm {
+    max-width: 600px !important;
+  }
+
+  /* Rounded corners, remove default border, subtle shadow */
+  .modal-content {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  }
+
+  /* Header: bottom border, vertically centered */
+  .modal-header {
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    align-items: center;      /* vertically center */
+    justify-content: center;  /* center the title horizontally */
+    height: 65px;             /* consistent height */
+    position: relative;
+  }
+  .modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  .modal-header .btn-close {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    box-shadow: none;
+  }
+
+  /* Body: minimal padding */
+  .modal-body {
+    padding: 1rem;
+  }
+
+  /* Footer: no top border, minimal bottom padding */
+  .modal-footer {
+    border-top: none;
+    padding: 0 1rem 1rem;
+  }
+
+  /* "Add to your post" bar => hidden or flex, as needed */
+  .add-to-post-bar {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex; /* We'll toggle this to 'none' after success */
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .add-to-post-label {
+    font-size: 14px;
+    color: #666;
+  }
+
+  /* The icon button => small, no border */
+  #show-dropzone-btn {
+    border: none;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+  }
+
+  /* "Post" button => can be full width */
+  #post-submit-upload {
+    border-radius: 6px;
+    font-weight: 600;
+    width: 100%;
+  }
+
+  /* -------------------------------
+     Borderless description field
+  --------------------------------*/
+  .form-floating .form-control {
+    border: none !important;
+    box-shadow: none !important;
+  }
+  /* Optional: remove floating label outline on focus */
+  .form-floating-outline .form-control:focus,
+  .form-floating-outline textarea:focus {
+    outline: none;
+  }
+
+</style>
+
+<!-- Begin Modal -->
+<div class="modal fade" id="addIskahubPost" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+
+      <!-- Header -->
+      <div class="modal-header" style="position: relative; text-align: center;">
+        <h3 class="modal-title" style="padding-bottom: 10px; display: inline-block; margin: 0; color: black;">Create Post</h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          style="font-size: 2.5rem; width: 45px; height: 45px; position: absolute; top: 50%; right: 1rem; transform: translateY(-50%); margin-top: 2px"
+        ></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+
+        <!-- Textarea (borderless) -->
+        <div class="row mb-3">
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <textarea
+                id="postDescription"
+                class="form-control"
+                placeholder="What do you have in mind?"
+                style="height: 120px; font-size: 1.1rem; color: black;"
+              ></textarea>
+              <label for="postDescription" style="color: gray;"
+              >What do you have in mind?</label>
+              <small class="char-counter" id="descriptionCounter">0/300 words</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden Dropzone Section (for uploading the image) -->
+        <div class="card" id="post-upload-section" style="display: none;">
+          <h5 class="card-header">Image Upload</h5>
+          <div class="card-body">
+            <form
+              action="/upload_iskahub_post"
+              class="dropzone needsclick"
+              id="post-dropzone"
+            >
+              <div class="dz-message needsclick">
+                Drop image here or click to upload
+                <span class="note needsclick">(JPEG/PNG, max 5MB)</span>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Preview Container -->
+        <div id="post-upload-preview" style="display: none; margin-top: 1rem;">
+          <div class="upload-item">
+            <div class="upload-thumbnail">
+              <img src="" alt="Preview" id="post-uploaded-preview" />
+            </div>
+            <div class="upload-details">
+              <div class="upload-header">
+                <span class="upload-filename" id="post-uploaded-filename"></span>
+                <span class="upload-size" id="post-uploaded-size"></span>
+              </div>
+              <div class="upload-progress-container">
+                <div class="upload-progress">
+                  <div class="upload-progress-bar" style="width: 0%"></div>
+                </div>
+                <span class="upload-percentage" id="post-upload-percentage">0%</span>
+                <span class="upload-remove" id="post-remove-upload">×</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- End Modal Body -->
+
+      <!-- Footer -->
+      <div class="modal-footer d-block">
+
+        <!-- "Add to your post" bar (image only) -->
+        <!-- NOTE: We add an id="addToPostBar" so we can hide the entire bar -->
+        <div class="add-to-post-bar" id="addToPostBar">
+          <span class="add-to-post-label" style="color:black">Add to your post</span>
+          <button
+            type="button"
+            id="show-dropzone-btn"
+          >
+          <img
+          width="20"
+          height="20"
+          src="https://img.icons8.com/?size=100&id=0sHzWoTXIFqd&format=png&color=000000"
+          alt="academic"
+          title="Academic Icon"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          />
+
+            <span style="font-size: 14px;"></span>
+          </button>
+        </div>
+
+        <!-- "Post" button (full width) -->
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="post-submit-upload"
+          style="min-width: 100px;"
+        >
+          Post
+        </button>
+
+      </div><!-- End Modal Footer -->
+
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Elements
+  const showDropzoneBtn = document.getElementById("show-dropzone-btn");
+  const addToPostBar = document.getElementById("addToPostBar");  // new reference
+  const uploadSection = document.getElementById("post-upload-section");
+  const previewContainer = document.getElementById("post-upload-preview");
+  const postBtn = document.getElementById("post-submit-upload");
+  const descInput = document.getElementById("postDescription");
+  const descCounter = document.getElementById("descriptionCounter");
+
+  let currentFile = null;
+  let isFileFullyUploaded = false;
+
+  // -------------------------------------------
+  // 1) DESCRIPTION: Limit to 300 words
+  // -------------------------------------------
+  function updateDescriptionCounter() {
+    let words = descInput.value.trim().split(/\s+/).filter(Boolean);
+    if (words.length > 300) {
+      words = words.slice(0, 300);
+      descInput.value = words.join(" ");
+    }
+    descCounter.textContent = words.length + "/300 words";
+  }
+  descInput.addEventListener("input", updateDescriptionCounter);
+
+  // -------------------------------------------
+  // 2) TOGGLE DROPZONE on "Add Image" click
+  // -------------------------------------------
+  showDropzoneBtn.addEventListener("click", function () {
+    // Prevent toggling if an image is already fully uploaded.
+    if (currentFile && isFileFullyUploaded) {
+      return;
+    }
+    if (uploadSection.style.display === "none") {
+      uploadSection.style.display = "block";
+    } else {
+      uploadSection.style.display = "none";
+    }
+  });
+
+  // -------------------------------------------
+  // 3) VALIDATION: either description has text or an image is uploaded
+  // -------------------------------------------
+  function canPost() {
+    let textWords = descInput.value.trim().split(/\s+/).filter(Boolean).length;
+    let hasText = textWords > 0;
+    let hasImage = currentFile && isFileFullyUploaded;
+    return hasText || hasImage;
+  }
+
+  // -------------------------------------------
+  // 4) INIT DROPZONE
+  // -------------------------------------------
+  var postDropzone = new Dropzone("#post-dropzone", {
+    url: "/upload_iskahub_post",
+    maxFiles: 1,
+    maxFilesize: 5, // MB
+    acceptedFiles: "image/jpeg,image/png",
+    addRemoveLinks: false,
+    autoProcessQueue: true,
+    dictDefaultMessage: "Drop image here or click to upload",
+    dictInvalidFileType: "Invalid file type. Only JPEG/PNG allowed.",
+    previewTemplate: '<div style="display:none"></div>',
+    init: function () {
+      this.on("addedfile", function (file) {
+        previewContainer.style.display = "block";
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById("post-uploaded-preview").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        document.getElementById("post-uploaded-filename").textContent = file.name;
+        document.getElementById("post-uploaded-size").textContent =
+          (file.size / 1024 / 1024).toFixed(1) + " MB";
+        currentFile = file;
+        isFileFullyUploaded = false;
+      });
+
+      this.on("uploadprogress", function (file, progress) {
+        const progressBar = document.querySelector(".upload-progress-bar");
+        const percentage = Math.round(progress);
+        progressBar.style.width = percentage + "%";
+        document.getElementById("post-upload-percentage").textContent = percentage + "%";
+      });
+
+      this.on("success", function (file, response) {
+        const progressBar = document.querySelector(".upload-progress-bar");
+        progressBar.style.width = "100%";
+        document.getElementById("post-upload-percentage").textContent = "100%";
+        isFileFullyUploaded = true;
+        // Hide the entire "Add to your post" bar
+        addToPostBar.style.display = "none";
+        // Also hide the dropzone toggle button
+        showDropzoneBtn.style.display = "none";
+        // Hide the upload section
+        uploadSection.style.display = "none";
+      });
+
+      this.on("error", function (file, errorMessage) {
+        Swal.fire({
+          title: "Upload Error",
+          text: errorMessage || "There was a problem uploading your image.",
+          icon: "error",
+          customClass: {
+            confirmButton: "btn btn-primary waves-effect waves-light"
+          },
+          buttonsStyling: false
+        });
+      });
+
+      this.on("removedfile", function () {
+        // Show the entire "Add to your post" bar again
+        addToPostBar.style.display = "flex";
+        // Show the "Add Image" button again
+        showDropzoneBtn.style.display = "block";
+        // Hide the preview container
+        previewContainer.style.display = "none";
+        // Hide the upload section
+        uploadSection.style.display = "none";
+        currentFile = null;
+        isFileFullyUploaded = false;
+      });
+    }
+  });
+
+  // -------------------------------------------
+  // 5) REMOVE UPLOADED FILE (the X icon)
+  // -------------------------------------------
+  document.getElementById("post-remove-upload").addEventListener("click", function () {
+    if (currentFile) {
+      Swal.fire({
+        title: "Remove File?",
+        text: "Are you sure you want to remove this file?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, remove it!",
+        customClass: {
+          confirmButton: "btn btn-primary me-3 waves-effect waves-light",
+          cancelButton: "btn btn-outline-secondary waves-effect"
+        },
+        buttonsStyling: false
+      }).then(result => {
+        if (result.isConfirmed) {
+          postDropzone.removeFile(currentFile);
+          Swal.fire({
+            title: "Removed!",
+            text: "The file has been removed.",
+            icon: "success",
+            customClass: {
+              confirmButton: "btn btn-success waves-effect"
+            },
+            buttonsStyling: false
+          });
+        }
+      });
+    }
+  });
+
+  // -------------------------------------------
+  // 6) POST BUTTON => check “either text or image”
+  // -------------------------------------------
+  postBtn.addEventListener("click", function () {
+    if (!canPost()) {
+      Swal.fire({
+        title: "Cannot Post",
+        text: "Please add text or an image before posting.",
+        icon: "error",
+        customClass: {
+          confirmButton: "btn btn-primary waves-effect waves-light"
+        },
+        buttonsStyling: false
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: "Confirm Post",
+      text: "Are you sure you want to post? This will be subject to moderator approval.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Post it!",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton: "btn btn-primary me-3 waves-effect waves-light",
+        cancelButton: "btn btn-outline-secondary waves-effect"
+      },
+      buttonsStyling: false
+    }).then(result => {
+      if (result.isConfirmed) {
+        Swal.fire({
+            title: "Posting...",
+            text: "Please wait.",
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+            showCancelButton: false,
+            confirmButtonText: '',
+            customClass: { confirmButton: '', cancelButton: '' },
+            buttonsStyling: false
+        });
+
+        // Show a warning if it takes too long
+        let timeout = setTimeout(() => {
+          Swal.update({
+            title: 'Posting...',
+            text: 'This is taking longer than expected. Please wait or check your internet connection.',
+            icon: 'warning',
+            showConfirmButton: false,
+            showCancelButton: false,
+            customClass: { confirmButton: '', cancelButton: '' },
+            buttonsStyling: false,
+            allowOutsideClick: false
+          });
+          Swal.showLoading();
+        }, 5000);
+
+        // Fail if no response after 30s
+        let timeout2 = setTimeout(() => {
+          Swal.close();
+          Swal.fire({
+            title: 'Failed to post',
+            text: 'Please reload the page and try again.',
+            icon: 'error',
+            customClass: { confirmButton: 'btn btn-danger waves-effect' },
+            buttonsStyling: false
+          })
+          .then(() => {
+            location.reload();
+          });
+        }, 30000);
+
+        let formData = new FormData();
+        formData.append("postBody", descInput.value);
+        if (currentFile) { formData.append("postImages", currentFile); }
+        formData.append("csrfmiddlewaretoken", $("input[name=csrfmiddlewaretoken]").val());
+
+        $.ajax({
+          url: userPost,
+          type: "POST",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            clearTimeout(timeout);
+            clearTimeout(timeout2);
+            Swal.close();
+
+            Swal.fire({
+              title: "Posted!",
+              text: "Your post is submitted and awaiting moderator approval.",
+              icon: "success",
+              customClass: {
+                confirmButton: "btn btn-success waves-effect"
+              },
+              buttonsStyling: false
+            }).then(() => {
+              descInput.value = "";
+              updateDescriptionCounter();
+              if (currentFile) {
+                postDropzone.removeAllFiles(true);
+              }
+              previewContainer.style.display = "none";
+              uploadSection.style.display = "none";
+              showDropzoneBtn.style.display = "block";
+              addToPostBar.style.display = "flex"; // restore bar
+              currentFile = null;
+              isFileFullyUploaded = false;
+              $("#addIskahubPost").modal("hide");
+            });
+          },
+          error: function(xhr, status, error) {
+            clearTimeout(timeout);
+            clearTimeout(timeout2);
+            Swal.close();
+
+            Swal.fire({
+              title: "Failed to post",
+              text: "Please reload the page and try again.",
+              icon: "error",
+              customClass: {
+                confirmButton: "btn btn-danger waves-effect"
+              },
+              buttonsStyling: false
+            });
+          }
+        });
+      }
+    });
+  });
+
+  // -------------------------------------------
+  // 7) RESET on modal close
+  // -------------------------------------------
+  $("#addIskahubPost").on("hidden.bs.modal", function () {
+    descInput.value = "";
+    updateDescriptionCounter();
+    if (currentFile) {
+      postDropzone.removeAllFiles(true);
+    }
+    previewContainer.style.display = "none";
+    uploadSection.style.display = "none";
+    showDropzoneBtn.style.display = "block";
+    addToPostBar.style.display = "flex"; // always show bar on reset
+    currentFile = null;
+    isFileFullyUploaded = false;
+  });
+});
+</script>
+
+
+<!--Old Modal-->
+{% comment %} <style>
+  .upload-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #f8f9fa;
+  }
+  .upload-thumbnail {
+    width: 80px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .upload-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .upload-details {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .upload-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .upload-filename {
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+  }
+  .upload-size {
+    font-size: 12px;
+    color: #6c757d;
+    margin-left: auto;
+  }
+  .upload-progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .upload-progress {
+    flex-grow: 1;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .upload-progress-bar {
+    height: 100%;
+    background: #0d6efd;
+    transition: width 0.3s ease;
+  }
+  .upload-percentage {
+    font-size: 12px;
+    color: #0d6efd;
+    min-width: 40px;
+    text-align: right;
+  }
+  .upload-remove {
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+    margin-left: 10px;
+  }
+  /* Modal enhancements */
+  .modal-dialog {
+    max-width: 800px;
+  }
+  .modal-header h3 {
+    margin: 0;
+    font-weight: bold;
+  }
+</style>
+
+<!-- Iskahub Post Modal -->
+<div class="modal fade" id="addIskahubPost" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content p-md-5">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h3 class="modal-title text-center w-100">Create Post</h3>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+          style="font-size: 1.5rem; width: 32px; height: 32px;"
+        ></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body py-3 py-md-4">
+
+        <!-- Description Field (max 300 words) -->
+        <div class="row g-4">
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <!-- BIG placeholder -->
+              <textarea
+                id="postDescription"
+                class="form-control"
+                placeholder="What do you want to post?"
+                style="height: 120px; font-size: 1.1rem;"
+              ></textarea>
+              <label for="postDescription">What do you want to post? (Max 300 words)</label>
+              <small class="char-counter" id="descriptionCounter">0/300 words</small>
+            </div>
+          </div>
+        </div>
+        <br />
+
+        <!-- Dropzone (Hidden by default) -->
+        <div class="row mb-3">
+          <div class="col-12">
+            <div class="card" id="post-upload-section" style="display: none;">
+              <h5 class="card-header">Image Upload</h5>
+              <div class="card-body">
+                <form
+                  action="/upload_iskahub_post"
+                  class="dropzone needsclick"
+                  id="post-dropzone"
+                >
+                  <div class="dz-message needsclick">
+                    Drop image here or click to upload
+                    <span class="note needsclick"
+                      >(Supported formats: JPEG, PNG. Max file size: 5MB)</span>
+                  </div>
+                  <div class="fallback">
+                    <input name="file" type="file" />
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image Preview Container -->
+        <div class="row">
+          <div class="col-12">
+            <div id="post-upload-preview" style="display: none;">
+              <div class="upload-item">
+                <div class="upload-thumbnail">
+                  <img src="" alt="Preview" id="post-uploaded-preview" />
+                </div>
+                <div class="upload-details">
+                  <div class="upload-header">
+                    <span class="upload-filename" id="post-uploaded-filename"></span>
+                    <span class="upload-size" id="post-uploaded-size"></span>
+                  </div>
+                  <div class="upload-progress-container">
+                    <div class="upload-progress">
+                      <div class="upload-progress-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="upload-percentage" id="post-upload-percentage">0%</span>
+                    <span class="upload-remove" id="post-remove-upload">×</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br />
+
+        <!-- "Add Image" button (toggles dropzone on/off) -->
+        <div class="row">
+          <div class="col-12">
+            <button
+              type="button"
+              class="btn d-flex align-items-center w-100 justify-content-center mb-3"
+              id="show-dropzone-btn"
+              style="
+                background-color: #F8F9FA;
+                color: #6C757D;
+                font-size: 16px;
+                border-radius: 8px;
+                border: 1px solid #DEE2E6;
+                transition: all 0.3s ease;
+                padding: 0 20px;
+                height: 50px;
+              "
+              onmouseover="this.style.backgroundColor='#E9ECEF'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'"
+              onmouseout="this.style.backgroundColor='#F8F9FA'; this.style.boxShadow='none'"
+            >
+              <i class="mdi mdi-comment-edit-outline me-2" style="font-size: 20px;"></i>
+              Add Image
+            </button>
+          </div>
+        </div>
+
+      </div>
+      <!-- End Modal Body -->
+
+      <!-- Footer: Single "Post" button (full width) -->
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary w-100"
+          id="post-submit-upload"
+        >
+          Post
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Elements
+  const showDropzoneBtn = document.getElementById("show-dropzone-btn");
+  const uploadSection = document.getElementById("post-upload-section");
+  const previewContainer = document.getElementById("post-upload-preview");
+  const postBtn = document.getElementById("post-submit-upload");
+  const descInput = document.getElementById("postDescription");
+  const descCounter = document.getElementById("descriptionCounter");
+
+  let currentFile = null;
+  let isFileFullyUploaded = false;
+
+  // -------------------------------------------
+  // 1) DESCRIPTION: Limit to 300 words
+  // -------------------------------------------
+  function updateDescriptionCounter() {
+    let words = descInput.value.trim().split(/\s+/).filter(Boolean);
+    if (words.length > 300) {
+      words = words.slice(0, 300);
+      descInput.value = words.join(" ");
+    }
+    descCounter.textContent = words.length + "/300 words";
+  }
+  descInput.addEventListener("input", updateDescriptionCounter);
+
+  // -------------------------------------------
+  // 2) TOGGLE DROPZONE on "Add Image" click
+  // -------------------------------------------
+  showDropzoneBtn.addEventListener("click", function () {
+    // Prevent toggling if an image is already fully uploaded.
+    if (currentFile && isFileFullyUploaded) {
+      return;
+    }
+    if (uploadSection.style.display === "none") {
+      uploadSection.style.display = "block";
+    } else {
+      uploadSection.style.display = "none";
+    }
+  });
+
+  // -------------------------------------------
+  // 3) VALIDATION: either description has text or an image is uploaded
+  // -------------------------------------------
+  function canPost() {
+    let textWords = descInput.value.trim().split(/\s+/).filter(Boolean).length;
+    let hasText = textWords > 0;
+    let hasImage = currentFile && isFileFullyUploaded;
+    return hasText || hasImage;
+  }
+
+  // -------------------------------------------
+  // 4) INIT DROPZONE
+  // -------------------------------------------
+  var postDropzone = new Dropzone("#post-dropzone", {
+    url: "/upload_iskahub_post",
+    maxFiles: 1,
+    maxFilesize: 5, // MB
+    acceptedFiles: "image/jpeg,image/png",
+    addRemoveLinks: false,
+    autoProcessQueue: true,
+    dictDefaultMessage: "Drop image here or click to upload",
+    dictInvalidFileType: "Invalid file type. Only JPEG/PNG allowed.",
+    previewTemplate: '<div style="display:none"></div>',
+    init: function () {
+      this.on("addedfile", function (file) {
+        previewContainer.style.display = "block";
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById("post-uploaded-preview").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        document.getElementById("post-uploaded-filename").textContent = file.name;
+        document.getElementById("post-uploaded-size").textContent =
+          (file.size / 1024 / 1024).toFixed(1) + " MB";
+        currentFile = file;
+        isFileFullyUploaded = false;
+      });
+
+      this.on("uploadprogress", function (file, progress) {
+        const progressBar = document.querySelector(".upload-progress-bar");
+        const percentage = Math.round(progress);
+        progressBar.style.width = percentage + "%";
+        document.getElementById("post-upload-percentage").textContent = percentage + "%";
+      });
+
+      this.on("success", function (file, response) {
+        const progressBar = document.querySelector(".upload-progress-bar");
+        progressBar.style.width = "100%";
+        document.getElementById("post-upload-percentage").textContent = "100%";
+        isFileFullyUploaded = true;
+        // Hide "Add Image" button and dropzone after successful upload.
+        showDropzoneBtn.style.display = "none";
+        uploadSection.style.display = "none";
+      });
+
+      this.on("error", function (file, errorMessage) {
+        Swal.fire({
+          title: "Upload Error",
+          text: errorMessage || "There was a problem uploading your image.",
+          icon: "error",
+          customClass: {
+            confirmButton: "btn btn-primary waves-effect waves-light"
+          },
+          buttonsStyling: false
+        });
+      });
+
+      this.on("removedfile", function () {
+        // Show the "Add Image" button again if the file is removed.
+        showDropzoneBtn.style.display = "block";
+        previewContainer.style.display = "none";
+        uploadSection.style.display = "none";
+        currentFile = null;
+        isFileFullyUploaded = false;
+      });
+    }
+  });
+
+  // -------------------------------------------
+  // 5) REMOVE UPLOADED FILE (the X icon)
+  // -------------------------------------------
+  document.getElementById("post-remove-upload").addEventListener("click", function () {
+    if (currentFile) {
+      Swal.fire({
+        title: "Remove File?",
+        text: "Are you sure you want to remove this file?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, remove it!",
+        customClass: {
+          confirmButton: "btn btn-primary me-3 waves-effect waves-light",
+          cancelButton: "btn btn-outline-secondary waves-effect"
+        },
+        buttonsStyling: false
+      }).then(result => {
+        if (result.isConfirmed) {
+          postDropzone.removeFile(currentFile);
+          Swal.fire({
+            title: "Removed!",
+            text: "The file has been removed.",
+            icon: "success",
+            customClass: {
+              confirmButton: "btn btn-success waves-effect"
+            },
+            buttonsStyling: false
+          });
+        }
+      });
+    }
+  });
+
+  // -------------------------------------------
+  // 6) POST BUTTON => check “either text or image”
+  // -------------------------------------------
+  postBtn.addEventListener("click", function () {
+    if (!canPost()) {
+      Swal.fire({
+        title: "Cannot Post",
+        text: "Please add text or an image before posting.",
+        icon: "error",
+        customClass: {
+          confirmButton: "btn btn-primary waves-effect waves-light"
+        },
+        buttonsStyling: false
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: "Confirm Post",
+      text: "Are you sure you want to post? This will be subject to moderator approval.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Post it!",
+      cancelButtonText: "Cancel",
+      customClass: {
+        confirmButton: "btn btn-primary me-3 waves-effect waves-light",
+        cancelButton: "btn btn-outline-secondary waves-effect"
+      },
+      buttonsStyling: false
+    }).then(result => {
+      if (result.isConfirmed) {
+        Swal.fire({
+            title: "Posting...",
+            text: "Please wait.",
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+            showCancelButton: false,
+            confirmButtonText: '',
+            customClass: { confirmButton: '', cancelButton: '' },
+            buttonsStyling: false
+        });
+
+        // Set a timeout to show a warning message if the process takes too long
+        let timeout = setTimeout(() => {
+            Swal.update({
+                title: 'Posting...',
+                text: 'This is taking longer than expected. Please wait or check your internet connection.',
+                icon: 'warning',
+                showConfirmButton: false,
+                showCancelButton: false,
+                confirmButtonText: '',
+                customClass: { confirmButton: '', cancelButton: '' },
+                buttonsStyling: false,
+                allowOutsideClick: false,
+            });
+            Swal.showLoading();
+        }, 5000); // Change 5000 to any delay you want in milliseconds
+          // Set a timeout to show a warning message if the process takes too long
+        let timeout2 = setTimeout(() => {
+            Swal.close();
+            Swal.fire({
+                title: 'Failed to post',
+                text: 'Please reload the page and try again.',
+                icon: 'error',
+                customClass: { confirmButton: 'btn btn-danger waves-effect' },
+                buttonsStyling: false
+            })
+            .then(() => {
+                location.reload();
+            })
+        }, 30000); // Change 5000 to any delay you want in milliseconds
+
+        let formData = new FormData();
+        formData.append("postBody", descInput.value);
+        if (currentFile) { formData.append("postImages", currentFile); }
+        formData.append("csrfmiddlewaretoken", $("input[name=csrfmiddlewaretoken]").val());
+
+        $.ajax({
+          url: userPost,
+          type: "POST",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            clearTimeout(timeout);
+            clearTimeout(timeout2);
+            Swal.close();
+
+            Swal.fire({
+              title: "Posted!",
+              text: "Your post is submitted and awaiting moderator approval.",
+              icon: "success",
+              customClass: {
+                confirmButton: "btn btn-success waves-effect"
+              },
+              buttonsStyling: false
+            }).then(() => {
+              descInput.value = "";
+              updateDescriptionCounter();
+              if (currentFile) {
+                postDropzone.removeAllFiles(true);
+              }
+              previewContainer.style.display = "none";
+              uploadSection.style.display = "none";
+              showDropzoneBtn.style.display = "block";
+              currentFile = null;
+              isFileFullyUploaded = false;
+              $("#addIskahubPost").modal("hide");
+            });
+          },
+          error: function(xhr, status, error) {
+            clearTimeout(timeout);
+            clearTimeout(timeout2);
+            Swal.close();
+
+            Swal.fire({
+              title: "Failed to post",
+              text: "Please reload the page and try again.",
+              icon: "error",
+              customClass: {
+                confirmButton: "btn btn-danger waves-effect"
+              },
+              buttonsStyling: false
+            });
+          }
+        })
+      }
+    });
+  });
+
+  // -------------------------------------------
+  // 7) RESET on modal close
+  // -------------------------------------------
+  $("#addIskahubPost").on("hidden.bs.modal", function () {
+    descInput.value = "";
+    updateDescriptionCounter();
+    if (currentFile) {
+      postDropzone.removeAllFiles(true);
+    }
+    previewContainer.style.display = "none";
+    uploadSection.style.display = "none";
+    showDropzoneBtn.style.display = "block";
+    currentFile = null;
+    isFileFullyUploaded = false;
+  });
+});
+</script> {% endcomment %}

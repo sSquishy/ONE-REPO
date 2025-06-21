@@ -1,0 +1,520 @@
+{% extends 'layout/sysStudent/sysStudent_layout.html' %}
+
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}myPUPQC | Student Guide{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'myPUPQC/js/content-management/modal/mypupqc_mypupqcslide-file-upload.js' %}"></script>
+
+{% comment %} <script src="{% static 'js/academic-head-js/modal-add-user.js' %}"></script> {% endcomment %}
+{% endblock page_js %}
+{{ block.super }}
+
+
+{% block content %}
+<div style="width: 90%; margin: 0 auto; box-sizing: border-box;">
+
+  <style>
+    /* This CSS ensures any image inside .tab-content fills the container's width and adjusts its height automatically */
+    .tab-content img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: auto;
+    }
+  </style>
+
+  <div class="container">
+    <!-- Freshmen Guide -->
+    <div class="col-md mt-4">
+      <h1 class="text-bolder text-3xl" style="color: #700001">Freshmen Guide</h1>
+      <div class="accordion mt-3 accordion-header-primary" id="freshmenGuide">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#freshmenGuide-1" aria-expanded="false">
+              Freshmen Guide Content
+            </button>
+          </h2>
+          <div id="freshmenGuide-1" class="accordion-collapse collapse" data-bs-parent="#freshmenGuide">
+            <div class="accordion-body">
+              <!-- Tabs for Freshmen Guide -->
+              <div class="card text-center mb-3">
+                <div class="card-header p-0">
+                  <div class="nav-align-top">
+                    <ul class="nav nav-tabs" role="tablist">
+                      <li class="nav-item">
+                        <button type="button" class="nav-link d-flex flex-column gap-1 active" role="tab" data-bs-toggle="tab" data-bs-target="#freshmen-tab1" aria-controls="freshmen-tab1" aria-selected="true">
+                          <i class="tf-icons mdi mdi-eye-outline mdi-20px me-1"></i>
+                          What should I look For?
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#freshmen-tab2" aria-controls="freshmen-tab2" aria-selected="false">
+                          <i class="tf-icons mdi mdi-clipboard-text-outline mdi-20px me-1"></i>
+                          Freshmen Essentials
+                        </button>
+                      </li>
+                      <li class="nav-item">
+                        <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#freshmen-tab3" aria-controls="freshmen-tab3" aria-selected="false">
+                          <i class="tf-icons mdi mdi-email-outline mdi-20px me-1"></i>
+                          How to Request PUPWebmail
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="tab-content pb-0">
+                    <!-- What should I look For? -->
+                    <div class="tab-pane fade show active" id="freshmen-tab1">
+                      <h4 class="text-center">What should I look For?</h4>
+                      <p class="text-black text-base text-start">
+                        1. You should check your schedule. You can see it in your PUPSIS Account. <br>
+                        2. You should check your room assignment. You can see it in your PUPSIS Account. <br>
+                        3. You should check who your professors are. You can see it in your PUPSIS Account. <br>
+                      </p>
+                    </div>
+
+                    <!-- Freshmen Essentials -->
+                    <div class="tab-pane fade" id="freshmen-tab2">
+                      <h4 class="text-center">Freshmen Essentials</h4>
+                      <p class="text-black text-base text-start">
+                        1. Download the
+                        <a href="https://drive.google.com/file/d/0B1BuDAuN0r8SX1BWX2NSN3FURzg/view?resourcekey=0-oi8lUy9PCFysh0FDyL5ipw" style="color:#700001" onMouseOver="this.style.color='red'">
+                          PUP Student Handbook and read it.
+                        </a> <br>
+                        2. Bag <br>
+                        3. Tumbler for water (optional) <br>
+                        4. Wallet <br>
+                        5. Ballpen <br>
+                        6. Yellow paper <br>
+                        7. Binder for your notes (optional) <br>
+                        8. Smart phone <br>
+                        9. Other essentials will depend on your professors' requirements. You can ask them. <br>
+                      </p>
+                    </div>
+
+                    <!-- How to Request PUPWebmail -->
+                    <div class="tab-pane fade" id="freshmen-tab3">
+                      <h4 class="text-center">How to Request PUPWebmail</h4>
+                      <p class="text-black text-base text-start">
+                        Send an email to <strong>webmail@pup.edu.ph</strong> with an attached copy of your PUP ID or any valid government ID. <br>
+                        Due to the volume of email requests we receive daily from all PUP students, faculty, employees, and even outside clients, our response may take longer than expected. <br><br>
+                        <strong>Processing Time:</strong> <br>
+                        1. Simple transactions within three (3) working days, <br>
+                        2. Seven (7) working days for complex transactions, and <br>
+                        3. Twenty (20) working days for highly technical transactions. <br><br>
+                        <strong>Reference:</strong>
+                        <a href="https://osssac.pup.edu.ph/knowledgebase.php?article=109#:~:text=Send%20email%20to%20webmail%40pup,or%20any%20valid%20government%20ID." style="color:#700001" onMouseOver="this.style.color='red'">
+                          PUP Webmail
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- End of Tabs -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use PUPSIS Guide -->
+      <div class="col-md mt-4">
+        <h1 class="text-bolder text-3xl" style="color: #700001">Use PUPSIS Guide</h1>
+        <div class="accordion mt-3 accordion-header-primary" id="pupsisGuide">
+          <!-- How to view my enrollment? -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#pupsis-enrollment" aria-expanded="false">
+                How to view my enrollment?
+              </button>
+            </h2>
+            <div id="pupsis-enrollment" class="accordion-collapse collapse" data-bs-parent="#pupsisGuide">
+              <div class="accordion-body">
+                <div class="card text-center mb-3">
+                  <div class="card-header p-0">
+                    <div class="nav-align-top">
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1 active" role="tab" data-bs-toggle="tab" data-bs-target="#enrollment-step1" aria-controls="enrollment-step1" aria-selected="true">
+                            <i class="tf-icons mdi mdi-numeric-1-box-outline mdi-20px me-1"></i>
+                            Step 1
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#enrollment-step2" aria-controls="enrollment-step2" aria-selected="false">
+                            <i class="tf-icons mdi mdi-numeric-2-box-outline mdi-20px me-1"></i>
+                            Step 2
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#enrollment-step3" aria-controls="enrollment-step3" aria-selected="false">
+                            <i class="tf-icons mdi mdi-numeric-3-box-outline mdi-20px me-1"></i>
+                            Step 3
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card-body text-start">
+                    <div class="tab-content pb-0">
+                      <div class="tab-pane fade show active" id="enrollment-step1">
+                        <h4 class="text-center">Step 1</h4>
+                        <p>Go to PUPSIS Website</p>
+                        <img src="{% static 'myClient/img/freshman-guide/enrollmen1.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <div class="tab-pane fade" id="enrollment-step2">
+                        <h4 class="text-center">Step 2</h4>
+                        <p>Sign in to your student account</p>
+                        <img src="{% static 'myClient/img/freshman-guide/enrollmen2.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <div class="tab-pane fade" id="enrollment-step3">
+                        <h4 class="text-center">Step 3</h4>
+                        <p>Click or tap Enrollment in the top bar</p>
+                        <img src="{% static 'myClient/img/freshman-guide/enrollmen3.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- How to view my schedule? -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#pupsis-schedule" aria-expanded="false">
+                How to view my schedule?
+              </button>
+            </h2>
+            <div id="pupsis-schedule" class="accordion-collapse collapse" data-bs-parent="#pupsisGuide">
+              <div class="accordion-body">
+                <div class="card text-center mb-3">
+                  <div class="card-header p-0">
+                    <div class="nav-align-top">
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1 active" role="tab" data-bs-toggle="tab" data-bs-target="#schedule-step1" aria-controls="schedule-step1" aria-selected="true">
+                            <i class="tf-icons mdi mdi-numeric-1-box-outline mdi-20px me-1"></i>
+                            Step 1
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#schedule-step2" aria-controls="schedule-step2" aria-selected="false">
+                            <i class="tf-icons mdi mdi-numeric-2-box-outline mdi-20px me-1"></i>
+                            Step 2
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#schedule-step3" aria-controls="schedule-step3" aria-selected="false">
+                            <i class="tf-icons mdi mdi-numeric-3-box-outline mdi-20px me-1"></i>
+                            Step 3
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card-body text-start">
+                    <div class="tab-content pb-0">
+                      <div class="tab-pane fade show active" id="schedule-step1">
+                        <h4 class="text-center">Step 1</h4>
+                        <p>Go to PUPSIS Website</p>
+                        <img src="{% static 'myClient/img/freshman-guide/enrollmen1.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <div class="tab-pane fade" id="schedule-step2">
+                        <h4 class="text-center">Step 2</h4>
+                        <p>Sign in to your student account</p>
+                        <img src="{% static 'myClient/img/freshman-guide/enrollmen2.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <div class="tab-pane fade" id="schedule-step3">
+                        <h4 class="text-center">Step 3</h4>
+                        <p>Click or tap Schedule in the top bar</p>
+                        <img src="{% static 'myClient/img/freshman-guide/schedule3.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- How to view my Grades? -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#pupsis-grades" aria-expanded="false">
+                How to view my Grades?
+              </button>
+            </h2>
+            <div id="pupsis-grades" class="accordion-collapse collapse" data-bs-parent="#pupsisGuide">
+              <div class="accordion-body">
+                <div class="card text-center mb-3">
+                  <div class="card-header p-0">
+                    <div class="nav-align-top">
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1 active" role="tab" data-bs-toggle="tab" data-bs-target="#grades-step1" aria-controls="grades-step1" aria-selected="true">
+                            <i class="tf-icons mdi mdi-numeric-1-box-outline mdi-20px me-1"></i>
+                            Step 1
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#grades-step2" aria-controls="grades-step2" aria-selected="false">
+                            <i class="tf-icons mdi mdi-numeric-2-box-outline mdi-20px me-1"></i>
+                            Step 2
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#grades-step3" aria-controls="grades-step3" aria-selected="false">
+                            <i class="tf-icons mdi mdi-numeric-3-box-outline mdi-20px me-1"></i>
+                            Step 3
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card-body text-start">
+                    <div class="tab-content pb-0">
+                      <div class="tab-pane fade show active" id="grades-step1">
+                        <h4 class="text-center">Step 1</h4>
+                        <p>Go to PUPSIS Website</p>
+                        <img src="{% static 'myClient/img/freshman-guide/enrollmen1.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <div class="tab-pane fade" id="grades-step2">
+                        <h4 class="text-center">Step 2</h4>
+                        <p>Sign in to your student account</p>
+                        <img src="{% static 'myClient/img/freshman-guide/enrollmen2.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <div class="tab-pane fade" id="grades-step3">
+                        <h4 class="text-center">Step 3</h4>
+                        <p>Click or tap Grades in the top bar</p>
+                        <img src="{% static 'myClient/img/freshman-guide/grade3.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- How to view my accounts (payment)? -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#pupsis-accounts" aria-expanded="false">
+                How to view my accounts (payment)?
+              </button>
+            </h2>
+            <div id="pupsis-accounts" class="accordion-collapse collapse" data-bs-parent="#pupsisGuide">
+              <div class="accordion-body">
+                <div class="card text-center mb-3">
+                  <div class="card-header p-0">
+                    <div class="nav-align-top">
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1 active" role="tab" data-bs-toggle="tab" data-bs-target="#accounts-step1" aria-controls="accounts-step1" aria-selected="true">
+                            <i class="tf-icons mdi mdi-numeric-1-box-outline mdi-20px me-1"></i>
+                            Step 1
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#accounts-step2" aria-controls="accounts-step2" aria-selected="false">
+                            <i class="tf-icons mdi mdi-numeric-2-box-outline mdi-20px me-1"></i>
+                            Step 2
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#accounts-step3" aria-controls="accounts-step3" aria-selected="false">
+                            <i class="tf-icons mdi mdi-numeric-3-box-outline mdi-20px me-1"></i>
+                            Step 3
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card-body text-start">
+                    <div class="tab-content pb-0">
+                      <div class="tab-pane fade show active" id="accounts-step1">
+                        <h4 class="text-center">Step 1</h4>
+                        <p>Go to PUPSIS Website</p>
+                        <img src="{% static 'myClient/img/freshman-guide/enrollmen1.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <div class="tab-pane fade" id="accounts-step2">
+                        <h4 class="text-center">Step 2</h4>
+                        <p>Sign in to your student account</p>
+                        <img src="{% static 'myClient/img/freshman-guide/enrollmen2.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <div class="tab-pane fade" id="accounts-step3">
+                        <h4 class="text-center">Step 3</h4>
+                        <p>Click or tap Accounts in the top bar</p>
+                        <img src="{% static 'myClient/img/freshman-guide/payment3.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- What is Room TBA? (No Tabs) -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#pupsis-roomtba" aria-expanded="false">
+                What is Room TBA?
+              </button>
+            </h2>
+            <div id="pupsis-roomtba" class="accordion-collapse collapse" data-bs-parent="#pupsisGuide">
+              <div class="accordion-body text-start">
+                <h4 class="text-center">What is Room TBA?</h4>
+                <p>Room TBA means "To Be Announced." You can ask Ma'am Edz for room inquiries.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Use SIS Guide -->
+      <div class="col-md mt-4">
+        <h1 class="text-bolder text-3xl" style="color: #700001">Use SIS Guide</h1>
+        <div class="accordion mt-3 accordion-header-primary" id="sisGuide">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#sisGuide-1" aria-expanded="false">
+                How to use PUP SIS Tools for enrollment?
+              </button>
+            </h2>
+            <div id="sisGuide-1" class="accordion-collapse collapse" data-bs-parent="#sisGuide">
+              <div class="accordion-body">
+                <!-- Tabs for SIS Guide -->
+                <div class="card text-center mb-3">
+                  <div class="card-header p-0">
+                    <div class="nav-align-top">
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1 active" role="tab" data-bs-toggle="tab" data-bs-target="#sis-about" aria-controls="sis-about" aria-selected="true">
+                            <i class="tf-icons mdi mdi-information-outline mdi-20px me-1"></i>
+                            About
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#sis-step1" aria-controls="sis-step1" aria-selected="false">
+                            <i class="tf-icons mdi mdi-numeric-1-box-outline mdi-20px me-1"></i>
+                            Step 1
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#sis-step2" aria-controls="sis-step2" aria-selected="false">
+                            <i class="tf-icons mdi mdi-numeric-2-box-outline mdi-20px me-1"></i>
+                            Step 2
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#sis-step3" aria-controls="sis-step3" aria-selected="false">
+                            <i class="tf-icons mdi mdi-numeric-3-box-outline mdi-20px me-1"></i>
+                            Step 3
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#sis-course" aria-controls="sis-course" aria-selected="false">
+                            <i class="tf-icons mdi mdi-book-open-outline mdi-20px me-1"></i>
+                            Course Offerings
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#sis-petition" aria-controls="sis-petition" aria-selected="false">
+                            <i class="tf-icons mdi mdi-comment-question-outline mdi-20px me-1"></i>
+                            Request for Petition Subjects
+                          </button>
+                        </li>
+                        <li class="nav-item">
+                          <button type="button" class="nav-link d-flex flex-column gap-1" role="tab" data-bs-toggle="tab" data-bs-target="#sis-ace" aria-controls="sis-ace" aria-selected="false">
+                            <i class="tf-icons mdi mdi-file-document-outline mdi-20px me-1"></i>
+                            ACE Form
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card-body text-start">
+                    <div class="tab-content pb-0">
+                      <!-- About -->
+                      <div class="tab-pane fade show active" id="sis-about">
+                        <h4 class="text-center">About</h4>
+                        <p>Students taking up bachelor’s degree and diploma programs who need to add or change subjects during adjustment period can now use the PUP Online ACE starting this Summer 2019.
+                        The link is provided on the PUPSIS Student Module login page under <strong>SIS Tools for Students</strong>.</p>
+                      </div>
+                      <!-- Step 1 -->
+                      <div class="tab-pane fade" id="sis-step1">
+                        <h4 class="text-center">Step 1</h4>
+                        <p>Go to PUPSIS and click SIS Tool.</p>
+                        <a href="https://apps.pup.edu.ph/sisstudent/Login" style="color:#700001" onMouseOver="this.style.color='red'">
+                          SIS Tools
+                        </a>
+                        <img src="{% static 'myClient/img/freshman-guide/sisstep1.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <!-- Step 2 -->
+                      <div class="tab-pane fade" id="sis-step2">
+                        <h4 class="text-center">Step 2</h4>
+                        <p>Proceed after entering your student account details.</p>
+                        <img src="{% static 'myClient/img/freshman-guide/sisstep2.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <!-- Step 3 -->
+                      <div class="tab-pane fade" id="sis-step3">
+                        <h4 class="text-center">Step 3</h4>
+                        <p>Choose the tool you want to use.</p>
+                        <img src="{% static 'myClient/img/freshman-guide/sisstep3.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <!-- Course Offerings -->
+                      <div class="tab-pane fade" id="sis-course">
+                        <h4 class="text-center">Course Offerings</h4>
+                        <p>You can search your subjects here for your current academic year and semester.</p>
+                        <img src="{% static 'myClient/img/freshman-guide/sisstep4.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <!-- Request for Petition Subjects -->
+                      <div class="tab-pane fade" id="sis-petition">
+                        <h4 class="text-center">Request for Petition Subjects</h4>
+                        <p>Before making a request for petition subjects, make sure to read the manual first.</p>
+                        <img src="{% static 'myClient/img/freshman-guide/sisstep5.png' %}" class="img-fluid mt-2 rounded-lg">
+                      </div>
+                      <!-- Application for Change of Enrollment (ACE) Form -->
+                      <div class="tab-pane fade" id="sis-ace">
+                        <h4 class="text-center">Application for Change of Enrollment (ACE) Form</h4>
+                        <p>The ACE Form is only applicable for enrolled students.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End of Tabs -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  </div>
+  <!-- All Modals -->
+
+
+
+  <!-- All sweet alert -->
+  {% include 'sysAdmin/partials/content-management/table_action_bar.html' %}
+
+
+{% endblock %}

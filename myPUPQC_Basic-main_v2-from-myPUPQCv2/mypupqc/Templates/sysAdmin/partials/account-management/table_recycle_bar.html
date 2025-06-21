@@ -1,0 +1,76 @@
+<!-- CSS for Action Bar (unchanged) -->
+<style>
+  .action-bar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 12px; /* Rounded corners for soft UI */
+  }
+  .selected-count {
+    font-weight: bold;
+    margin-right: 10px;
+    color: #333; /* Dark text color */
+  }
+  .btn-outline-primary {
+    border-color: #0d6efd; /* Bootstrap primary blue */
+    color: #0d6efd;
+  }
+  .btn-outline-primary:hover {
+    background-color: #0d6efd; /* Solid blue on hover */
+    color: #fff;
+  }
+  .btn-outline-success {
+    border-color: #198754; /* Bootstrap success green */
+    color: #198754;
+  }
+  .btn-outline-success:hover {
+    background-color: #198754; /* Solid green on hover */
+    color: #fff;
+  }
+  .btn-outline-danger {
+    border-color: #dc3545; /* Bootstrap danger red */
+    color: #dc3545;
+  }
+  .btn-outline-danger:hover {
+    background-color: #dc3545; /* Solid red on hover */
+    color: #fff;
+  }
+  .btn-outline-warning {
+    border-color: #ffc107; /* Bootstrap warning yellow */
+    color: #ffc107;
+  }
+  .btn-outline-warning:hover {
+    background-color: #ffc107; /* Solid yellow on hover */
+    color: #fff;
+  }
+  .btn-close-action {
+    background-color: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #333;
+  }
+</style>
+
+<!-- Action Bar for Recycle Table -->
+<div id="actionBarRecycle" class="action-bar" style="display: none;">
+  <span id="selectedCountRecycle" class="selected-count"></span>
+  <button id="bulkReactivate" class="btn btn-outline-success">
+    <i class="mdi mdi-refresh me-1"></i> Reactivate
+  </button>
+  <span class="divider">||</span>
+  <button id="bulkDeleteRecycle" class="btn btn-outline-danger">
+    <i class="mdi mdi-delete-outline me-1"></i> Delete
+  </button>
+  <button id="closeActionBarRecycle" class="btn btn-close-action">
+    <i class="mdi mdi-close"></i>
+  </button>
+</div>

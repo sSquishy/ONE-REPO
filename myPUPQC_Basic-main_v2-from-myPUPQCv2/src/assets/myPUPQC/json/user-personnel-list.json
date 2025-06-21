@@ -1,0 +1,54 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "employee_id": "EMP001",
+      "full_name": "John Doe",
+      "role_access": "System Admin",
+      "email": "johndoe@example.com",
+      "created_date": "26 Feb 24",
+      "status": 1,
+      "action": ""
+    },
+    {
+      "id": 2,
+      "employee_id": "EMP002",
+      "full_name": "Jane Smith",
+      "role_access": "Moderator",
+      "email": "janesmith@example.com",
+      "created_date": "25 Feb 24",
+      "status": 2,
+      "action": ""
+    },
+    {
+      "id": 3,
+      "employee_id": "EMP003",
+      "full_name": "Alice Johnson",
+      "role_access": "System Admin",
+      "email": "alicejohnson@example.com",
+      "created_date": "24 Feb 24",
+      "status": 3,
+      "action": ""
+    },
+    {
+      "id": 4,
+      "employee_id": "EMP004",
+      "full_name": "Bob Williams",
+      "role_access": "Moderator",
+      "email": "bobwilliams@example.com",
+      "created_date": "23 Feb 24",
+      "status": 1,
+      "action": ""
+    },
+    {
+      "id": 5,
+      "employee_id": "EMP005",
+      "full_name": "Charlie Brown",
+      "role_access": "System Admin",
+      "email": "charliebrown@example.com",
+      "created_date": "22 Feb 24",
+      "status": 2,
+      "action": ""
+    }
+  ]
+}
