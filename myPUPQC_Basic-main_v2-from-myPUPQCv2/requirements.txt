@@ -38,3 +38,29 @@ urllib3==2.3.0
 user-agents==2.2.0
 whitenoise==6.9.0
 yarl==1.18.3
+
+
+asgiref
+Django
+gunicorn
+packaging
+python-dotenv
+sqlparse
+typing_extensions
+whitenoise
+fitz
+
+# For the OCR and PDF processing
+# and web scraping
+# and document processing
+PyPDF2
+pdfplumber
+pytesseract
+pillow
+python-docx
+beautifulsoup4
+langchain
+tiktoken
+langchain-community
+
+# pip install langdetect

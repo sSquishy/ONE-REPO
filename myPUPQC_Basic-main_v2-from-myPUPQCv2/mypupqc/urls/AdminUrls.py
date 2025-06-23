@@ -1,6 +1,7 @@
 from django.urls import path
 from mypupqc.views import SchedulerAuthView, UsersView
 from mypupqc.controller import *
+from mypupqc.controller import AdminConfigController, StudentChatController
 
 urlpatterns = [
     # Authentication Paths
@@ -10,13 +11,13 @@ urlpatterns = [
         name="sysAdminLogin",
     ),
     path(
-        'authentication/Login/LoginSysAdmin/', 
-        AuthController.showSysAdminLogin, 
+        'authentication/Login/LoginSysAdmin/',
+        AuthController.showSysAdminLogin,
         name='sysAdminLogin.Post',
     ),
     path(
-        'authentication/Login/LogoutSysAdmin/', 
-        AuthController.sysAdminLogout, 
+        'authentication/Login/LogoutSysAdmin/',
+        AuthController.sysAdminLogout,
         name='sysAdminLogout',
     ),
     path(
@@ -459,4 +460,14 @@ urlpatterns += [
         SysAdminDashboardController.getTotalRegisteredUsersPerYear,
         name="getTotalRegisteredUsersPerYear",
     ),
+]
+
+
+# Chatbot URLs
+urlpatterns += [
+    path("chatbot/", StudentChatController.chat_with_ai, name="chatbot"),
+    path("sysAdmin/config/manage_data/", AdminConfigController.ChatbotDataView.as_view(), name="chatbot_data"),
+    path("sysAdmin/config/delete_data/", AdminConfigController.ChatbotDataDelete.as_view(), name="delete_chatbot_data"),
+    path("sysAdmin/config/manage_labels/", AdminConfigController.ChatbotLabelView.as_view(), name="chatbot_labels"),
+    path("sysAdmin/config/delete_labels/", AdminConfigController.ChatbotLabelDelete.as_view(), name="delete_chatbot_labels")
 ]

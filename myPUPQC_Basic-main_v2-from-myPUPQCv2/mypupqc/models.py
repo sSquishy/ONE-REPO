@@ -194,7 +194,7 @@ class Organization(models.Model):
     createdTime = models.DateTimeField(default=timezone.now)
     updatedTime = models.DateTimeField(null=True)
     isActive = models.IntegerField(default=1)
-    
+
 
 class StudentsOrganization(models.Model):
     studentOrganizationID = models.AutoField(primary_key=True)
@@ -320,6 +320,27 @@ class HowToLinks(models.Model):
     updatedTime = models.DateTimeField(default=timezone.now)
 
 
+class ChatbotData(models.Model):
+    data_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    link = models.URLField(blank=True, null=True)
+    attachment = models.FileField(upload_to='chatbot_attachments/', blank=True, null=True)
+    extracted_text = models.TextField(null=True, blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.data_id
+
+class ChatbotLabel(models.Model):
+    label_id = models.AutoField(primary_key=True)
+    label_name = models.CharField(max_length=255)
+    date_added = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+
 # Login History
 from django.db import models
 from django.conf import settings
@@ -329,7 +350,7 @@ class UserLoginHistory(models.Model):
         ('web', 'Web Login'),
         ('api', 'API Login'),
     )
-    
+
     user = models.ForeignKey("Faculty", on_delete=models.CASCADE)
     browser = models.CharField(max_length=200)
     device = models.CharField(max_length=200)
@@ -338,10 +359,10 @@ class UserLoginHistory(models.Model):
     location = models.CharField(max_length=200)
     login_datetime = models.DateTimeField()
     access_type = models.CharField(max_length=10, choices=ACCESS_TYPES, default='web')
-    
+
     class Meta:
         ordering = ['-login_datetime']
-        
+
     def __str__(self):
         return f"{self.user.firstname} - {self.login_datetime}"
 

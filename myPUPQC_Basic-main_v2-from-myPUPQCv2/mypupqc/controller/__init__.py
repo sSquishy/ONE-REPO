@@ -9,4 +9,6 @@ __all__ = [
     'SysAdminController',
     'SysAdminDashboardController',
     'ChatBotController',
+    'AdminConfigController',
+    'StudentChatController',
 ]
