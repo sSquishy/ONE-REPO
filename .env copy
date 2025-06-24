@@ -1,8 +1,0 @@
-# Django settings
-SECRET_KEY = 'django-insecure-%xqxcw%@ltqfbl9$lo5v!ct3$046$(s7q^wfu7hym119q%bvu2'
-DEBUG = True
-ALLOWED_HOSTS = localhost 127.0.0.1 [::1] mypupqc-n7me.onrender.com
-EMAIL_HOST_USER = 'mypupqcportal@gmail.com'
-EMAIL_HOST_PASSWORD = 'afjn kmvz gydp memo'
-TIME_ZONE = 'Asia/Manila'
-DATABASE_URL = "postgresql://rikkadesu:ePLwWuejSrVcLsA5oHso9cu2PT1YxoPC@dpg-csetmj1u0jms73fbf26g-a.singapore-postgres.render.com/mypupqc_postgres"
