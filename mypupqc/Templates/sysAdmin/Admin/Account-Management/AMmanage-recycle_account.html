@@ -1,0 +1,123 @@
+{% extends 'layout/sysAdmin/sysAdmin_layout_vertical.html' %}
+
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Configurator | Manage Recycle Accounts{% endblock %}
+
+
+{% block vendor_css %}
+{{ block.super }}
+
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/bs-stepper/bs-stepper.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/animate-css/animate.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/bootstrap-select/bootstrap-select.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/tagify/tagify.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/dropzone/dropzone.css' %}" />
+
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+
+<script src="{% static 'vendor/libs/cleavejs/cleave.js' %}"></script>
+<script src="{% static 'vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/bs-stepper/bs-stepper.js' %}"></script>
+
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+
+<script src="{% static 'vendor/libs/dropzone/dropzone.js' %}"></script>
+
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'myPUPQC/js/account-management/tables-recycle-basic.js' %}"></script>
+
+{% comment %} <script src="{% static 'js/academic-head-js/modal-add-user.js' %}"></script> {% endcomment %}
+{% endblock page_js %}
+{{ block.super }}
+
+
+{% block content %}
+{% csrf_token %}
+<div style="width: 90%; margin: 0 auto; box-sizing: border-box;">
+  <h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">
+      <a href="{% url 'sysAdminHomepage' %}" class="text-muted fw-light">{% translate "Home" %}</a> /
+    </span>
+    <span class="text-muted fw-light">
+      <a href="{% url 'sysAdminAccountManagement' %}" class="text-muted fw-light">{% translate "Account Management" %}</a> /
+    </span>
+    <a href="{% url 'sysAdminManageRecycle' %}" class="text-dark">
+      {% translate "Manage Recycle Account" %}
+    </a>
+  </h4>
+
+
+  <!-- Recycle Accounts DataTable -->
+  <div class="card">
+    <div class="card-datatable table-responsive pt-0">
+      <table class="datatables-recycle table table-bordered">
+        <thead>
+          <tr>
+            <th></th>
+            <th>ID</th>
+            <th>User Type</th>
+            <th>User Number</th>
+            <th>Name</th>
+            <th>Date of Birth</th>
+            <th>Email</th>
+            <th>Webmail</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <!-- / Recycle Accounts DataTable -->
+
+  <!-- All Modals -->
+  {% include "sysAdmin/partials/account-management/modal_add_programs.html" %}
+  {% include "sysAdmin/partials/account-management/modal_edit_programs.html" %}
+
+  <!-- All sweet alert -->
+  {% include 'sysAdmin/partials/account-management/table_recycle_bar.html' %}
+</div>
+{% endblock %}

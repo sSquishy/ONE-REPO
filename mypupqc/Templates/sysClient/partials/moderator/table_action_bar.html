@@ -1,0 +1,204 @@
+<style>
+  .action-bar {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 12px; /* Rounded corners for soft UI */
+  }
+
+  .selected-count {
+    font-weight: bold;
+    margin-right: 10px;
+    color: #333; /* Dark text color */
+  }
+
+  .btn-outline-primary {
+    border-color: #0d6efd; /* Bootstrap primary blue */
+    color: #0d6efd;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #0d6efd; /* Solid blue on hover */
+    color: #fff;
+  }
+
+  .btn-outline-success {
+    border-color: #198754; /* Bootstrap success green */
+    color: #198754;
+  }
+
+  .btn-outline-success:hover {
+    background-color: #198754; /* Solid green on hover */
+    color: #fff;
+  }
+
+  .btn-outline-danger {
+    border-color: #dc3545; /* Bootstrap danger red */
+    color: #dc3545;
+  }
+
+  .btn-outline-danger:hover {
+    background-color: #dc3545; /* Solid red on hover */
+    color: #fff;
+  }
+
+  .btn-outline-warning {
+    border-color: #ffc107; /* Bootstrap warning yellow */
+    color: #ffc107;
+  }
+
+  .btn-outline-warning:hover {
+    background-color: #ffc107; /* Solid yellow on hover */
+    color: #fff;
+  }
+
+  .btn-close-action {
+    background-color: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #333;
+  }
+</style>
+
+<!-- Publish Table Action Bar -->
+<div id="publish_actionBar" class="action-bar" style="display: none;">
+  <span id="publish_selectedCount" class="selected-count"></span>
+  <!-- Report button -->
+  <button id="publish_report" class="btn btn-outline-warning">
+    <i class="mdi mdi-alert-outline me-1"></i> Report
+  </button>
+  <span class="divider"></span>
+  <!-- Reject button -->
+  <button id="publish_reject" class="btn btn-outline-danger">
+    <i class="mdi mdi-delete-outline me-1"></i> Reject
+  </button>
+  <button id="publish_closeActionBar" class="btn btn-close-action">
+    <i class="mdi mdi-close"></i>
+  </button>
+</div>
+
+
+<!-- Rejected Table Action Bar -->
+<div id="reject_actionBar" class="action-bar" style="display: none;">
+  <span id="reject_selectedCount" class="selected-count"></span>
+  <!-- Published button -->
+  <button id="reject_published" class="btn btn-outline-success">
+    <i class="mdi mdi-check-outline me-1"></i> Published
+  </button>
+  <span class="divider"></span>
+  <!-- Report button -->
+  <button id="reject_report" class="btn btn-outline-warning">
+    <i class="mdi mdi-alert-outline me-1"></i> Report
+  </button>
+  <button id="reject_closeActionBar" class="btn btn-close-action">
+    <i class="mdi mdi-close"></i>
+  </button>
+</div>
+
+
+<!-- Reported Table Action Bar -->
+<div id="reported_actionBar" class="action-bar" style="display: none;">
+  <span id="reported_selectedCount" class="selected-count"></span>
+  <!-- Edit button -->
+  <button id="reported_edit" class="btn btn-outline-warning">
+    <i class="mdi mdi-pencil-outline me-1"></i> Edit
+  </button>
+  <span class="divider"></span>
+  <!-- Published button -->
+  <button id="reported_published" class="btn btn-outline-success">
+    <i class="mdi mdi-check-outline me-1"></i> Published
+  </button>
+  <span class="divider"></span>
+  <!-- Rejected button -->
+  <button id="reported_rejected" class="btn btn-outline-danger">
+    <i class="mdi mdi-close-outline me-1"></i> Rejected
+  </button>
+  <button id="reported_closeActionBar" class="btn btn-close-action">
+    <i class="mdi mdi-close"></i>
+  </button>
+</div>
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Corrected table to action bar mapping
+    const tableActionBarMap = {
+      publishedTable: "publish_actionBar",
+      rejectedTable: "reject_actionBar",
+      reportedTable: "reported_actionBar"
+    };
+
+    // Action bar to table mapping for deselection
+    const actionBarTableMap = {
+      publish_actionBar: "publishedTable",
+      reject_actionBar: "rejectedTable",
+      reported_actionBar: "reportedTable"
+    };
+
+    const actionBars = document.querySelectorAll(".action-bar");
+
+    function deactivateAllActionBars() {
+      actionBars.forEach((bar) => {
+        if (bar.style.display !== "none") {
+          const tableId = actionBarTableMap[bar.id];
+          if (tableId) {
+            // Deselect all checkboxes in the associated table
+            const checkboxes = document.querySelectorAll(`#${tableId} .row-checkbox`);
+            checkboxes.forEach(checkbox => checkbox.checked = false);
+            // Reset selected count
+            const countSpan = bar.querySelector(".selected-count");
+            if (countSpan) countSpan.textContent = "0 Selected";
+          }
+        }
+        bar.style.display = "none";
+      });
+    }
+
+    function activateActionBar(actionBarId) {
+      deactivateAllActionBars();
+      const actionBar = document.getElementById(actionBarId);
+      if (actionBar) actionBar.style.display = "flex";
+    }
+
+    // Attach table click handlers
+    Object.entries(tableActionBarMap).forEach(([tableId, actionBarId]) => {
+      const table = document.getElementById(tableId);
+      if (table) {
+        table.addEventListener("click", () => activateActionBar(actionBarId));
+      }
+    });
+
+    // Close button handlers
+    actionBars.forEach(bar => {
+      const closeBtn = bar.querySelector(".btn-close-action");
+      if (closeBtn) {
+        closeBtn.addEventListener("click", () => deactivateAllActionBars());
+      }
+    });
+  });
+</script>
+
+<script>
+// IDs of all action bars
+const allActionBars = ['#publish_actionBar', '#reject_actionBar', '#reported_actionBar'];
+function deactivateAllActionBars() {
+  allActionBars.forEach(barId => {
+    document.querySelector(barId).style.display = 'none';
+  });
+}
+function activateActionBar(barId) {
+  deactivateAllActionBars();
+  document.querySelector(barId).style.display = 'flex';
+}
+
+</script>

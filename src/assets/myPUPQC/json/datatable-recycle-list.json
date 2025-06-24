@@ -1,0 +1,40 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "user_type": "Student",
+      "user_number": "2024001",
+      "name": "Juan Dela Cruz",
+      "dob": "2002-05-12",
+      "email": "juan.delacruz@example.com",
+      "webmail": "jdcruz@pup.edu.ph"
+    },
+    {
+      "id": "2",
+      "user_type": "Faculty",
+      "user_number": "F1001",
+      "name": "Maria Santos",
+      "dob": "1985-08-22",
+      "email": "maria.santos@example.com",
+      "webmail": "msantos@pup.edu.ph"
+    },
+    {
+      "id": "3",
+      "user_type": "Alumni",
+      "user_number": "A3005",
+      "name": "Carlos Garcia",
+      "dob": "1997-03-15",
+      "email": "carlos.garcia@example.com",
+      "webmail": "cgarcia@alumni.pup.edu.ph"
+    },
+    {
+      "id": "4",
+      "user_type": "Personnel",
+      "user_number": "P5002",
+      "name": "Anna Reyes",
+      "dob": "1979-12-02",
+      "email": "anna.reyes@example.com",
+      "webmail": "areyes@pup.edu.ph"
+    }
+  ]
+}

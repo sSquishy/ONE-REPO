@@ -1,0 +1,124 @@
+<!-- Modal for Adding Report -->
+<div class="modal fade" id="addReportModal" tabindex="-1" aria-labelledby="addReportModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-add-report">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Add Report</h3>
+          <p class="pt-1">Please provide the report details below.</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form id="addReportForm" class="row g-4" onsubmit="return false">
+          <!-- Report Title -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="newReportTitle" name="newReportTitle" class="form-control" placeholder="Report Title" required>
+              <label for="newReportTitle">Report Title</label>
+            </div>
+          </div>
+          <!-- Report Description -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <textarea id="newReportDescription" name="newReportDescription" class="form-control" placeholder="Report Description" style="height: 150px;" required></textarea>
+              <label for="newReportDescription">Report Description</label>
+            </div>
+          </div>
+          <!-- Report Category (Dropdown) -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <select id="newReportCategory" name="newReportCategory" class="form-select" required>
+                <option value="" disabled selected>Select Category</option>
+                <option value="spam">Spam</option>
+                <option value="abuse">Abuse</option>
+                <option value="other">Other</option>
+              </select>
+              <label for="newReportCategory">Report Category</label>
+            </div>
+          </div>
+          <!-- Submit and Cancel Buttons -->
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary me-3" id="submitNewReport">Submit</button>
+            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Function to validate a single field for the add report form
+  function validateNewReportField(field) {
+    if (field.value.trim() === "") {
+      field.classList.add('is-invalid');
+    } else {
+      field.classList.remove('is-invalid');
+    }
+  }
+
+  // Real-time validation for required fields in addReportForm
+  document.querySelectorAll('#addReportForm [required]').forEach((field) => {
+    field.addEventListener('input', () => validateNewReportField(field));
+  });
+
+  // Form submission logic for addReportForm
+  document.getElementById('submitNewReport').addEventListener('click', function() {
+    let isValid = true;
+
+    // Validate all required fields
+    document.querySelectorAll('#addReportForm [required]').forEach((field) => {
+      validateNewReportField(field);
+      if (field.classList.contains('is-invalid')) {
+        isValid = false;
+      }
+    });
+
+    if (!isValid) {
+      Swal.fire({
+        title: 'Incomplete or Invalid Information',
+        text: 'Please ensure all fields are valid.',
+        icon: 'error',
+        customClass: { confirmButton: 'btn btn-danger waves-effect' },
+        buttonsStyling: false
+      });
+      return;
+    }
+
+    // Confirmation prompt before saving the report
+    Swal.fire({
+      title: 'Save Report?',
+      text: 'Confirm to save the report details.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Save!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+        cancelButton: 'btn btn-outline-secondary waves-effect'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Saved!',
+          text: 'Report details have been saved successfully.',
+          customClass: { confirmButton: 'btn btn-success waves-effect' },
+          buttonsStyling: false
+        }).then(() => {
+          // Close modal
+          const modal = bootstrap.Modal.getInstance(document.getElementById('addReportModal'));
+          modal.hide();
+
+          // Reset the form fields
+          document.getElementById('addReportForm').reset();
+          document.querySelectorAll('#addReportForm [required]').forEach((field) => {
+            field.classList.remove('is-invalid');
+          });
+        });
+      }
+    });
+  });
+</script>

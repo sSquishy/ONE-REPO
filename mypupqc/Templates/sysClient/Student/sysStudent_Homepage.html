@@ -1,0 +1,463 @@
+{% extends 'layout/sysStudent/sysStudent_layout.html' %}
+
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}myPUPQC | Homepage{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/bs-stepper/bs-stepper.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/animate-css/animate.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/dropzone/dropzone.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/plyr/plyr.css' %}" />
+
+<style>
+  /* Container styling */
+  .card {
+    display: inline-flex;           /* Lay out buttons in a row */
+    align-items: center;
+    background-color: #fff;         /* Light background */
+    border-radius: 9999px;          /* 'Pill' shape */
+    padding: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
+    gap: 8px;                       /* Space between the two buttons */
+  }
+
+  /* General button styling */
+  .card .btn.rounded-pill.btn-label-secondary {
+    border: none;
+    background-color: transparent;  /* Make button background blend with card */
+    color: #333;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 9999px;
+    cursor: pointer;
+  }
+
+  /* First button expands to fill space (like an input) */
+  .card .btn.rounded-pill.btn-label-secondary:first-child {
+    flex: 1;
+    text-align: left;
+  }
+
+  /* Icon styling */
+  .card .btn.rounded-pill.btn-label-secondary i.mdi {
+    font-size: 20px;
+    color: #007BFF; /* Adjust icon color as needed */
+  }
+</style>
+
+<link rel="stylesheet" href="{% static 'myClient/css/client/responsive.css' %}" />
+
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+
+<script src="{% static 'vendor/libs/cleavejs/cleave.js' %}"></script>
+<script src="{% static 'vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/bs-stepper/bs-stepper.js' %}"></script>
+
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+
+<script src="{% static 'vendor/libs/dropzone/dropzone.js' %}"></script>
+
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/plyr/plyr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/css/pages/app-academy.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script>
+  const defaultImage = "{% static 'img/avatars/1.png' %}";
+  const getChikas = "{% url 'student.getChikas' %}";
+  const getCalendarEvents = "{% url 'student.getCalendarEvents' %}";
+  const userPost = "{% url 'student.post' %}";
+  const getPosts = "{% url 'student.getPosts' %}";
+</script>
+
+<script src="{% static 'myPUPQC\js\Globals.js' %}"></script>
+<script src="{% static 'myClient/js/homepage/post-managemenet.js' %}"></script>
+<script src="{% static 'js/ui-popover.js' %}"></script>
+<script src="{% static 'js/extended-ui-sweetalert2.js' %}"></script>
+<script src="{% static 'js/form-validation.js' %}"></script>
+
+<script src="{% static 'myClient\js\student\student.js' %}"></script>
+{% comment %} <script src="{% static 'js/app-academy-course.js' %}"></script> {% endcomment %}
+{% endblock page_js %}
+{{ block.super }}
+
+
+{% block content %}
+<!-- Begin: Main Container -->
+<div style="display: flex; justify-content: center; align-items: flex-start; width: 100%; gap: 20px;">
+
+  <!-- Begin: Left Column (70%) -->
+  <div style="flex: 7; width: 75%; max-width: 75%;">
+
+    {# Optional Banner Image (commented out) #}
+    {# <!-- Begin: Optional Banner Image --> #}
+    {# <img src="{% static 'myClient/img/AnoAngChikaBanner.png' %}" alt="PUP Calendar Banner" style="width: 30%; height: auto; max-height: 50px; display: block;"> #}
+    {# <!-- End: Optional Banner Image --> #}
+
+    <!-- Begin: Slider Container Parent -->
+    <div style="width: 770px; max-width: 100%; margin: 0 auto;">
+      <div class="card" style="border: none; background: transparent; box-shadow: none; height: 280px;">
+
+        <!-- Begin: Slider Container -->
+        <div id="slider-container" style="position: relative; overflow: hidden; padding: 0.5rem; width: 100%; height: 250px;">
+
+          <!-- Begin: Left Navigation Button -->
+          <button
+            id="btn-left"
+            onclick="slideLeft()"
+            style="position: absolute; left: 0; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(255,255,255,0.8); border: none; font-size: 1.5rem; cursor: pointer;"
+          >
+            &#8249;
+          </button>
+          <!-- End: Left Navigation Button -->
+
+          <!-- Begin: Cards Row Container -->
+          <div id="card-slider" style="display: flex; transition: transform 0.3s ease; justify-content: flex-start;">
+
+            <!-- Begin: Cards Row -->
+            <div id="chikaContainer" style="display: flex; transition: transform 0.3s ease; gap: 20px; justify-content: flex-start;">
+
+              <!-- Skeleton Loader Card (Left-Aligned, Top-Aligned Content) -->
+              <div class="col-12 col-md-6 col-lg-4 chikaCard" style="flex: 0 0 250px; height: 240px;">
+                <div class="card shadow-none border h-100 chikaCard" style="height: 150px; width: 300px; border-radius: 10px; overflow: hidden;">
+                  <div class="p-2 pb-0" style="height: 120px; width: 100%;">
+                    <!-- Image Placeholder -->
+                    <div class="placeholder bg-gray-300" style="width: 100%; height: 120px; border-radius: 10px;"></div>
+                  </div>
+                  <!-- Card Body: left-aligned and top-aligned -->
+                  <div class="card-body" style="text-align: left; display: flex; flex-direction: column; justify-content: flex-start;">
+                    <!-- Title Placeholder -->
+                    <h5 class="card-title placeholder-glow" style="font-size: small;">
+                      <span class="placeholder col-6" style="width: 250px;"></span>
+                    </h5>
+                    <!-- Description Placeholder -->
+                    <p class="card-text placeholder-glow"
+                      style="font-size: small; margin: 0; flex-grow: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                      <span class="placeholder col-7" style="width: 100px;"></span>
+                      <span class="placeholder col-5"></span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Skeleton Loader Card (Left-Aligned, Top-Aligned Content) -->
+              <div class="col-12 col-md-6 col-lg-4 chikaCard" style="flex: 0 0 250px; height: 240px;">
+                <div class="card shadow-none border h-100 chikaCard" style="height: 150px; width: 300px; border-radius: 10px; overflow: hidden;">
+                  <div class="p-2 pb-0" style="height: 120px; width: 100%;">
+                    <!-- Image Placeholder -->
+                    <div class="placeholder bg-gray-300" style="width: 100%; height: 120px; border-radius: 10px;"></div>
+                  </div>
+                  <!-- Card Body: left-aligned and top-aligned -->
+                  <div class="card-body" style="text-align: left; display: flex; flex-direction: column; justify-content: flex-start;">
+                    <!-- Title Placeholder -->
+                    <h5 class="card-title placeholder-glow" style="font-size: small;">
+                      <span class="placeholder col-6" style="width: 230px;"></span>
+                    </h5>
+                    <!-- Description Placeholder -->
+                    <p class="card-text placeholder-glow"
+                      style="font-size: small; margin: 0; flex-grow: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                      <span class="placeholder col-7" style="width: 100px;"></span>
+                      <span class="placeholder col-5"></span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Skeleton Loader Card (Left-Aligned, Top-Aligned Content) -->
+              <div class="col-12 col-md-6 col-lg-4 chikaCard" style="flex: 0 0 250px; height: 240px;">
+                <div class="card shadow-none border h-100 chikaCard" style="height: 150px; width: 300px; border-radius: 10px; overflow: hidden;">
+                  <div class="p-2 pb-0" style="height: 120px; width: 100%;">
+                    <!-- Image Placeholder -->
+                    <div class="placeholder bg-gray-300" style="width: 100%; height: 120px; border-radius: 10px;"></div>
+                  </div>
+                  <!-- Card Body: left-aligned and top-aligned -->
+                  <div class="card-body" style="text-align: left; display: flex; flex-direction: column; justify-content: flex-start;">
+                    <!-- Title Placeholder -->
+                    <h5 class="card-title placeholder-glow" style="font-size: small;">
+                      <span class="placeholder col-6" style="width: 250px;"></span>
+                    </h5>
+                    <!-- Description Placeholder -->
+                    <p class="card-text placeholder-glow"
+                      style="font-size: small; margin: 0; flex-grow: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                      <span class="placeholder col-7" style="width: 130px;"></span>
+                      <span class="placeholder col-5"></span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- End: Cards Row Container -->
+
+          <!-- Begin: Right Navigation Button -->
+          <button
+            id="btn-right"
+            onclick="slideRight()"
+            style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(255,255,255,0.8); border: none; font-size: 1.5rem; cursor: pointer;">
+            &#8250;
+          </button>
+          <!-- End: Right Navigation Button -->
+
+        </div>
+        <!-- End: Slider Container -->
+      </div>
+    </div>
+    <!-- End: Slider Container Parent -->
+
+    {% comment %}
+    <br>
+      <img src="{% static 'myClient/img/IskaHubBanner.png' %}" alt="PUP Calendar Banner" style="width: 30%; height: auto; max-height: 50px; display: block;">
+    <br>
+    {% endcomment %}
+
+    <!-- Begin: Iskahub Post Card -->
+    <div class="card d-flex flex-row align-items-center p-3 mx-auto" style="background-color: #f5f5f5; width: 770px; max-width: 100%; box-sizing: border-box; border-radius: 8px;">
+      <!-- Begin: Text Button with Icon -->
+      <button
+        type="button"
+        class="btn d-flex align-items-center flex-grow-1 me-3 responsive-text"
+        data-bs-toggle="modal"
+        data-bs-target="#addIskahubPost"
+        style="min-height: 50px; height: auto; background-color: #F8F9FA; color: #6C757D; font-size: 16px; border-radius: 8px; border: 1px solid #DEE2E6; transition: all 0.3s ease; padding: 0 20px;"
+        onmouseover="this.style.backgroundColor='#E9ECEF'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'"
+        onmouseout="this.style.backgroundColor='#F8F9FA'; this.style.boxShadow='none'">
+        <i class="mdi mdi-comment-edit-outline me-2" style="font-size: 20px;"></i>
+        What do you want to tell our isko and iska?
+      </button>
+      <!-- End: Text Button with Icon -->
+
+      <!-- Begin: Icon Button -->
+      <button
+        type="button"
+        class="btn d-flex align-items-center justify-content-center"
+        data-bs-toggle="modal"
+        data-bs-target="#addIskahubPost"
+        style="min-height: 50px; min-width: 50px; height: auto; width: auto; aspect-ratio: 1/1; background-color: #F8F9FA; color: #6C757D; border-radius: 8px; border: 1px solid #DEE2E6; transition: all 0.3s ease;"
+        onmouseover="this.style.backgroundColor='#E9ECEF'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.1)'"
+        onmouseout="this.style.backgroundColor='#F8F9FA'; this.style.boxShadow='none'">
+        <i class="mdi mdi-paperclip" style="font-size: 24px;"></i>
+      </button>
+      <!-- End: Icon Button -->
+
+    </div>
+    <!-- End: Iskahub Post Card -->
+
+    <br>
+
+    <!-- Begin: Post Container -->
+    <div id="feedContainer" class="card border-0 bg-transparent shadow-none">
+      <!-- Posts will automatically be appended here -->
+
+      <!-- Begin: Modal for Full Image View -->
+      <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content bg-transparent border-0 shadow-none">
+            <div class="modal-body p-0 text-center">
+              <img id="postImage" src="{% static 'img/elements/2.jpg' %}" alt="Full Post Image" class="img-fluid rounded-3"
+                   style="max-width: 100%; height: auto;" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End: Modal for Full Image View -->
+    </div>
+    <!-- End: Post Container -->
+
+    <!-- Skeleton Loader: centered and matching the post card format -->
+    <div id="loadingTrigger" style="display: none;">
+      <div class="mx-auto" style="width: 770px; max-width: 100%;">
+        <div class="flex flex-col space-y-4 animate-pulse">
+
+          <!-- Skeleton Card #1 -->
+          <div class="card border rounded-3 p-3 mb-3 shadow-sm bg-white" style="width: 770px; max-width: 100%; background: #fff;">
+            <div class="card-header bg-transparent border-bottom-0 p-2 d-flex align-items-center" style="width: 770px; max-width: 100%; margin: 0 auto;">
+              <div class="d-flex align-items-center flex-grow-1">
+                <!-- Round icon placeholder -->
+                <span class="placeholder rounded-circle bg-gray-300 me-2" style="width: 45px; height: 45px;"></span>
+                <div style="width: 770px; max-width: 100%;">
+                  <!-- Title placeholder lines -->
+                  <p class="mb-0 placeholder-glow">
+                    <span class="placeholder col-4"></span>
+                  </p>
+                  <p class="placeholder-glow">
+                    <span class="placeholder col-3"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-2" style="width: 770px; max-width: 100%; margin: 0 auto;">
+              <!-- Description placeholder lines -->
+              <p class="mb-0 placeholder-glow">
+                <span class="placeholder col-7"></span>
+                <span class="placeholder col-4"></span>
+                <span class="placeholder col-4"></span>
+                <span class="placeholder col-6"></span>
+                <span class="placeholder col-8"></span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Skeleton Card #2 -->
+          <div class="card border rounded-3 p-3 mb-3 shadow-sm bg-white" style="width: 770px; max-width: 100%; background: #fff;">
+            <div class="card-header bg-transparent border-bottom-0 p-2 d-flex align-items-center" style="width: 770px; max-width: 100%; margin: 0 auto;">
+              <div class="d-flex align-items-center flex-grow-1">
+                <div class="rounded-full bg-gray-300 me-2" style="width: 45px; height: 45px;"></div>
+                <div style="width: 770px; max-width: 100%;">
+                  <p class="mb-0 placeholder-glow">
+                    <span class="placeholder col-4"></span>
+                  </p>
+                  <p class="placeholder-glow">
+                    <span class="placeholder col-3"></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="card-body p-2" style="width: 770px; max-width: 100%; margin: 0 auto;">
+              <p class="mb-0 placeholder-glow">
+                <span class="placeholder col-7"></span>
+                <span class="placeholder col-4"></span>
+                <span class="placeholder col-4"></span>
+                <span class="placeholder col-6"></span>
+                <span class="placeholder col-8"></span>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- End: Left Column (70%) -->
+
+  <!-- Student Right Column -->
+  <div class="hide-on-small" style="flex: 3; width: 25%; max-width: 25%; position: sticky; top: 80px;">
+    <!-- Begin: PUP Calendar Banner -->
+    <img src="{% static 'myClient/img/PUPCalendarBanner.png' %}" alt="PUP Calendar Banner" style="height: auto; max-height: 50px; display: block;">
+    <!-- End: PUP Calendar Banner -->
+
+    <!-- Begin: Notification for School Events -->
+    <div class="col-lg-12">
+      <div class="demo-inline-spacing mt-2">
+        <div id="calendarEventsContainer" class="list-group">
+          <a href="javascript:void(0);" class="list-group-item list-group-item-action d-flex justify-content-between p-2">
+            <div class="li-wrapper d-flex justify-content-start align-items-center">
+              <div class="avatar avatar-xs me-2">
+                <span class="avatar-initial rounded-circle bg-label-success" style="font-size: 10px; padding: 5px;">M</span>
+              </div>
+              <div class="list-content">
+                <h6 class="mb-0" style="font-size: 12px;">Looking for events...</h6>
+                <small style="font-size: 10px;">Please wait</small>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- End: Notification for School Events -->
+    <br>
+
+    <!-- Begin: Services Banner -->
+    <img src="{% static 'myClient/img/ServicesBanner.png' %}" alt="PUP Services Banner" style="height: auto; max-height: 50px; display: block;">
+    <!-- End: Services Banner -->
+
+    <!-- Begin: List Group Icons with Links -->
+    <div class="col-lg-12">
+      <div class="demo-inline-spacing mt-2">
+        <ul class="list-group">
+          <li class="list-group-item d-flex align-items-center p-2">
+            <i class="mdi mdi-television me-2" style="font-size: 14px;"></i>
+            <a href="https://www.pup.edu.ph/about/calendar" target="_blank" rel="noopener noreferrer" style="color: black; text-decoration: none; font-size: 12px;">
+              University Calendar
+            </a>
+          </li>
+          <li class="list-group-item d-flex align-items-center p-2">
+            <i class="mdi mdi-bell-outline me-2" style="font-size: 14px;"></i>
+            <a href="https://puppoc.serviceops.ai/support-portal/" target="_blank" rel="noopener noreferrer" style="color: black; text-decoration: none; font-size: 12px;">
+              PUP Sinta
+            </a>
+          </li>
+          <li class="list-group-item d-flex align-items-center p-2">
+            <i class="mdi mdi-headphones me-2" style="font-size: 14px;"></i>
+            <a href="https://odrs.pup.edu.ph/" target="_blank" rel="noopener noreferrer" style="color: black; text-decoration: none; font-size: 12px;">
+              Online Document Request System
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- End: List Group Icons with Links -->
+    <br>
+
+    <!-- Begin: Students Services Banner -->
+    <img src="{% static 'myClient/img/StudentsServicesBanner.png' %}" alt="PUP Student Services Banner" style="height: auto; max-height: 50px; display: block;">
+    <!-- End: Students Services Banner -->
+
+    <!-- Begin: Second List Group with Links -->
+    <div class="col-lg-12">
+      <div class="demo-inline-spacing mt-2">
+        <ul class="list-group">
+          <li class="list-group-item d-flex align-items-center p-2">
+            <i class="mdi mdi-account-school me-2 text-warning" style="font-size: 14px;"></i>
+            <a href="https://sisstudents.pup.edu.ph/" target="_blank" rel="noopener noreferrer" style="color: black; text-decoration: none; font-size: 12px;">
+              PUP SIS
+            </a>
+          </li>
+          <li class="list-group-item d-flex align-items-center p-2">
+            <i class="mdi mdi-school me-2 text-warning" style="font-size: 14px;"></i>
+            <a href="https://www.pup.edu.ph/students/scholarships" target="_blank" rel="noopener noreferrer" style="color: black; text-decoration: none; font-size: 12px;">
+              Scholarship
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- End: Second List Group with Links -->
+
+  </div>
+  <!-- End: Right Column (30%) -->
+</div>
+<!-- End: Main Flex Container -->
+
+
+<!-- Begin: Modals -->
+{% include 'sysClient/partials/modal_add_post.html' %}
+{% include 'sysClient/partials/modal_view_anoangchika.html' %}
+<!-- End: Modals -->
+
+{% endblock %}

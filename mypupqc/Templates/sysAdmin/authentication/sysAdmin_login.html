@@ -1,0 +1,100 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}myPUPQC - Login{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/animate-css/animate.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static  'vendor/css/pages/page-auth.css' %}">
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'myPUPQC\js\Globals.js' %}"></script>
+<script src="{% static 'myPUPQC\js\authentication\system-admin.js' %}"></script>
+{% endblock page_js %}
+
+
+{% block content %}
+<div class="position-relative" style="background-image: url('{% static "myClient/img/bg_pupqc.png" %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+  <div class="authentication-wrapper authentication-basic container-p-y">
+    <div class="authentication-inner py-4">
+      <div class="card p-2">
+        <div class="card-body mt-2">
+          <div class="mb-3 items-center justify-center h-screen text-center">
+            <h4 class="mb-2">System Admin</h4>
+            <p class="mb-4">Please sign in to your account and start the Managing!</p>
+          </div>
+          <form id="formAuthentication" class="mb-3" action="">
+            {% csrf_token %}
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="text" class="form-control" id="username" name="username" placeholder="Enter your employee number" autofocus>
+              <label for="username">Employee Number</label>
+            </div>
+            <div class="mb-3">
+              <div class="form-password-toggle">
+                <div class="input-group input-group-merge">
+                  <div class="form-floating form-floating-outline">
+                    <input type="password" id="password" class="form-control" name="password" placeholder="Password">
+                    <label for="password">Password</label>
+                  </div>
+                  <span class="input-group-text cursor-pointer">
+                    <i class="mdi mdi-eye-off-outline"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3 d-flex justify-content-between">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="remember-me">
+                <label class="form-check-label" for="remember-me">Remember Me</label>
+              </div>
+              <a href="{% url 'sysAdminForgotPassword' %}" class="float-end mb-1" style="color: #a5041c; font-weight: bold;">
+                <span>Forgot Password?</span>
+              </a>
+            </div>
+            <!-- Button with Spinner -->
+            <div class="mb-3">
+              <button class="btn btn-primary d-grid w-100" id="btnSubmit" type="button"
+                style="background-color: #880000; transition: background-color 0.3s; display: flex; align-items: center; justify-content: center; height: 2.5rem;">
+                <span class="btn-text">Sign in</span>
+                <span class="spinner-border spinner" role="status" style="display: none;">
+                  <span class="visually-hidden">Loading...</span>
+                </span>
+              </button>
+            </div>
+
+            <!-- Hover effect CSS -->
+            <style>
+              #btnSubmit:hover {
+                background-color: rgb(70, 0, 0) !important;
+              }
+            </style>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

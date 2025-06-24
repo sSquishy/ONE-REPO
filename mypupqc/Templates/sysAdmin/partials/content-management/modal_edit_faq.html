@@ -1,0 +1,185 @@
+<!-- Modal for Editing FAQ -->
+<div class="modal fade" id="editFaqModal" tabindex="-1" aria-labelledby="editFaqModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-simple modal-edit-faq">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Edit FAQ</h3>
+          <p class="pt-1">Please update the FAQ details below.</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form id="editFaqForm" class="row g-4" onsubmit="return false">
+          <!-- Hidden field for FAQ ID (if needed) -->
+          <input type="hidden" id="faqId" name="faqId" />
+
+          <!-- Question Field -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="faqQuestionEdit" name="faqQuestionEdit" class="form-control" placeholder="Question" required />
+              <label for="faqQuestionEdit">Question</label>
+            </div>
+          </div>
+
+          <!-- Answer Field -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <textarea id="faqAnswerEdit" name="faqAnswerEdit" class="form-control" placeholder="Answer" required></textarea>
+              <label for="faqAnswerEdit">Answer</label>
+            </div>
+          </div>
+
+          <!-- Status Dropdown -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <select id="faqStatusEdit" name="faqStatusEdit" class="form-select" required>
+                <option value="" disabled>Select Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+              <label for="faqStatusEdit">Status</label>
+            </div>
+          </div>
+
+          <!-- Submit and Reset -->
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary me-3" id="submitFaqEdit">Save Changes</button>
+            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('submitFaqEdit').addEventListener('click', function () {
+    let isValid = true;
+
+    // Validate all required fields in the edit FAQ form
+    document.querySelectorAll('#editFaqForm [required]').forEach((field) => {
+      if (field.value.trim() === "") {
+        field.classList.add('is-invalid');
+        isValid = false;
+      } else {
+        field.classList.remove('is-invalid');
+      }
+    });
+
+    if (!isValid) {
+      Swal.fire({
+        title: 'Incomplete Information',
+        text: 'Please ensure all fields are filled out.',
+        icon: 'error',
+        customClass: { confirmButton: 'btn btn-danger waves-effect' },
+        buttonsStyling: false
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: 'Save Changes?',
+      text: 'Confirm to update the FAQ details.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Save!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+        cancelButton: 'btn btn-outline-secondary waves-effect'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Here you can process the form data (e.g. via AJAX)
+        const faqID = document.getElementById('submitFaqEdit').getAttribute('data-id');
+        const faqQuestion = document.getElementById('faqQuestionEdit').value;
+        const faqAnswer = document.getElementById('faqAnswerEdit').value;
+        const faqStatus = document.getElementById('faqStatusEdit').value;
+
+        $.ajax({
+          url: "/sysAdmin/Admin/Content-Management/editFAQ/",
+          type: "POST",
+          data: {
+            faqID: faqID,
+            faqQuestion: faqQuestion,
+            faqAnswer: faqAnswer,
+            faqStatus: faqStatus,
+            csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+          },
+          success: function (response) {
+            console.log(response);
+            Swal.fire({
+              icon: 'success',
+              title: 'Updated!',
+              text: 'FAQ details have been successfully updated.',
+              customClass: { confirmButton: 'btn btn-success waves-effect' },
+              buttonsStyling: false
+            }).then(() => {
+              // Hide the modal and reset the form
+              const modal = bootstrap.Modal.getInstance(document.getElementById('editFaqModal'));
+              modal.hide();
+              document.getElementById('editFaqForm').reset();
+              document.querySelectorAll('#editFaqForm [required]').forEach((field) => {
+                field.classList.remove('is-invalid');
+              });
+              document.dt_faq.ajax.reload(null, false);
+            });
+          },
+          error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: 'An error occurred while updating the FAQ details.',
+              customClass: { confirmButton: 'btn btn-danger waves-effect' },
+              buttonsStyling: false
+            });
+          }
+        })
+      }
+    });
+  });
+</script>
+
+<script>
+  /**
+   * File Upload for FAQ (if required for the edit modal)
+   */
+  'use strict';
+
+  (function () {
+    // Updated Dropzone default preview template
+    const previewTemplate = `<div class="dz-preview dz-file-preview">
+      <div class="dz-details">
+        <div class="dz-thumbnail">
+          <img data-dz-thumbnail>
+          <span class="dz-nopreview">No preview</span>
+          <div class="dz-success-mark"></div>
+          <div class="dz-error-mark"></div>
+          <div class="dz-error-message"><span data-dz-errormessage></span></div>
+          <div class="progress">
+            <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress></div>
+          </div>
+        </div>
+        <div class="dz-filename" data-dz-name></div>
+        <div class="dz-size" data-dz-size></div>
+      </div>
+    </div>`;
+
+    // Basic Dropzone for editing FAQ (if file upload is needed)
+    const dropzoneEdit = document.querySelector('#dropzone-edit');
+    if (dropzoneEdit) {
+      const myDropzoneEdit = new Dropzone(dropzoneEdit, {
+        previewTemplate: previewTemplate,
+        parallelUploads: 1,
+        maxFilesize: 5,
+        addRemoveLinks: true,
+        maxFiles: 1
+      });
+    }
+  })();
+</script>

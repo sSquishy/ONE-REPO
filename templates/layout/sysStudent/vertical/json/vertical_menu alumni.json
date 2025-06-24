@@ -1,0 +1,74 @@
+{
+  "menu": [
+    {
+      "name": "Iskahub",
+      "icon": "menu-icon tf-icons mdi mdi-school-outline",
+      "slug": "iskahub",
+      "submenu": [
+        {
+          "url": "/sysAlumni/Alumni/Homepage",
+          "name": "Alumni Paths",
+          "slug": "sys-alumni-homepage",
+          "external": true
+        }
+      ]
+    },
+    {
+      "name": "Downloadables",
+      "icon": "menu-icon tf-icons mdi mdi-download-outline",
+      "slug": "downloadables",
+      "url": "https://www.pup.edu.ph/downloads/sysAlumnis/",
+      "external": true,
+      "target": "_blank"
+    },
+    {
+      "name": "About PUPQC",
+      "icon": "menu-icon tf-icons mdi mdi-information-outline",
+      "slug": "about-pupqc",
+      "submenu": [
+        {
+          "url": "https://www.pup.edu.ph/quezoncity/history",
+          "name": "History",
+          "slug": "pupqc-history",
+          "external": true,
+          "target": "_blank"
+        },
+        {
+          "url": "https://www.pup.edu.ph/quezoncity/facilities",
+          "name": "Facilities",
+          "slug": "pupqc-facilities",
+          "external": true,
+          "target": "_blank"
+        },
+        {
+          "url": "https://www.pup.edu.ph/quezoncity/personnel",
+          "name": "Officials and Staff",
+          "slug": "pupqc-officials-staff",
+          "external": true,
+          "target": "_blank"
+        },
+        {
+          "url": "https://www.pup.edu.ph/quezoncity/faculty",
+          "name": "Faculty",
+          "slug": "pupqc-faculty",
+          "external": true,
+          "target": "_blank"
+        },
+        {
+          "url": "https://www.pup.edu.ph/quezoncity/",
+          "name": "Academic",
+          "slug": "pupqc-academic",
+          "external": true,
+          "target": "_blank"
+        },
+        {
+          "url": "https://www.pup.edu.ph/quezoncity/contactinfo",
+          "name": "Contact Information",
+          "slug": "pupqc-contact",
+          "external": true,
+          "target": "_blank"
+        }
+      ]
+    }
+  ]
+}

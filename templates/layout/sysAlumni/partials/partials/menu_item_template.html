@@ -1,0 +1,7 @@
+{% if item.submenu %}
+{% comment %} Menu Item has Submenu (Collapsible) {% endcomment %}
+{% include 'layout/sysAlumni/partials/partials/menu_collapsible_template.html' with item=item %}
+{% else %}
+{% comment %} Menu Item has link{% endcomment %}
+{% include 'layout/sysAlumni/partials/partials/menu_link_template.html' with item=item %}
+{% endif %}

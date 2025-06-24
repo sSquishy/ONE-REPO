@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "program_name": "Bachelor of Science in Computer Science",
+      "acronym": "BSCS",
+      "created_date": "2023-01-15"
+    },
+    {
+      "id": 2,
+      "program_name": "Bachelor of Science in Information Technology",
+      "acronym": "BSIT",
+      "created_date": "2023-02-20"
+    },
+    {
+      "id": 3,
+      "program_name": "Bachelor of Science in Electrical Engineering",
+      "acronym": "BSEE",
+      "created_date": "2023-03-10"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{% extends 'layout/sysClient_master.html' %}
+
+{% block layout %}
+<!-- Layout wrapper: Start -->
+<div class="layout-container d-flex flex-column min-vh-100">
+
+  <!-- Navbar: Start -->
+  {% include "layout/Guest/navbar_front.html" %}
+  <!-- Navbar: End -->
+
+</br></br>
+</br>
+
+
+  {% block content %}
+  {% endblock content %}
+
+  {% if is_footer %}
+  <!-- Footer: Start -->
+  {% include "layout/Guest/footer_front.html" %}
+  <!-- Footer: End -->
+  {% endif %}
+
+  <div class="content-backdrop fade"></div>
+</div>
+<!-- / Layout wrapper: End -->
+{% endblock layout %}

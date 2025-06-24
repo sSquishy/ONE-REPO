@@ -1,0 +1,59 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "image": "assets/images/articles/article1.jpg",
+      "event_title": "Event One",
+      "description": "This is a description for event one.",
+      "started_date": "15 Jan 2025",
+      "end_date": "20 Jan 2025",
+      "created_date": "10 Jan 2025",
+      "status": "Active",
+      "action": ""
+    },
+    {
+      "id": 2,
+      "image": "assets/images/articles/article2.jpg",
+      "event_title": "Event Two",
+      "description": "This is a description for event two.",
+      "started_date": "5 Feb 2025",
+      "end_date": "10 Feb 2025",
+      "created_date": "1 Feb 2025",
+      "status": "Inactive",
+      "action": ""
+    },
+    {
+      "id": 3,
+      "image": "assets/images/articles/article3.jpg",
+      "event_title": "Event Three",
+      "description": "This is a description for event three.",
+      "started_date": "1 Mar 2025",
+      "end_date": "5 Mar 2025",
+      "created_date": "25 Feb 2025",
+      "status": "Active",
+      "action": ""
+    },
+    {
+      "id": 4,
+      "image": "assets/images/articles/article4.jpg",
+      "event_title": "Event Four",
+      "description": "This is a description for event four.",
+      "started_date": "10 Mar 2025",
+      "end_date": "15 Mar 2025",
+      "created_date": "5 Mar 2025",
+      "status": "Draft",
+      "action": ""
+    },
+    {
+      "id": 5,
+      "image": "assets/images/articles/article5.jpg",
+      "event_title": "Event Five",
+      "description": "This is a description for event five.",
+      "started_date": "1 Apr 2025",
+      "end_date": "5 Apr 2025",
+      "created_date": "28 Mar 2025",
+      "status": "Active",
+      "action": ""
+    }
+  ]
+}

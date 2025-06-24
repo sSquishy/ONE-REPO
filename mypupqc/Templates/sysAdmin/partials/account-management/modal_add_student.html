@@ -1,0 +1,404 @@
+<!-- Modal for Adding Student -->
+<div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-add-student">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Add Student Information</h3>
+          <p class="pt-1">Please provide the student details below.</p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form id="addStudentForm" class="row g-4" onsubmit="return false">
+          <!-- Student Number -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="addStudentNumber" name="studentNumber" class="form-control" placeholder="Student Number" required />
+              <label for="addStudentNumber">Student Number</label>
+            </div>
+          </div>
+
+          <!-- Program (Dropdown) -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <select id="addStudentProgram" name="program" class="form-select" required>
+                <option value="" disabled selected>Select Program</option>
+              </select>
+              <label for="addStudentProgram">Program</label>
+            </div>
+          </div>
+
+          <!-- First Name -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="addStudentFirstName" name="firstName" class="form-control" placeholder="First Name" required />
+              <label for="addStudentFirstName">First Name</label>
+            </div>
+          </div>
+
+          <!-- Last Name -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="addStudentLastName" name="lastName" class="form-control" placeholder="Last Name" required />
+              <label for="addStudentLastName">Last Name</label>
+            </div>
+          </div>
+
+          <!-- Middle Name (Optional) -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="addStudentMiddleName" name="middleName" class="form-control" placeholder="Middle Name" />
+              <label for="addStudentMiddleName">Middle Name (Optional)</label>
+            </div>
+          </div>
+
+          <!-- Suffix (Optional) -->
+          <div class="col-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="addStudentSuffix" name="suffix" class="form-control" placeholder="Suffix" />
+              <label for="addStudentSuffix">Suffix (Optional)</label>
+            </div>
+          </div>
+
+          <!-- Birth Information -->
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="addStudentBirthMonth" name="modalAddStudentBirthMonth" class="form-select" required>
+                <option value="">Select Month</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+              <label for="addStudentBirthMonth">Birth Month</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="addStudentBirthDay" name="addStudentBirthDay" class="form-select" required>
+                <option value="">Select Day</option>
+                <!-- Days will be dynamically populated -->
+              </select>
+              <label for="addStudentBirthDay">Birth Day</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="addStudentBirthYear" name="modalAddStudentBirthYear" class="form-select" required>
+                <option value="">Select Year</option>
+                <!-- Years will be dynamically populated -->
+              </select>
+              <label for="addStudentBirthYear">Birth Year</label>
+            </div>
+          </div>
+
+          <!-- Additional Information -->
+          <div class="col-12">
+            <h6 class="mt-4 mb-3">Additional Information</h6>
+            <!-- Mobile Number (Philippine Format) -->
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="text" id="addStudentMobileNumber" name="mobileNumber" class="form-control" placeholder="Mobile Number" required />
+              <label for="addStudentMobileNumber">Mobile Number (e.g., +63 912 345 6789)</label>
+            </div>
+
+            <!-- Personal Email -->
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="email" id="addStudentPersonalEmail" name="personalEmail" class="form-control" placeholder="Personal Email" required />
+              <label for="addStudentPersonalEmail">Personal Email</label>
+            </div>
+
+            <!-- PUP Webmail -->
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="email" id="addStudentPupWebmail" name="pupWebmail" class="form-control" placeholder="PUP Webmail" required />
+              <label for="addStudentPupWebmail">PUP Webmail</label>
+            </div>
+          </div>
+
+          <!-- Submit and Reset -->
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary me-3" id="submitStudent">Submit</button>
+            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Real-time validation for required fields
+    $('#addStudentForm [required]').on('input', function () {
+      validateField(this);
+    });
+
+    // Mobile Number Formatting: Accepts numbers only and auto-formats spacing for +63 912 345 6789
+    $('#addStudentMobileNumber').on('input', function (e) {
+      let input = $(this).val().replace(/\D/g, ''); // Remove non-numeric characters
+      if (input.startsWith('0')) {
+        input = '63' + input.substring(1); // Replace leading '0' with '63'
+      }
+      if (input.startsWith('63')) {
+        input = '+' + input;
+      }
+      // Format the number into: +63 912 345 6789
+      let formattedNumber = input.replace(/(\+\d{2})(\d{3})(\d{3})(\d{4})/, '$1 $2 $3 $4');
+      formattedNumber.length > 16 ? formattedNumber = formattedNumber.substring(0, 16) : null;
+      $(this).val(formattedNumber);
+    });
+
+    // Form submission logic
+    $('#submitStudent').on('click', function () {
+      let isValid = true;
+
+      // Validate all required fields
+      $('#addStudentForm [required]').each(function () {
+        validateField(this);
+        if ($(this).hasClass('is-invalid')) {
+          isValid = false;
+        }
+      });
+
+      // Validate phone number format
+      const phoneNumber = $('#addStudentMobileNumber').val();
+      if (!validatePhoneNumber(phoneNumber)) {
+        $('#addStudentMobileNumber').addClass('is-invalid');
+        isValid = false;
+      } else {
+        $('#addStudentMobileNumber').removeClass('is-invalid');
+      }
+
+      // Validate student number format
+      const studentNumber = $('#addStudentNumber').val();
+      if (!validateStudentNumber(studentNumber)) {
+        $('#addStudentNumber').addClass('is-invalid');
+        isValid = false;
+      } else {
+        $('#addStudentNumber').removeClass('is-invalid');
+      }
+
+      // Validate personal email format
+      const personalEmail = $('#addStudentPersonalEmail').val();
+      if (!validateEmail(personalEmail)) {
+        $('#addStudentPersonalEmail').addClass('is-invalid');
+        isValid = false;
+      } else {
+        $('#addStudentPersonalEmail').removeClass('is-invalid');
+      }
+
+      // Validate PUP webmail format
+      const pupWebmail = $('#addStudentPupWebmail').val();
+      if (!validateWebmail(pupWebmail)) {
+        $('#addStudentPupWebmail').addClass('is-invalid');
+        isValid = false;
+      } else {
+        $('#addStudentPupWebmail').removeClass('is-invalid');
+      }
+
+      if (!isValid) {
+        // Show error alert if validation fails
+        Swal.fire({
+          title: 'Incomplete or Invalid Information',
+          text: 'Please ensure all fields are valid.',
+          icon: 'error',
+          customClass: { confirmButton: 'btn btn-danger waves-effect' },
+          buttonsStyling: false
+        });
+        return;
+      }
+
+      // Confirmation prompt
+      Swal.fire({
+        title: 'Save Student?',
+        text: 'Confirm to save the student details.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Save!',
+        cancelButtonText: 'Cancel',
+        customClass: {
+          confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+          cancelButton: 'btn btn-outline-secondary waves-effect'
+        },
+        buttonsStyling: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+              title: "Saving...",
+              text: "Processing your request...",
+              allowOutsideClick: false,
+              didOpen: () => {
+                  Swal.showLoading();
+              },
+              showCancelButton: false,
+              confirmButtonText: '',
+              customClass: { confirmButton: '', cancelButton: '' },
+              buttonsStyling: false
+          });
+
+          // Set a timeout to show a warning message if the process takes too long
+          let timeout = setTimeout(() => {
+              Swal.update({
+                  title: 'Saving...',
+                  text: 'This is taking longer than expected. Please wait or check your internet connection.',
+                  icon: 'warning',
+                  showConfirmButton: false,
+                  showCancelButton: false,
+                  confirmButtonText: '',
+                  customClass: { confirmButton: '', cancelButton: '' },
+                  buttonsStyling: false,
+                  allowOutsideClick: false,
+              });
+              Swal.showLoading();
+          }, 5000); // Change 5000 to any delay you want in milliseconds
+
+          // Set a timeout to show a warning message if the process takes too long
+          let timeout2 = setTimeout(() => {
+              Swal.close();
+              Swal.fire({
+                  title: 'Failed to save student account',
+                  text: 'Please try reloading the page and try again.',
+                  icon: 'error',
+                  customClass: { confirmButton: 'btn btn-danger waves-effect' },
+                  buttonsStyling: false
+              })
+          }, 30000); // Change 30000 to any delay you want in milliseconds
+
+          $.ajax({
+            url: "/sysAdmin/Admin/Account-Management/addStudent/",
+            type: "POST",
+            data: {
+              studentNumberAdd: $('#addStudentNumber').val(),
+              programAdd: $('#addStudentProgram').val(),
+              firstNameAdd: $('#addStudentFirstName').val(),
+              lastNameAdd: $('#addStudentLastName').val(),
+              middleNameAdd: $('#addStudentMiddleName').val(),
+              suffixAdd: $('#addStudentSuffix').val(),
+              birthMonthAdd: $('#addStudentBirthMonth').val(),
+              birthDayAdd: $('#addStudentBirthDay').val(),
+              birthYearAdd: $('#addStudentBirthYear').val(),
+              mobileNoAdd: $('#addStudentMobileNumber').val(),
+              emailAddressAdd: $('#addStudentPersonalEmail').val(),
+              webmailAdd: $('#addStudentPupWebmail').val(),
+              csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function(response) {
+              clearTimeout(timeout);
+              clearTimeout(timeout2);
+              Swal.close();
+
+              // Success alert
+              Swal.fire({
+                icon: 'success',
+                title: 'Saved!',
+                text: 'Student details have been successfully saved.',
+                customClass: { confirmButton: 'btn btn-success waves-effect' },
+                buttonsStyling: false
+              }).then(() => {
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addStudentModal'));
+                modal.hide();
+
+                // Reset form
+                $('#addStudentForm')[0].reset();
+                $('#addStudentForm [required]').removeClass('is-invalid');
+
+                // Refresh the table
+                document.dt_user.ajax.reload(null, false);
+              });
+            },
+            error: function(xhr, status, error) {
+              clearTimeout(timeout);
+              clearTimeout(timeout2);
+              Swal.close();
+
+              // Error alert for existing student number
+              if(xhr.responseJSON.status === "existing") {
+                Swal.fire({
+                  icon: 'error',
+                  title: "Failed to add student",
+                  text: xhr.responseJSON.message,
+                  customClass: { confirmButton: 'btn btn-danger waves-effect' },
+                  buttonsStyling: false
+                })
+                return;
+              }
+
+              // Default Error alert
+              console.log(xhr.responseText);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while updating the student details. Please try again.',
+                customClass: { confirmButton: 'btn btn-danger waves-effect' },
+                buttonsStyling: false
+              });
+            }
+          })
+        }
+      });
+    });
+
+    // Populate Years Dropdown
+    const birthYearDropDown = $('#addStudentBirthYear');
+    for (let year = new Date().getFullYear(); year >= 1900; year--) {
+      birthYearDropDown.append(`<option value="${year}">${year}</option>`);
+    }
+
+    // Function to populate default days (1-31) with padded values
+    function populateDefaultDays() {
+      const birthDayDropDown = $('#addStudentBirthDay');
+      birthDayDropDown.empty().append('<option value="">Select Day</option>');
+      for (let day = 1; day <= 31; day++) {
+        let dayFormatted = day.toString().padStart(2, '0');
+        birthDayDropDown.append(`<option value="${dayFormatted}">${dayFormatted}</option>`);
+      }
+    }
+
+    // Call default population on page load
+    populateDefaultDays();
+
+    // Function to update the day dropdown based on selected month and year
+    function fillBirthDay() {
+      const selectedMonth = $('#addStudentBirthMonth').val();
+      const selectedYear = $('#addStudentBirthYear').val();
+      const birthDayDropDown = $('#addStudentBirthDay');
+
+      // If month or year is not selected, revert to default days 01-31
+      if (!selectedMonth || !selectedYear) {
+        populateDefaultDays();
+        return;
+      }
+
+      const currentSelectedDay = birthDayDropDown.val();
+      const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+
+      // Clear and repopulate days dropdown with padded day values
+      birthDayDropDown.empty().append('<option value="">Select Day</option>');
+      for (let day = 1; day <= daysInMonth; day++) {
+        let dayFormatted = day.toString().padStart(2, '0');
+        birthDayDropDown.append(`<option value="${dayFormatted}">${dayFormatted}</option>`);
+      }
+
+      // Retain the previously selected day if it is still within range; otherwise, clear selection.
+      if (currentSelectedDay && parseInt(currentSelectedDay, 10) <= daysInMonth) {
+        birthDayDropDown.val(currentSelectedDay);
+      } else {
+        birthDayDropDown.val('');
+      }
+    }
+
+    // Update days dropdown when the birth month or year changes
+    $('#addStudentBirthMonth, #addStudentBirthYear').on('change', function () {
+      fillBirthDay();
+    });
+  });
+</script>

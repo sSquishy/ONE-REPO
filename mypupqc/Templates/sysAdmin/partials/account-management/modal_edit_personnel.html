@@ -1,0 +1,437 @@
+<!-- Modal for Editing Personnel -->
+<div class="modal fade" id="editPersonnelModal" tabindex="-1" aria-labelledby="editPersonnelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-edit-personnel">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Edit Personnel</h3>
+          <p class="pt-1">Please update the personnel details below.</p>
+        </div>
+        <form id="editPersonnelForm" class="row g-4" onsubmit="return false">
+          {% csrf_token %}
+          <!-- Personal Information -->
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="editPersonnelFirstName" name="editPersonnelFirstName" class="form-control" placeholder="John" required />
+              <label for="editPersonnelFirstName">First Name</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="editPersonnelLastName" name="editPersonnelLastName" class="form-control" placeholder="Doe" required />
+              <label for="editPersonnelLastName">Last Name</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="editPersonnelMiddleName" name="editPersonnelMiddleName" class="form-control" placeholder="D" />
+              <label for="editPersonnelMiddleName">Middle Initial (Optional)</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="editPersonnelSuffix" name="editPersonnelSuffix" class="form-control" placeholder="Jr." />
+              <label for="editPersonnelSuffix">Suffix (Optional)</label>
+            </div>
+          </div>
+
+          <!-- Birth Information -->
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="editPersonnelBirthMonth" name="editPersonnelBirthMonth" class="form-select" required>
+                <option value="">Select Month</option>
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+              <label for="editPersonnelBirthMonth">Birth Month</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="editPersonnelBirthDay" name="editPersonnelBirthDay" class="form-select" required>
+                <option value="">Select Day</option>
+              </select>
+              <label for="editPersonnelBirthDay">Birth Day</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="form-floating form-floating-outline">
+              <select id="editPersonnelBirthYear" name="editPersonnelBirthYear" class="form-select" required>
+                <option value="">Select Year</option>
+              </select>
+              <label for="editPersonnelBirthYear">Birth Year</label>
+            </div>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="email" id="editPersonnelPersonalEmail" name="editPersonnelPersonalEmail" class="form-control" placeholder="example@domain.com" required />
+              <label for="editPersonnelPersonalEmail">Personal Email</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="email" id="editPersonnelPupWebmail" name="editPersonnelPupWebmail" class="form-control" placeholder="personnel@domain.com" required />
+              <label for="editPersonnelPupWebmail">PUP Webmail</label>
+            </div>
+          </div>
+
+          <!-- Personnel Information -->
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline">
+              <input type="text" id="editPersonnelNumber" name="editPersonnelNumber" class="form-control" placeholder="P123456" required />
+              <label for="editPersonnelNumber">Employee Number</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="form-floating form-floating-outline mb-3">
+              <input type="text" id="editPersonnelMobileNumber" name="editPersonnelMobileNumber" class="form-control" placeholder="+63 912 345 6789" required />
+              <label for="editPersonnelMobileNumber">Mobile Number</label>
+            </div>
+          </div>
+
+          <!-- Additional Information -->
+          <div class="col-12">
+            <h6 class="mt-1 mb-3">Additional Information</h6>
+            <div class="form-floating form-floating-outline mt-3">
+              <textarea id="editPersonnelRemarks" name="editPersonnelRemarks" class="form-control" placeholder="Remarks"></textarea>
+              <label for="editPersonnelRemarks">Remarks</label>
+            </div>
+          </div>
+
+          <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary me-sm-3 me-1" id="editPersonnelSubmitButton">Save Changes</button>
+            <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Mobile Number Formatting: Accepts numbers only and auto-formats spacing for +63 912 345 6789
+    $('#editPersonnelMobileNumber').on('input', function (e) {
+      let input = $(this).val().replace(/\D/g, ''); // Remove non-numeric characters
+      if (input.startsWith('0')) {
+        input = '63' + input.substring(1); // Replace leading '0' with '63'
+      }
+      if (input.startsWith('63')) {
+        input = '+' + input;
+      }
+      // Format the number into: +63 912 345 6789
+      let formattedNumber = input.replace(/(\+\d{2})(\d{3})(\d{3})(\d{4})/, '$1 $2 $3 $4');
+      formattedNumber.length > 16 ? formattedNumber = formattedNumber.substring(0, 16) : null;
+      $(this).val(formattedNumber);
+    });
+
+    // Populate Years Dropdown
+    const birthYearDropDown = $('#editPersonnelBirthYear');
+    for (let year = new Date().getFullYear(); year >= 1900; year--) {
+      birthYearDropDown.append(`<option value="${year}">${year}</option>`);
+    }
+
+    function fillBirthDay() {
+      const selectedMonth = $('#editPersonnelBirthMonth').val();
+      const selectedYear = $('#editPersonnelBirthYear').val();
+
+      // If month or year is not selected, do nothing
+      if(selectedMonth === '' || selectedYear === '') {
+        return;
+      }
+
+      const selectedDay = $('#editPersonnelBirthDay').val(); // Used for when month or year changes, to retain selected day
+      const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+
+      // Clear and repopulate days dropdown with padded day values
+      birthDayDropDown.empty().append('<option value="">Select Day</option>');
+      for (let day = 1; day <= daysInMonth; day++) {
+        let dayFormatted = day.toString().padStart(2, '0');
+        birthDayDropDown.append(`<option value="${dayFormatted}">${dayFormatted}</option>`);
+      }
+
+      // Retain selected day
+      if(daysInMonth >= selectedDay) {
+        birthDayDropDown.val(selectedDay);
+      }
+    }
+
+    // Populate Days Dropdown based on selected month and year
+    const birthDayDropDown = $('#editPersonnelBirthDay');
+    $('#editPersonnelBirthMonth, #editPersonnelBirthYear').on('change', function () {
+      fillBirthDay();
+    });
+
+    // Populate Programs Dropdown by getting their data from the database
+    $(document).on('click', '.edit-personnel, #personnel_editSelected', function() {
+      let personnelID = null;
+      if($(this).prop('id') === 'personnel_editSelected') {
+        personnelID = $('.personnel-checkbox:checked').val();
+        if (personnelID) {
+          // Open the edit modal with the selected row's data
+          $('#editPersonnelModal').modal('show');
+          console.log('Editing personnel with ID ' + personnelID);
+        }
+      } else {
+        personnelID = $(this).data('id');
+      }
+
+      // Set the student ID to the update button
+      $('#editPersonnelSubmitButton').data('id', personnelID);
+
+      Swal.fire({
+          title: "Loading...",
+          text: "Retrieving personnel data...",
+          allowOutsideClick: false,
+          didOpen: () => {
+              Swal.showLoading();
+          },
+          showCancelButton: false,
+          confirmButtonText: '',
+          customClass: { confirmButton: '', cancelButton: '' },
+          buttonsStyling: false
+      });
+
+      // Set a timeout to show a warning message if the process takes too long
+      let timeout = setTimeout(() => {
+          Swal.update({
+              title: 'Loading...',
+              text: 'This is taking longer than expected. Please wait or check your internet connection.',
+              icon: 'warning',
+              showConfirmButton: false,
+              showCancelButton: false,
+              confirmButtonText: '',
+              customClass: { confirmButton: '', cancelButton: '' },
+              buttonsStyling: false,
+              allowOutsideClick: false,
+          });
+          Swal.showLoading();
+      }, 5000); // Change 5000 to any delay you want in milliseconds
+
+      let timeout2 = setTimeout(() => {
+          Swal.close();
+          Swal.fire({
+              title: 'Failed to load data',
+              text: 'Please try again.',
+              icon: 'error',
+              customClass: { confirmButton: 'btn btn-danger waves-effect' },
+              buttonsStyling: false
+          })
+      }, 30000); // Change 5000 to any delay you want in milliseconds
+
+      $.ajax({
+        url: "/sysAdmin/Admin/Account-Management/getSpecificUser/",
+        type: "POST",
+        data: {
+          userID: personnelID,
+          userRole: 'Personnel',
+          csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+        },
+        success: function(response) {
+          clearTimeout(timeout);
+          clearTimeout(timeout2);
+          Swal.close();
+
+          $('#editPersonnelNumber').val(response.personnelNumber);
+          $('#editPersonnelFirstName').val(response.firstname);
+          $('#editPersonnelLastName').val(response.lastname);
+          $('#editPersonnelMiddleName').val(response.middlename);
+          $('#editPersonnelSuffix').val(response.suffix);
+          $('#editPersonnelBirthMonth').val(response.dateOfBirth.split('-')[1]);
+          $('#editPersonnelBirthYear').val(response.dateOfBirth.split('-')[0]);
+          fillBirthDay();
+          $('#editPersonnelBirthDay').val(response.dateOfBirth.split('-')[2]);
+          $('#editPersonnelMobileNumber').val(response.mobileNo);
+          $('#editPersonnelPersonalEmail').val(response.emailAddress);
+          $('#editPersonnelPupWebmail').val(response.webMail);
+          $('#editPersonnelRemarks').val(response.remarks);
+        },
+        error: function(xhr, status, error) {
+          clearTimeout(timeout);
+          clearTimeout(timeout2);
+          Swal.close();
+
+          console.log(xhr.responseText);
+          Swal.fire({
+            title: 'Failed to load data',
+            text: 'Please try again.',
+            icon: 'error',
+            customClass: { confirmButton: 'btn btn-danger waves-effect' },
+            buttonsStyling: false
+          })
+        }
+      })
+    });
+
+    // Edit Personnel Form Handler
+    $('#editPersonnelSubmitButton').on('click', function () {
+      const invalidFields = $('#editPersonnelForm [required]').filter(function () {
+        return !$(this).val().trim();
+      });
+
+      if (invalidFields.length) {
+        invalidFields.addClass('is-invalid');
+        Swal.fire({
+          title: 'Missing Information',
+          text: 'Please fill in all required fields.',
+          icon: 'error',
+          customClass: {
+            confirmButton: 'btn btn-danger waves-effect waves-light'
+          },
+          buttonsStyling: false
+        });
+        return;
+      }
+
+      // Confirmation Dialog
+      Swal.fire({
+        title: 'Update Personnel?',
+        text: "Confirm to save changes to this record.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Save Changes',
+        cancelButtonText: 'Cancel',
+        customClass: {
+          confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
+          cancelButton: 'btn btn-outline-secondary waves-effect'
+        },
+        buttonsStyling: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const personnelID = $('#editPersonnelSubmitButton').data('id');
+
+          Swal.fire({
+              title: "Saving...",
+              text: "Processing your request...",
+              allowOutsideClick: false,
+              didOpen: () => {
+                  Swal.showLoading();
+              },
+              showCancelButton: false,
+              confirmButtonText: '',
+              customClass: { confirmButton: '', cancelButton: '' },
+              buttonsStyling: false
+          });
+
+          // Set a timeout to show a warning message if the process takes too long
+          let timeout = setTimeout(() => {
+              Swal.update({
+                  title: 'Saving...',
+                  text: 'This is taking longer than expected. Please wait or check your internet connection.',
+                  icon: 'warning',
+                  showConfirmButton: false,
+                  showCancelButton: false,
+                  confirmButtonText: '',
+                  customClass: { confirmButton: '', cancelButton: '' },
+                  buttonsStyling: false,
+                  allowOutsideClick: false,
+              });
+              Swal.showLoading();
+          }, 5000); // Change 5000 to any delay you want in milliseconds
+
+          let timeout2 = setTimeout(() => {
+              Swal.close();
+              Swal.fire({
+                  title: 'Failed to save student account',
+                  text: 'Please try reloading the page and try again.',
+                  icon: 'error',
+                  customClass: { confirmButton: 'btn btn-danger waves-effect' },
+                  buttonsStyling: false
+              })
+          }, 30000); // Change 5000 to any delay you want in milliseconds
+
+          $.ajax({
+            url: "/sysAdmin/Admin/Account-Management/editPersonnel/",
+            type: "POST",
+            data: {
+              userID: personnelID,
+              personnelNumberEdit: $('#editPersonnelNumber').val(),
+              firstNameEdit: $('#editPersonnelFirstName').val(),
+              lastNameEdit: $('#editPersonnelLastName').val(),
+              middleNameEdit: $('#editPersonnelMiddleName').val(),
+              suffixEdit: $('#editPersonnelSuffix').val(),
+              birthMonthEdit: $('#editPersonnelBirthMonth').val(),
+              birthDayEdit: $('#editPersonnelBirthDay').val(),
+              birthYearEdit: $('#editPersonnelBirthYear').val(),
+              mobileNoEdit: $('#editPersonnelMobileNumber').val(),
+              emailAddressEdit: $('#editPersonnelPersonalEmail').val(),
+              webmailEdit: $('#editPersonnelPupWebmail').val(),
+              remarksEdit: $('#editPersonnelRemarks').val(),
+              csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            success: function(response) {
+              clearTimeout(timeout);
+              clearTimeout(timeout2);
+              Swal.close();
+
+              // Simulated AJAX submission
+              Swal.fire({
+                title: 'Updated!',
+                text: 'Personnel record has been updated.',
+                icon: 'success',
+                customClass: {
+                  confirmButton: 'btn btn-success waves-effect'
+                },
+                buttonsStyling: false
+              }).then(() => {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('editPersonnelModal'));
+                if (modal) modal.hide();
+                document.dt_personnel.ajax.reload(null, false);
+              });
+            },
+            error: function(xhr, status, error) {
+              clearTimeout(timeout);
+              clearTimeout(timeout2);
+              Swal.close();
+
+              // Error handling for existing personnel number
+              if(xhr.responseJSON.status === "existing") {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Failed to update personnel information',
+                  text: xhr.responseJSON.message,
+                  customClass: { confirmButton: 'btn btn-danger waves-effect' },
+                  buttonsStyling: false
+                })
+                return;
+              }
+
+              // Error alert
+              console.log(xhr.responseText);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while updating the personnel details. Please try again.',
+                customClass: { confirmButton: 'btn btn-danger waves-effect' },
+                buttonsStyling: false
+              });
+            }
+          });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire({
+            title: 'Cancelled',
+            text: 'Changes were not saved.',
+            icon: 'error',
+            customClass: {
+              confirmButton: 'btn btn-secondary waves-effect'
+            },
+            buttonsStyling: false
+          });
+        }
+      });
+    });
+  });
+</script>

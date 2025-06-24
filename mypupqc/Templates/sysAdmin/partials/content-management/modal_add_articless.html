@@ -1,0 +1,435 @@
+<!-- Include this style block in your page head or above the modal -->
+<style>
+  .upload-progress-bar {
+    transition: width 0.4s ease;
+  }
+</style>
+
+<!-- Article Upload Modal -->
+<div class="modal fade" id="articleUploadModal" tabindex="-1" aria-labelledby="articleUploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" style="max-width: 800px;">
+    <div class="modal-content p-3 p-md-5">
+      <div class="modal-body py-3 py-md-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-4">
+          <h3 class="mb-2">Upload Article</h3>
+          <p class="pt-1">Upload JPG/PNG image (Recommended size: 1200x630 pixels)</p>
+        </div>
+
+        <!-- Article Details -->
+        <div class="row g-4">
+          <!-- Article Title -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <input
+                type="text"
+                id="articleTitle"
+                name="articleTitle"
+                class="form-control required-field"
+                placeholder="Article Title"
+                maxlength="150"
+              />
+              <label for="articleTitle">Article Title</label>
+              <small class="char-counter" id="titleCounter">0/150</small>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <textarea
+                id="articleDescription"
+                name="articleDescription"
+                class="form-control required-field"
+                placeholder="Description"
+                maxlength="5000"
+              ></textarea>
+              <label for="articleDescription">Description</label>
+              <small class="char-counter" id="descriptionCounter">0/5000</small>
+            </div>
+          </div>
+
+          <!-- Start Date -->
+          <div class="col-md-6 col-12">
+            <div class="form-floating form-floating-outline">
+              <input
+                type="text"
+                class="form-control required-field"
+                placeholder="YYYY-MM-DD"
+                id="articleStartDate"
+                name="articleStartDate"
+              />
+              <label for="articleStartDate">Start Date</label>
+            </div>
+          </div>
+
+          <!-- End Date -->
+          <div class="col-md-6 col-12">
+            <div class="form-floating form-floating-outline">
+              <input
+                type="text"
+                class="form-control required-field"
+                placeholder="YYYY-MM-DD"
+                id="articleEndDate"
+                name="articleEndDate"
+              />
+              <label for="articleEndDate">End Date</label>
+            </div>
+          </div>
+
+          <!-- Status -->
+          <div class="col-12">
+            <div class="form-floating form-floating-outline">
+              <select
+                id="articleStatus"
+                name="articleStatus"
+                class="form-select required-field"
+              >
+                <option value="" disabled selected>Select Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Completed">Completed</option>
+              </select>
+              <label for="articleStatus">Status</label>
+            </div>
+          </div>
+        </div>
+        <br />
+
+        <!-- Article Image Upload Section -->
+        <div class="row">
+          <div class="col-12">
+            <!-- Dropzone Card -->
+            <div class="card mb-4" id="article-upload-section">
+              <h5 class="card-header">Image Upload</h5>
+              <div class="card-body">
+                <form
+                  action="/upload_article"
+                  class="dropzone needsclick"
+                  id="article-dropzone"
+                >
+                  <div class="dz-message needsclick">
+                    Drop image here or click to upload
+                    <span class="note needsclick">(Supported formats: JPEG, PNG. Max file size: 5MB)</span>
+                  </div>
+                  <div class="fallback">
+                    <input name="file" type="file" />
+                  </div>
+                </form>
+              </div>
+            </div>
+            <!-- Image Preview Container -->
+            <div id="article-upload-preview" class="mt-4" style="display: none;">
+              <div class="upload-item">
+                <div class="upload-thumbnail">
+                  <img src="" alt="Preview" id="article-uploaded-preview" />
+                </div>
+                <div class="upload-details">
+                  <div class="upload-header">
+                    <span class="upload-filename" id="article-uploaded-filename"></span>
+                    <span class="upload-size" id="article-uploaded-size"></span>
+                  </div>
+                  <div class="upload-progress-container">
+                    <div class="upload-progress">
+                      <div class="upload-progress-bar" style="width: 0%"></div>
+                    </div>
+                    <span class="upload-percentage" id="article-upload-percentage">0%</span>
+                    <span class="upload-remove" id="article-remove-upload">×</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Image Preview Container -->
+          </div>
+        </div>
+        <!-- End Image Upload Section -->
+      </div>
+      <br />
+
+      <!-- Submit and Cancel Buttons -->
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-primary me-3" id="article-submit-upload">
+          Submit
+        </button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Reference elements
+  const submitBtn = document.getElementById("article-submit-upload");
+  const requiredFields = document.querySelectorAll(".required-field");
+  const uploadSection = document.getElementById("article-upload-section");
+  const previewContainer = document.getElementById("article-upload-preview");
+  const titleInput = document.getElementById("articleTitle");
+  const titleCounter = document.getElementById("titleCounter");
+  const descInput = document.getElementById("articleDescription");
+  const descCounter = document.getElementById("descriptionCounter");
+
+  // Track the current file & upload status
+  let currentArticleFile = null;
+  let isFileFullyUploaded = false;
+
+  // Update counters for title & description
+  titleInput.addEventListener("input", function () {
+    titleCounter.textContent = this.value.length + "/150";
+  });
+  descInput.addEventListener("input", function () {
+    descCounter.textContent = this.value.length + "/5000";
+  });
+
+  // Initialize flatpickr with a matching format for the placeholder YYYY-MM-DD
+  const startPicker = flatpickr("#articleStartDate", {
+    dateFormat: "Y-m-d",
+    onChange: function (selectedDates) {
+      endPicker.set("minDate", selectedDates[0] || null);
+    }
+  });
+  const endPicker = flatpickr("#articleEndDate", {
+    dateFormat: "Y-m-d",
+    onChange: function (selectedDates) {
+      startPicker.set("maxDate", selectedDates[0] || null);
+    }
+  });
+
+  /**
+   * Validate required fields
+   * @return { isValid: boolean, missingFields: string[] }
+   */
+  function validateFields() {
+    let isValid = true;
+    let missingFields = [];
+
+    requiredFields.forEach(field => {
+      let fieldValue = field.value.trim();
+      let fieldName = field.parentNode.querySelector("label")?.textContent || field.placeholder;
+
+      // Check if the field is missing
+      if ((field.tagName === "INPUT" || field.tagName === "TEXTAREA") && !fieldValue) {
+        field.classList.add("is-invalid");
+        missingFields.push(fieldName);
+        isValid = false;
+      } else if (field.tagName === "SELECT" && field.selectedIndex === 0) {
+        // Select dropdown validation
+        field.classList.add("is-invalid");
+        missingFields.push(fieldName);
+        isValid = false;
+      } else {
+        field.classList.remove("is-invalid");
+      }
+    });
+
+    if(document.getElementById("article-upload-percentage").textContent === "100%") {
+      isFileFullyUploaded = true;
+    }
+
+    // Check file presence & upload completion
+    if (!currentArticleFile) {
+      uploadSection.classList.add("border", "border-danger");
+      missingFields.push("Image Upload");
+      isValid = false;
+    } else {
+      uploadSection.classList.remove("border", "border-danger");
+      if (!isFileFullyUploaded) {
+        missingFields.push("Image still uploading");
+        isValid = false;
+      }
+    }
+
+    return { isValid, missingFields };
+  }
+
+  // Monitor fields in real-time
+  requiredFields.forEach(field => {
+    field.addEventListener("input", validateFields);
+    field.addEventListener("change", validateFields);
+  });
+
+  // Initialize Dropzone for image upload
+  var articleDropzone = new Dropzone("#article-dropzone", {
+    url: "/upload_article",
+    maxFiles: 1,
+    maxFilesize: 5, // MB
+    acceptedFiles: "image/jpeg,image/png",
+    addRemoveLinks: false,
+    // Automatically start upload
+    autoProcessQueue: true,
+    dictDefaultMessage: "Drop image here or click to upload",
+    dictInvalidFileType: "Invalid file type. Only JPEG/PNG allowed.",
+    previewTemplate: '<div style="display:none"></div>',
+    init: function () {
+      this.on("addedfile", function (file) {
+        // Hide dropzone area, show preview container
+        uploadSection.style.display = "none";
+        previewContainer.style.display = "block";
+
+        // Show a preview of the file
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          document.getElementById("article-uploaded-preview").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+
+        // Show filename & size
+        document.getElementById("article-uploaded-filename").textContent = file.name;
+        document.getElementById("article-uploaded-size").textContent =
+          (file.size / 1024 / 1024).toFixed(1) + " MB";
+
+        currentArticleFile = file;
+        isFileFullyUploaded = false; // reset upload status
+        validateFields();
+      });
+
+      // Live progress updates
+      this.on("uploadprogress", function (file, progress) {
+        const progressBar = document.querySelector(".upload-progress-bar");
+        const percentage = Math.round(progress);
+        progressBar.style.width = percentage + "%";
+        document.getElementById("article-upload-percentage").textContent = percentage + "%";
+      });
+
+      // If file is removed
+      this.on("removedfile", function () {
+        // Show dropzone area, hide preview container
+        uploadSection.style.display = "block";
+        previewContainer.style.display = "none";
+        currentArticleFile = null;
+        isFileFullyUploaded = false;
+        validateFields();
+      });
+    }
+  });
+
+  // Removing an uploaded file from the preview
+  document.getElementById("article-remove-upload").addEventListener("click", function () {
+    if (currentArticleFile) {
+      Swal.fire({
+        title: "Remove File?",
+        text: "Are you sure you want to remove this file?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, remove it!",
+        customClass: {
+          confirmButton: "btn btn-primary me-3 waves-effect waves-light",
+          cancelButton: "btn btn-outline-secondary waves-effect"
+        },
+        buttonsStyling: false
+      }).then(result => {
+        if (result.isConfirmed) {
+          articleDropzone.removeFile(currentArticleFile);
+          Swal.fire({
+            title: "Removed!",
+            text: "The file has been removed.",
+            icon: "success",
+            customClass: {
+              confirmButton: "btn btn-success waves-effect"
+            },
+            buttonsStyling: false
+          });
+        }
+      });
+    }
+  });
+
+  // Submit button handler
+  submitBtn.addEventListener("click", function () {
+    const { isValid, missingFields } = validateFields();
+
+    if (isValid) {
+      let formData = new FormData();
+      formData.append("articleImage", currentArticleFile);
+      formData.append("articleTitle", titleInput.value);
+      formData.append("articleDescription", descInput.value);
+      formData.append("startDate", document.getElementById("articleStartDate").value);
+      formData.append("endDate", document.getElementById("articleEndDate").value);
+      formData.append("status", document.getElementById("articleStatus").value);
+      formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+      $.ajax({
+        url: "/sysAdmin/Admin/Content-Management/addArticle/",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+          console.log(response);
+          Swal.fire({
+            title: "Success!",
+            text: "Article uploaded successfully.",
+            icon: "success",
+            customClass: {
+              confirmButton: "btn btn-primary waves-effect waves-light"
+            },
+            buttonsStyling: false
+          }).then(() => {
+            // Reset all fields
+            titleInput.value = "";
+            descInput.value = "";
+            document.getElementById("articleStartDate").value = "";
+            document.getElementById("articleEndDate").value = "";
+            document.getElementById("articleStatus").selectedIndex = 0;
+            titleCounter.textContent = "0/150";
+            descCounter.textContent = "0/5000";
+            requiredFields.forEach(field => field.classList.remove("is-invalid"));
+
+            // Reset file upload
+            articleDropzone.removeAllFiles(true);
+            currentArticleFile = null;
+            isFileFullyUploaded = false;
+            uploadSection.style.display = "block";
+            previewContainer.style.display = "none";
+
+            // Close modal (assuming jQuery is present)
+            $("#articleUploadModal").modal("hide");
+
+            // Refresh the table
+            document.dt_article.ajax.reload(null, false);
+          })
+        },
+        error: function (xhr, status, error) {
+          console.log(xhr.responseText);
+          Swal.fire({
+            title: "Error!",
+            text: "An error occurred while uploading the article.",
+            icon: "error",
+            customClass: {
+              confirmButton: "btn btn-primary waves-effect waves-light"
+            },
+            buttonsStyling: false
+          });
+        }
+      });
+    } else {
+      Swal.fire({
+        title: "Error!",
+        text: "Please complete the following: " + missingFields.join(", "),
+        icon: "error",
+        customClass: {
+          confirmButton: "btn btn-primary waves-effect waves-light"
+        },
+        buttonsStyling: false
+      });
+    }
+  });
+
+  // When the modal is closed, reset everything
+  $("#articleUploadModal").on("hidden.bs.modal", function () {
+    articleDropzone.removeAllFiles(true);
+    currentArticleFile = null;
+    isFileFullyUploaded = false;
+    requiredFields.forEach(field => {
+      field.value = "";
+      field.classList.remove("is-invalid");
+    });
+    titleCounter.textContent = "0/150";
+    descCounter.textContent = "0/5000";
+    uploadSection.style.display = "block";
+    previewContainer.style.display = "none";
+  });
+});
+</script>
