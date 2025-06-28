@@ -40,7 +40,7 @@
 
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         {% if not menu_horizontal %}
-        <!-- Search -->
+        {% comment %} <!-- Search -->
         <div class="navbar-nav align-items-center">
           <div class="nav-item navbar-search-wrapper mb-0">
             <a class="nav-item nav-link search-toggler fw-normal px-0" href="javascript:void(0);">
@@ -49,7 +49,7 @@
             </a>
           </div>
         </div>
-        <!-- /Search -->
+        <!-- /Search --> {% endcomment %}
         {% endif %}
         <ul class="navbar-nav flex-row align-items-center ms-auto">
 
@@ -345,9 +345,9 @@
                       {% if user.faculty %}
                         {% with user.faculty as faculty %}
                         <span class="fw-medium d-block">
-                          {{ faculty.firstname }} 
+                          {{ faculty.firstname }}
                           {{ faculty.middlename|default_if_none:''|slice:":1" }}{% if faculty.middlename %}. {% endif %}
-                          {{ faculty.lastname }} 
+                          {{ faculty.lastname }}
                           {{ faculty.suffix|default_if_none:'' }}
                         </span>
                         <small class="text-muted">Faculty</small>
@@ -379,7 +379,7 @@
               <li>
                 <div class="dropdown-divider my-1"></div>
               </li>
-              <li>
+              {% comment %} <li>
                 {% if request.user.is_authenticated %}
                 <span class="dropdown-item d-flex justify-content-between align-content-center">
                   <span>
@@ -397,7 +397,7 @@
                   <span class="text-danger"><i class='mdi mdi-circle'></i></span>
                 </a>
                 {% endif %}
-              </li>
+              </li> {% endcomment %}
               <li>
                 <form action="{% url 'g.logout' %}" method="post">
                   {% csrf_token %}

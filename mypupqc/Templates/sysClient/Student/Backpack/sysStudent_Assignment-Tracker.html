@@ -1,0 +1,834 @@
+{% extends 'layout/sysStudent/sysStudent_layout.html' %}
+
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}myPUPQC | Assignment Tracker{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+
+<!-- Calendar Styles -->
+<link rel="stylesheet" href="{% static 'vendor/libs/fullcalendar/fullcalendar.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/quill/editor.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+
+<!-- Kanban Styles -->
+<link rel="stylesheet" href="{% static 'vendor/libs/jkanban/jkanban.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/quill/typography.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/quill/katex.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/quill/editor.css' %}" />
+
+<!-- Table User List -->
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/umd/styles/index.min.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-select-bs5/select.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-fixedcolumns-bs5/fixedcolumns.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-fixedheader-bs5/fixedheader.bootstrap5.css' %}" />
+
+<!-- Select: Tagify -->
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/tagify/tagify.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/bootstrap-select/bootstrap-select.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/typeahead-js/typeahead.css' %}" />
+
+<!-- Sweet Alert -->
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+
+<!-- Calendar Scripts -->
+<script src="{% static 'vendor/libs/fullcalendar/fullcalendar.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+
+<!-- Kanban Scripts -->
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/jkanban/jkanban.js' %}"></script>
+<script src="{% static 'vendor/libs/quill/katex.js' %}"></script>
+<script src="{% static 'vendor/libs/quill/quill.js' %}"></script>
+
+<!-- Table User List -->
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/bundle/popular.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-bootstrap5/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/umd/plugin-auto-focus/index.min.js' %}"></script>
+<script src="{% static 'vendor/libs/cleavejs/cleave.js' %}"></script>
+<script src="{% static 'vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+
+<!-- Select: Tagify -->
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/tagify/tagify.js' %}"></script>
+<script src="{% static 'vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'vendor/libs/typeahead-js/typeahead.js' %}"></script>
+<script src="{% static 'vendor/libs/bloodhound/bloodhound.js' %}"></script>
+
+<!-- Sweet Alert -->
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+
+<!-- Calendar Page Styles -->
+<link rel="stylesheet" href="{% static 'vendor/css/pages/app-calendar.css' %}" />
+
+<!-- Kanban Page Styles -->
+<link rel="stylesheet" href="{% static 'vendor/css/pages/app-kanban.css' %}" />
+
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+
+<!-- Calendar Page Scripts -->
+<script src="{% static 'myClient/js/student/app-calendar-events.js' %}"></script>
+<script src="{% static 'myClient/js/student/app-calendar.js' %}"></script>
+
+<!-- Kanban Page Scripts -->
+<script src="{% static 'myClient/js/app-kanban.js' %}"></script>
+
+<!-- Student User List -->
+<script src="{% static 'myClient/js/student/tracker-list.js' %}"></script>
+
+{% comment %} <script src="{% static 'js/forms-tagify.js' %}"></script> {% endcomment %}
+
+<!-- Pomodoro Timer -->
+<script src="{% static 'myClient/js/student/pomodoro-timer.js' %}"></script>
+{% endblock page_js %}
+
+
+
+{% block content %}
+<style>
+  .upload-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: #f8f9fa;
+  }
+  .upload-thumbnail {
+    width: 80px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .upload-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .upload-details {
+    flex-grow: 1;
+    min-width: 0;
+  }
+  .upload-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .upload-filename {
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px;
+  }
+  .upload-size {
+    font-size: 12px;
+    color: #6c757d;
+    margin-left: auto;
+  }
+  .upload-progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .upload-progress {
+    flex-grow: 1;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .upload-progress-bar {
+    height: 100%;
+    background: #0d6efd;
+    transition: width 0.3s ease;
+  }
+  .upload-percentage {
+    font-size: 12px;
+    color: #0d6efd;
+    min-width: 40px;
+    text-align: right;
+  }
+  .upload-remove {
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+    margin-left: 10px;
+  }
+  /* Modal enhancements */
+  .modal-dialog {
+    max-width: 800px;
+  }
+  .modal-header h3 {
+    margin: 0;
+    font-weight: bold;
+  }
+</style>
+
+
+<div style="width: 90%; margin: 0 auto; box-sizing: border-box;">
+
+<div class="row">
+
+  <div class="col-12 col-lg-9" id="first-column">
+
+    <div class="nav-align-top mb-4">
+      <ul class="nav nav-pills" role="tablist">
+        <!-- Calendar Tab (Now Default Active, Raised) -->
+        <li class="nav-item me-2">
+          <button
+            type="button"
+            class="nav-link custom-tab custom-tab-red active"
+            style="width: 130px; height: 70px; margin-top: -20px; transition: height 0.2s ease, margin-top 0.2s ease; border-bottom-left-radius: 0; border-bottom-right-radius: 0; background-color: #dc3545; color: #fff;"
+            role="tab"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-calendar"
+            aria-controls="tab-calendar"
+            aria-selected="true"
+          >
+            Calendar
+          </button>
+        </li>
+
+        <!-- Yellow (Gold) Tab: Kanban -->
+        <li class="nav-item">
+          <button
+            type="button"
+            class="nav-link custom-tab custom-tab-gold"
+            style="width: 130px; height: 50px; margin-top: 0; transition: height 0.2s ease, margin-top 0.2s ease; border-bottom-left-radius: 0; border-bottom-right-radius: 0; background-color: #ffc107; color:rgb(255, 255, 255);"
+            role="tab"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-kanban"
+            aria-controls="tab-kanban"
+            aria-selected="false"
+          >
+            Kanban
+          </button>
+        </li>
+      </ul>
+      <!-- JavaScript -->
+      <script>
+        // Listen for click events on each custom tab button
+        document.querySelectorAll('.custom-tab').forEach(function(tab) {
+          tab.addEventListener('click', function() {
+            // Reset all tabs to default state: 50px tall with no negative top margin
+            document.querySelectorAll('.custom-tab').forEach(function(el) {
+              el.style.height = '50px';
+              el.style.marginTop = '0';
+            });
+            // Set the clicked tab to raised state: 70px tall with a negative top margin
+            this.style.height = '70px';
+            this.style.marginTop = '-20px';
+          });
+        });
+      </script>
+
+      <!-- Tab Content -->
+      <div class="tab-content">
+        <!-- Tab Pane: Calendar -->
+        <div class="tab-pane fade show active" id="tab-calendar" role="tabpanel">
+          <div class="card app-calendar-wrapper">
+
+            <div class="p-3 my-sm-0 mb-2 border-bottom d-flex">
+              <button class="btn btn-primary btn-toggle-sidebar col-3 text-end ms-auto" data-bs-toggle="offcanvas" data-bs-target="#addEventSidebar" aria-controls="addEventSidebar">
+                <i class="ri-add-line ri-16px me-2"></i>
+                <span class="align-middle">Add Task</span>
+              </button>
+            </div>
+            <div class="row g-0">
+              <!-- Calendar & Modal -->
+              <div class="col app-calendar-content">
+                <div class="card shadow-none border-0">
+                  <div class="card-body pb-0">
+                    <!-- FullCalendar -->
+                    <div id="calendar"></div>
+                  </div>
+                </div>
+                <div class="app-overlay"></div>
+              </div>
+              <!-- /Calendar & Modal -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Pane: Kanban -->
+        <div class="tab-pane fade" id="tab-kanban" role="tabpanel">
+          <div class="app-kanban">
+            <!-- Add new board -->
+            <div class="row">
+              <div class="col-12">
+                <form class="kanban-add-new-board">
+                  <label class="kanban-add-board-btn" for="kanban-add-board-input">
+                    <i class="mdi mdi-plus"></i>
+                    <span class="align-middle">Add new</span>
+                  </label>
+                  <input type="text" class="form-control w-px-250 kanban-add-board-input mb-3 d-none" placeholder="Add Board Title" id="kanban-add-board-input" required />
+                  <div class="mb-3 kanban-add-board-input d-none">
+                    <button class="btn btn-primary btn-sm me-2">Add</button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm kanban-add-board-cancel-btn">Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Kanban Wrapper -->
+            <div class="kanban-wrapper"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-3" id="second-column" style="padding-top: 25px;">
+
+    <!-- Begin: Mini Calendar-->
+    <!-- Container provided -->
+      <div class="card w-100 mt-4 mb-3 " style="
+        width: 280px;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        padding: 12px;
+      ">
+        <!-- Calendar Header -->
+        <div id="calendarHeader" style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 6px 0;
+        ">
+          <button id="prevMonth" style="
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+          ">&#10094;</button>
+
+          <div id="monthYear" style="
+            font-weight: bold;
+            font-size: 14px;
+          ">Month Year</div>
+
+          <button id="nextMonth" style="
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+          ">&#10095;</button>
+        </div>
+
+        <!-- Day Names (Mon - Sun) -->
+        <div style="
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          text-align: center;
+          margin-top: 4px;
+          font-size: 10px;
+          color: #777;
+        ">
+          <div>MO</div>
+          <div>TU</div>
+          <div>WE</div>
+          <div>TH</div>
+          <div>FR</div>
+          <div>SA</div>
+          <div>SU</div>
+        </div>
+
+        <!-- Calendar Dates -->
+        <div id="dates" style="
+          display: grid;
+          grid-template-columns: repeat(7, 1fr);
+          text-align: center;
+          margin-top: 4px;
+          row-gap: 6px;
+          font-size: 12px;
+          color: #333;
+        "></div>
+      </div>
+
+      <script>
+        // Get references
+        const prevMonthBtn = document.getElementById('prevMonth');
+        const nextMonthBtn = document.getElementById('nextMonth');
+        const monthYearText = document.getElementById('monthYear');
+        const datesGrid = document.getElementById('dates');
+
+        // Initialize
+        let today = new Date();
+        let currentMonth = today.getMonth();
+        let currentYear = today.getFullYear();
+
+        // Helper: Monday-based index
+        function getMondayBasedDayIndex(date) {
+          let day = date.getDay(); // Sunday=0, Monday=1, ...
+          return (day === 0) ? 6 : day - 1; // Monday=0 ... Sunday=6
+        }
+
+        // Render the calendar for given month/year
+        function renderCalendar(month, year) {
+          // Clear existing dates
+          datesGrid.innerHTML = '';
+
+          // Month names
+          const monthNames = [
+            'January','February','March','April','May','June',
+            'July','August','September','October','November','December'
+          ];
+
+          // Display month & year at top
+          monthYearText.textContent = `${monthNames[month]}, ${year}`;
+
+          // Determine first/last day
+          const firstDayOfMonth = new Date(year, month, 1);
+          const lastDateOfMonth = new Date(year, month + 1, 0).getDate();
+
+          // Calculate how many blank slots before day 1
+          const firstDayIndex = getMondayBasedDayIndex(firstDayOfMonth);
+          // Add blank cells for the days before the first day
+          for (let i = 0; i < firstDayIndex; i++) {
+            let blank = document.createElement('div');
+            blank.style.opacity = '0';
+            datesGrid.appendChild(blank);
+          }
+
+          // Create date cells
+          for (let date = 1; date <= lastDateOfMonth; date++) {
+            let dateDiv = document.createElement('div');
+            dateDiv.textContent = date;
+            dateDiv.style.cursor = 'pointer';
+            dateDiv.style.height = '28px';
+            dateDiv.style.lineHeight = '28px'; // vertically center text
+            dateDiv.style.borderRadius = '50%';
+
+            // Highlight the current day with a teal circle
+            if (
+              date === today.getDate() &&
+              month === today.getMonth() &&
+              year === today.getFullYear()
+            ) {
+              dateDiv.style.background = '#17c0ec';
+              dateDiv.style.color = '#ffffff';
+              dateDiv.style.fontWeight = 'bold';
+            }
+
+            // Hover effect
+            dateDiv.addEventListener('mouseover', () => {
+              if (!(date === today.getDate() && month === today.getMonth() && year === today.getFullYear())) {
+                dateDiv.style.background = '#e6f7ff';
+              }
+            });
+            dateDiv.addEventListener('mouseout', () => {
+              if (!(date === today.getDate() && month === today.getMonth() && year === today.getFullYear())) {
+                dateDiv.style.background = 'transparent';
+              }
+            });
+
+            datesGrid.appendChild(dateDiv);
+          }
+        }
+
+        // Previous month
+        prevMonthBtn.addEventListener('click', () => {
+          currentMonth--;
+          if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+          }
+          renderCalendar(currentMonth, currentYear);
+        });
+
+        // Next month
+        nextMonthBtn.addEventListener('click', () => {
+          currentMonth++;
+          if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+          }
+          renderCalendar(currentMonth, currentYear);
+        });
+
+        // Initial load
+        renderCalendar(currentMonth, currentYear);
+      </script>
+    <!-- End: Mini Calendar-->
+
+    <!-- Begin: Pomodoro Timer -->
+    <div id="pomodoroApp" style="position: relative; background: #ffffff; border-radius: 10px; padding: 16px; box-shadow: 0 3px 6px rgba(0,0,0,0.1); max-width: 300px; margin: 0 auto; text-align: center; color: #333; overflow: hidden;">
+
+      <!-- Audio element for ringing sound -->
+      <audio id="ringSound" src="ringtone.mp3"></audio>
+
+      <!-- Timer View -->
+      <div id="timerView" style="transition: transform 0.3s ease;">
+        <!-- Header -->
+        <h2 style="margin-bottom: 16px; font-size: 1.1rem;">Pomodoro Timer</h2>
+
+        <!-- Session Tabs with Bootstrap tooltips (trigger on hover) and MDI icons -->
+        <div id="sessionTabs" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 16px;">
+          <button type="button" class="tab-btn btn" data-session="Focus" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Pomodoro" style="background-color: #17c0ec; color: #fff; border: none; border-radius: 6px; padding: 6px 12px; font-size: 0.8rem; cursor: pointer;">
+            <i class="mdi mdi-timer-outline"></i>
+          </button>
+          <button type="button" class="tab-btn btn" data-session="Short Break" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Short Break" style="background-color: #f0f0f0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; font-size: 0.8rem; cursor: pointer;">
+            <i class="mdi mdi-coffee"></i>
+          </button>
+          <button type="button" class="tab-btn btn" data-session="Long Break" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="top" title="Long Break" style="background-color: #f0f0f0; color: #333; border: none; border-radius: 6px; padding: 6px 12px; font-size: 0.8rem; cursor: pointer;">
+            <i class="mdi mdi-sleep"></i>
+          </button>
+        </div>
+        <div id="pomodoroDisplay" style="position: relative; width: 180px; height: 180px; margin: 0 auto;">
+          <svg id="progressSvg" width="180" height="180" style="transform: rotate(-90deg);">
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#17c0ec" />
+                <stop offset="100%" stop-color="#66e0fa" />
+              </linearGradient>
+            </defs>
+            <circle id="progressCircle" cx="90" cy="90" r="80" fill="none" stroke="url(#gradient)" stroke-width="10" style="transition: stroke-dashoffset 0.5s; stroke-linecap: round; stroke-dasharray: 0; stroke-dashoffset: 0;"></circle>
+          </svg>
+          <div id="timerText" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.8rem; color: #333; font-weight: bold;">25:00</div>
+          <div id="sessionLabel" style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); font-size: 0.9rem; color: #666;">Focus</div>
+        </div>
+        <div id="pomodoroControls" style="display: flex; justify-content: center; gap: 8px; margin-top: 16px;">
+          <button id="startPauseBtn" style="background: #f0f0f0; border: none; border-radius: 6px; padding: 8px 12px; color: #333; cursor: pointer; font-size: 0.9rem;">Start</button>
+          <button id="resetBtn" style="background: #f0f0f0; border: none; border-radius: 6px; padding: 8px 12px; color: #333; cursor: pointer; font-size: 0.9rem;">Reset</button>
+          <button id="settingsBtn" style="background: #f0f0f0; border: none; border-radius: 6px; padding: 8px 12px; color: #333; cursor: pointer; font-size: 0.9rem;">&#9881;</button>
+        </div>
+      </div>
+
+      <!-- Settings View -->
+      <div id="settingsView" style="position: absolute; top: 0; left: 100%; width: 100%; height: 100%; background: #ffffff; border-radius: 10px; padding: 16px; transition: transform 0.3s ease; display: flex; flex-direction: column;">
+        <!-- Settings Content Container (vertically centered) -->
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+          <h2 style="margin-bottom: 16px; text-align: center; font-size: 1.1rem;">Settings</h2>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <label>Pomodoro</label>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <button class="btn-decrement" data-target="focus" style="background: #f0f0f0; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-size: 1.1rem;">-</button>
+              <span id="focusValue">25</span> min
+              <button class="btn-increment" data-target="focus" style="background: #f0f0f0; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-size: 1.1rem;">+</button>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <label>Short Break</label>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <button class="btn-decrement" data-target="shortBreak" style="background: #f0f0f0; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-size: 1.1rem;">-</button>
+              <span id="shortBreakValue">5</span> min
+              <button class="btn-increment" data-target="shortBreak" style="background: #f0f0f0; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-size: 1.1rem;">+</button>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <label>Long Break</label>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <button class="btn-decrement" data-target="longBreak" style="background: #f0f0f0; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-size: 1.1rem;">-</button>
+              <span id="longBreakValue">15</span> min
+              <button class="btn-increment" data-target="longBreak" style="background: #f0f0f0; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-size: 1.1rem;">+</button>
+            </div>
+          </div>
+        </div>
+        <!-- Bottom Buttons -->
+        <div style="display: flex; justify-content: space-between;">
+          <button id="backBtn" style="background: #f0f0f0; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 0.9rem;">Back</button>
+          <button id="saveSettingsBtn" style="background: #f0f0f0; border: none; border-radius: 6px; padding: 8px 12px; cursor: pointer; font-size: 0.9rem;">Save</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Default times (in minutes)
+        let focusTime = 25;
+        let shortBreakTime = 5;
+        let longBreakTime = 15;
+        // Set current session to "Focus" by default.
+        let currentSession = "Focus";
+        let currentTime = focusTime * 60;
+        let sessionCount = 0;
+        let isRunning = false;
+        let isPaused = false;
+        let timerInterval = null;
+        const progressCircle = document.getElementById("progressCircle");
+        const timerText = document.getElementById("timerText");
+        const sessionLabel = document.getElementById("sessionLabel");
+        const startPauseBtn = document.getElementById("startPauseBtn");
+        const resetBtn = document.getElementById("resetBtn");
+        const settingsBtn = document.getElementById("settingsBtn");
+        const timerView = document.getElementById("timerView");
+        const settingsView = document.getElementById("settingsView");
+        const focusValue = document.getElementById("focusValue");
+        const shortBreakValue = document.getElementById("shortBreakValue");
+        const longBreakValue = document.getElementById("longBreakValue");
+        const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+        const backBtn = document.getElementById("backBtn");
+        const incrementBtns = document.querySelectorAll(".btn-increment");
+        const decrementBtns = document.querySelectorAll(".btn-decrement");
+        const tabButtons = document.querySelectorAll(".tab-btn");
+        const ringSound = document.getElementById("ringSound");
+        const radius = 80;
+        const circumference = 2 * Math.PI * radius;
+        progressCircle.style.strokeDasharray = circumference;
+        progressCircle.style.strokeDashoffset = circumference;
+
+        updateTimerDisplay();
+        updateCircle();
+
+        // Timer functions
+        function startTimer() {
+          // Play sound when start is clicked.
+          ringSound.play();
+          if (!isRunning) {
+            isRunning = true;
+            isPaused = false;
+            startPauseBtn.textContent = "Pause";
+            timerInterval = setInterval(() => {
+              if (currentTime > 0) {
+                currentTime--;
+                updateTimerDisplay();
+                updateCircle();
+              } else {
+                clearInterval(timerInterval);
+                isRunning = false;
+                // Play ringing sound when timer is up.
+                ringSound.play();
+                // Transition to the next session without auto-starting.
+                nextSession();
+              }
+            }, 1000);
+          } else {
+            pauseTimer();
+          }
+        }
+
+        function pauseTimer() {
+          // Play sound when pause is clicked.
+          ringSound.play();
+          if (isRunning && !isPaused) {
+            clearInterval(timerInterval);
+            isPaused = true;
+            startPauseBtn.textContent = "Resume";
+          } else if (isPaused) {
+            isPaused = false;
+            startPauseBtn.textContent = "Pause";
+            timerInterval = setInterval(() => {
+              if (currentTime > 0) {
+                currentTime--;
+                updateTimerDisplay();
+                updateCircle();
+              } else {
+                clearInterval(timerInterval);
+                isRunning = false;
+                ringSound.play();
+                nextSession();
+              }
+            }, 1000);
+          }
+        }
+
+        function resetTimer() {
+          clearInterval(timerInterval);
+          isRunning = false;
+          isPaused = false;
+          startPauseBtn.textContent = "Start";
+          // Update timer based on the current selected session.
+          if (currentSession === "Focus") {
+            currentTime = focusTime * 60;
+          } else if (currentSession === "Short Break") {
+            currentTime = shortBreakTime * 60;
+          } else if (currentSession === "Long Break") {
+            currentTime = longBreakTime * 60;
+          }
+          sessionLabel.textContent = currentSession;
+          updateTimerDisplay();
+          updateCircle();
+        }
+
+        // When a timer ends, update the session for the next timer without auto-starting.
+        function nextSession() {
+          if (currentSession === "Focus") {
+            sessionCount++;
+            if (sessionCount % 4 === 0) {
+              currentSession = "Long Break";
+              currentTime = longBreakTime * 60;
+            } else {
+              currentSession = "Short Break";
+              currentTime = shortBreakTime * 60;
+            }
+          } else {
+            currentSession = "Focus";
+            currentTime = focusTime * 60;
+          }
+          sessionLabel.textContent = currentSession;
+          updateTimerDisplay();
+          updateCircle();
+          startPauseBtn.textContent = "Start";
+        }
+
+        function updateTimerDisplay() {
+          const minutes = Math.floor(currentTime / 60);
+          const seconds = currentTime % 60;
+          timerText.textContent = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+        }
+
+        function updateCircle() {
+          let totalSessionSeconds;
+          if (currentSession === "Focus") {
+            totalSessionSeconds = focusTime * 60;
+          } else if (currentSession === "Short Break") {
+            totalSessionSeconds = shortBreakTime * 60;
+          } else {
+            totalSessionSeconds = longBreakTime * 60;
+          }
+          const fraction = 1 - currentTime / totalSessionSeconds;
+          const offset = fraction * circumference;
+          progressCircle.style.strokeDashoffset = offset;
+        }
+
+        startPauseBtn.addEventListener("click", startTimer);
+        resetBtn.addEventListener("click", resetTimer);
+
+        // Session Tab switching (only allowed when timer is not running)
+        tabButtons.forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            if (isRunning) return;  // Prevent switching if timer is running.
+            // Update tab styles.
+            tabButtons.forEach(t => {
+              t.classList.remove("active");
+              t.style.background = "#f0f0f0";
+              t.style.color = "#333";
+            });
+            e.currentTarget.classList.add("active");
+            e.currentTarget.style.background = "#17c0ec";
+            e.currentTarget.style.color = "#fff";
+            // Update current session and timer based on the chosen tab.
+            currentSession = e.currentTarget.getAttribute("data-session");
+            if (currentSession === "Focus") {
+              currentTime = focusTime * 60;
+            } else if (currentSession === "Short Break") {
+              currentTime = shortBreakTime * 60;
+            } else if (currentSession === "Long Break") {
+              currentTime = longBreakTime * 60;
+            }
+            sessionLabel.textContent = currentSession;
+            updateTimerDisplay();
+            updateCircle();
+          });
+        });
+
+        // Toggle to settings view
+        settingsBtn.addEventListener("click", () => {
+          focusValue.textContent = focusTime;
+          shortBreakValue.textContent = shortBreakTime;
+          longBreakValue.textContent = longBreakTime;
+          timerView.style.transform = "translateX(-100%)";
+          settingsView.style.transform = "translateX(-100%)";
+        });
+
+        // Back button returns to timer view without saving changes
+        backBtn.addEventListener("click", () => {
+          timerView.style.transform = "translateX(0)";
+          settingsView.style.transform = "translateX(0)";
+        });
+
+        // Save settings and update the timer
+        saveSettingsBtn.addEventListener("click", () => {
+          focusTime = parseInt(focusValue.textContent);
+          shortBreakTime = parseInt(shortBreakValue.textContent);
+          longBreakTime = parseInt(longBreakValue.textContent);
+          timerView.style.transform = "translateX(0)";
+          settingsView.style.transform = "translateX(0)";
+          if (currentSession === "Focus") {
+            currentTime = focusTime * 60;
+          } else if (currentSession === "Short Break") {
+            currentTime = shortBreakTime * 60;
+          } else if (currentSession === "Long Break") {
+            currentTime = longBreakTime * 60;
+          }
+          resetTimer();
+        });
+
+        incrementBtns.forEach(btn => {
+          btn.addEventListener("click", e => {
+            const target = e.currentTarget.getAttribute("data-target");
+            if (target === "focus") {
+              focusValue.textContent = parseInt(focusValue.textContent) + 1;
+            } else if (target === "shortBreak") {
+              shortBreakValue.textContent = parseInt(shortBreakValue.textContent) + 1;
+            } else if (target === "longBreak") {
+              longBreakValue.textContent = parseInt(longBreakValue.textContent) + 1;
+            }
+          });
+        });
+
+        decrementBtns.forEach(btn => {
+          btn.addEventListener("click", e => {
+            const target = e.currentTarget.getAttribute("data-target");
+            if (target === "focus") {
+              const val = parseInt(focusValue.textContent);
+              if (val > 1) focusValue.textContent = val - 1;
+            } else if (target === "shortBreak") {
+              const val = parseInt(shortBreakValue.textContent);
+              if (val > 1) shortBreakValue.textContent = val - 1;
+            } else if (target === "longBreak") {
+              const val = parseInt(longBreakValue.textContent);
+              if (val > 1) longBreakValue.textContent = val - 1;
+            }
+          });
+        });
+      });
+    </script>
+    <!-- End: Pomodoro Timer -->
+
+  </div>
+
+</div>
+
+</div>
+{% include 'sysClient/partials/student/table_action_bar.html' %}
+
+{% include 'sysClient/partials/student/offcanvas_tracker.html' %}
+
+{% endblock %}

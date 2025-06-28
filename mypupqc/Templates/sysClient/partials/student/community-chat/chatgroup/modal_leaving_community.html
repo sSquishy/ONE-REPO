@@ -1,0 +1,75 @@
+<!-- Begin: Confirm-Leave Modal (modal_leaving_community.html) -->
+<div class="modal fade" id="confirmLeaveModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Leave Community?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-0">
+          Are you sure you want to leave
+          <strong id="leaveCommLabel">this community</strong>?
+        </p>
+      </div>
+      <div class="modal-footer border-0">
+        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button id="btnConfirmLeave" class="btn btn-danger">Leave</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End: Confirm-Leave Modal -->
+
+<!-- Begin: Leave-Community Script (per-room footer toggle) -->
+<script>
+/*  leaveCurrentCommunity()
+    ▸ removes the active community from the sidebar list
+    ▸ sets leftCommunities[slug] = true  ➜ used by loadCommunity()
+    ▸ keeps chat history visible, but hides the footer only for
+      the room that was left
+---------------------------------------------------------------- */
+function leaveCurrentCommunity () {
+  const modal      = bootstrap.Modal.getInstance(document.getElementById('confirmLeaveModal'));
+  const activeLi   = document.querySelector('.community-item.active');
+  if (!activeLi) { if (modal) modal.hide(); return; }
+
+  const roomName = activeLi.dataset.name;
+  const roomSlug = roomName.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+
+  /* remember that the user left this room */
+  window.leftCommunities = window.leftCommunities || {};
+  window.leftCommunities[roomSlug] = true;
+
+  /* remove from sidebar */
+  activeLi.remove();
+
+  /* hide modal */
+  if (modal) modal.hide();
+
+  /* if still viewing that room → append note & hide footer */
+  const currentSlug = document.getElementById('headerName')
+                        ?.textContent.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  if (currentSlug === roomSlug) {
+    const msgList = document.getElementById('messageList');
+    if (msgList) {
+      msgList.insertAdjacentHTML('beforeend',
+        `<li class="chat-divider text-center text-muted small my-2">
+           You have left the <strong>${roomName}</strong> community.
+         </li>`);
+    }
+    document.querySelector('.chat-history-footer')?.classList.add('d-none');
+  }
+
+  /* switch to another room if available */
+  const nextLi = document.querySelector('.community-item');
+  if (nextLi && typeof loadCommunity === 'function') loadCommunity(nextLi);
+}
+
+/* attach once DOM is ready */
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('btnConfirmLeave')
+          ?.addEventListener('click', leaveCurrentCommunity);
+});
+</script>
+<!-- End: Leave-Community Script -->

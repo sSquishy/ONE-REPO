@@ -36,6 +36,7 @@
 
 
 {% block content %}
+
 <div class="position-relative" style="background-image: url('{% static "myClient/img/bg_pupqc.png" %}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
   <div class="authentication-wrapper authentication-basic container-p-y">
     <div class="authentication-inner py-4">
@@ -74,15 +75,13 @@
               </a>
             </div>
             <!-- Button with Spinner -->
-            <div class="mb-3">
-              <button class="btn btn-primary d-grid w-100" id="btnSubmit" type="button"
-                style="background-color: #880000; transition: background-color 0.3s; display: flex; align-items: center; justify-content: center; height: 2.5rem;">
-                <span class="btn-text">Sign in</span>
-                <span class="spinner-border spinner" role="status" style="display: none;">
-                  <span class="visually-hidden">Loading...</span>
-                </span>
-              </button>
-            </div>
+            <button class="btn btn-primary d-grid w-100" id="btnSubmit" type="button"
+              style="background-color: #880000; transition: background-color 0.3s; display: flex; align-items: center; justify-content: center; height: 2.5rem;">
+              <span class="btn-text">Sign in</span>
+              <span class="spinner-border spinner" role="status" style="display: none;">
+                <span class="visually-hidden">Loading...</span>
+              </span>
+            </button>
 
             <!-- Hover effect CSS -->
             <style>

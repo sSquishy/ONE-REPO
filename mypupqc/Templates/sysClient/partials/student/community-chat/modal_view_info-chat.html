@@ -1,0 +1,52 @@
+<!-- === STATIC COMMUNITY INFO MODAL (always Junior Marketing Society) === -->
+<div class="modal fade" id="viewCommunityModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="max-width:420px">
+    <div class="modal-content community-info-modal overflow-hidden">
+
+      <!-- Header -->
+      <div class="info-cover position-relative">
+        <img src="{% static 'img/myPUPQC-Client/student/chats/commits.jpg' %}"
+             class="w-100" style="height:140px;object-fit:cover;" alt="Cover">
+        <img src="{% static 'img/myPUPQC-Client/student/chats/commits.jpg' %}"
+             class="position-absolute rounded-circle border border-white"
+             style="width:72px;height:72px;object-fit:cover;left:24px;bottom:-36px;" alt="Avatar">
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body pt-5 text-center">
+        <h5 class="fw-semibold mb-1">Junior Marketing Society</h5>
+
+        <div class="d-flex justify-content-center flex-wrap gap-1 mb-2">
+          <span class="badge bg-label-primary">Marketing</span>
+          <span class="badge bg-label-primary">Workshops</span>
+          <span class="badge bg-label-primary">Networking</span>
+        </div>
+
+        <p class="small text-muted mb-3">
+          Connect with fellow marketing enthusiasts and share innovative ideas. Join our workshops and
+          networking events. Elevate your skills and career prospects in marketing.
+        </p>
+
+        <div class="d-flex justify-content-center gap-4 mb-4 text-secondary">
+          <span class="d-flex align-items-center">
+            <i class="mdi mdi-account-multiple me-1 text-primary"></i>150
+          </span>
+
+        </div>
+
+        <div class="d-grid gap-2">
+          <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#confirmLeaveModal">
+            <i class="mdi mdi-logout me-1"></i> Leave Community
+          </button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .community-info-modal{border-radius:12px;background:#fff;box-shadow:0 4px 16px rgba(0,0,0,.12);}
+  .community-info-modal .info-cover{background:#f2f2f2;}
+</style>

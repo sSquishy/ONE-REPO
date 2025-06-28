@@ -1,12 +1,15 @@
-<!-- Include this style block in your page head or above the modal -->
 <style>
-  /* You can reuse the same .upload-progress-bar style if you'd like. */
-  .edit-upload-progress-bar {
+  .upload-progress-bar {
     transition: width 0.4s ease;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 0.9; }
+    50% { opacity: 0.6; }
+    100% { opacity: 0.9; }
   }
 </style>
 
-<!-- Edit Article Modal -->
 <div class="modal fade" id="articleEditModal" tabindex="-1" aria-labelledby="articleEditModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" style="max-width: 800px;">
     <div class="modal-content p-3 p-md-5">
@@ -132,7 +135,7 @@
                   </div>
                   <div class="upload-progress-container">
                     <div class="upload-progress">
-                      <div class="edit-upload-progress-bar" style="width: 0%"></div>
+                      <div class="upload-progress-bar" style="width: 0%"></div>
                     </div>
                     <span class="upload-percentage" id="edit-article-upload-percentage">0%</span>
                     <span class="upload-remove" id="edit-article-remove-upload">×</span>
@@ -178,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Update counters for title & description
   editTitleInput.addEventListener("input", function () {
-    editTitleCounter.textContent = this.value.length + "/150";
+    editTitleCounter.textContent = this.value.length + "/50";
   });
   editDescInput.addEventListener("input", function () {
     editDescCounter.textContent = this.value.length + "/5000";
@@ -222,10 +225,6 @@ document.addEventListener("DOMContentLoaded", function () {
         field.classList.remove("is-invalid");
       }
     });
-
-    if(document.getElementById("edit-article-upload-percentage").textContent === "100%") {
-      isEditFileFullyUploaded = true;
-    }
 
     // Check file presence & upload completion
     if (!currentEditFile) {
@@ -280,15 +279,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
         currentEditFile = file;
         isEditFileFullyUploaded = false; // reset upload status
+        
+        // Reset progress bar for animation
+        const progressBar = editPreviewContainer.querySelector(".upload-progress-bar");
+        progressBar.style.width = "0%";
+        progressBar.style.background = "#0d6efd"; // Reset color
+        document.getElementById("edit-article-upload-percentage").textContent = "0%";
+        document.getElementById("edit-article-upload-percentage").style.color = "#0d6efd"; // Reset color
+        // Force reflow to enable CSS transition
+        void progressBar.offsetWidth;
+        
         validateEditFields();
       });
 
       // Live progress updates
       this.on("uploadprogress", function (file, progress) {
-        const progressBar = document.querySelector(".edit-upload-progress-bar");
+        const progressBar = editPreviewContainer.querySelector(".upload-progress-bar");
         const percentage = Math.round(progress);
         progressBar.style.width = percentage + "%";
         document.getElementById("edit-article-upload-percentage").textContent = percentage + "%";
+        
+        // Pulse animation effect during upload
+        if (percentage > 0 && percentage < 100) {
+          progressBar.style.animation = "pulse 1.5s infinite";
+        } else {
+          progressBar.style.animation = "none";
+        }
+      });
+
+      // When upload completes
+      this.on("complete", function(file) {
+        if (file.status === "success") {
+          isEditFileFullyUploaded = true;
+          const progressBar = editPreviewContainer.querySelector(".upload-progress-bar");
+          progressBar.style.animation = "none";
+          progressBar.style.background = "#28a745"; // Success color
+          document.getElementById("edit-article-upload-percentage").style.color = "#28a745"; // Success color
+          
+          // Success animation
+          progressBar.style.transition = "all 0.5s ease";
+          setTimeout(() => {
+            progressBar.style.boxShadow = "0 0 0 8px rgba(40, 167, 69, 0.3)";
+            setTimeout(() => {
+              progressBar.style.boxShadow = "none";
+            }, 500);
+          }, 300);
+          
+          validateEditFields();
+        }
       });
 
       // If file is removed
@@ -356,8 +394,11 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("editArticleStartDate").value = article.articleStartDate;
         document.getElementById("editArticleEndDate").value = article.articleEndDate;
         document.getElementById("editArticleStatus").value = article.articleStatus;
-        editTitleCounter.textContent = article.title.length + "/150";
-        editDescCounter.textContent = article.description.length + "/5000";
+        
+        // Fixed counter references
+        editTitleCounter.textContent = article.articleTitle.length + "/50";
+        editDescCounter.textContent = article.articleDescription.length + "/5000";
+        
         editRequiredFields.forEach(field => field.classList.remove("is-invalid"));
 
         // Reset file upload
@@ -366,6 +407,20 @@ document.addEventListener("DOMContentLoaded", function () {
         isEditFileFullyUploaded = false;
         editUploadSection.style.display = "block";
         editPreviewContainer.style.display = "none";
+        
+        // Reset progress bar
+        const progressBar = editPreviewContainer.querySelector(".upload-progress-bar");
+        if (progressBar) {
+          progressBar.style.width = '0%';
+          progressBar.style.background = "#0d6efd";
+          progressBar.style.animation = "none";
+          progressBar.style.boxShadow = "none";
+        }
+        const progressPercent = document.getElementById('edit-article-upload-percentage');
+        if (progressPercent) {
+          progressPercent.textContent = '0%';
+          progressPercent.style.color = "#0d6efd";
+        }
       },
       error: function(xhr, status, error) {
         console.error(xhr.responseText);
@@ -387,6 +442,35 @@ document.addEventListener("DOMContentLoaded", function () {
     const { isValid, missingFields } = validateEditFields();
 
     if (isValid) {
+      // Show processing modal with progress bar
+      let progressInterval;
+      let progress = 0;
+      let processingSwal = Swal.fire({
+        title: "Processing...",
+        html: `
+          <div class="progress mt-3" style="height: 20px; border-radius: 10px;">
+            <div id="swal-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                 role="progressbar" style="width: 0%; background: #28a745;"></div>
+          </div>
+          <p class="mt-3 mb-0" id="swal-progress-text">Updating article...</p>
+        `,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+          progressInterval = setInterval(() => {
+            progress += 10;
+            if (progress > 90) progress = 90; // Leave room for final step
+            const progressBar = document.getElementById('swal-progress-bar');
+            const progressText = document.getElementById('swal-progress-text');
+            if (progressBar) progressBar.style.width = `${progress}%`;
+            if (progressText) progressText.textContent = `Processing: ${progress}%`;
+          }, 300);
+        },
+        willClose: () => {
+          clearInterval(progressInterval);
+        }
+      });
+
       let formData = new FormData();
       formData.append("articleTitle", editTitleInput.value.trim());
       formData.append("articleDescription", editDescInput.value.trim());
@@ -404,42 +488,55 @@ document.addEventListener("DOMContentLoaded", function () {
         processData: false,
         contentType: false,
         success: function (response) {
-          console.log(response);
-          Swal.fire({
-            title: "Success!",
-            text: "Article updated successfully.",
-            icon: "success",
-            customClass: {
-              confirmButton: "btn btn-primary waves-effect waves-light"
-            },
-            buttonsStyling: false
-          }).then(() => {
-            // Reset all fields
-            editTitleInput.value = "";
-            editDescInput.value = "";
-            document.getElementById("editArticleStartDate").value = "";
-            document.getElementById("editArticleEndDate").value = "";
-            document.getElementById("editArticleStatus").selectedIndex = 0;
-            editTitleCounter.textContent = "0/150";
-            editDescCounter.textContent = "0/5000";
-            editRequiredFields.forEach(field => field.classList.remove("is-invalid"));
+          clearInterval(progressInterval);
+          // Complete the progress bar
+          const progressBar = document.getElementById('swal-progress-bar');
+          const progressText = document.getElementById('swal-progress-text');
+          if (progressBar) progressBar.style.width = '100%';
+          if (progressText) progressText.textContent = 'Completed!';
+          
+          setTimeout(() => {
+            processingSwal.close();
+            
+            Swal.fire({
+              title: "Success!",
+              text: "Article updated successfully.",
+              icon: "success",
+              customClass: {
+                confirmButton: "btn btn-primary waves-effect waves-light"
+              },
+              buttonsStyling: false
+            }).then(() => {
+              // Reset all fields
+              editTitleInput.value = "";
+              editDescInput.value = "";
+              document.getElementById("editArticleStartDate").value = "";
+              document.getElementById("editArticleEndDate").value = "";
+              document.getElementById("editArticleStatus").selectedIndex = 0;
+              editTitleCounter.textContent = "0/50";
+              editDescCounter.textContent = "0/5000";
+              editRequiredFields.forEach(field => field.classList.remove("is-invalid"));
 
-            // Reset file upload
-            editArticleDropzone.removeAllFiles(true);
-            currentEditFile = null;
-            isEditFileFullyUploaded = false;
-            editUploadSection.style.display = "block";
-            editPreviewContainer.style.display = "none";
+              // Reset file upload
+              editArticleDropzone.removeAllFiles(true);
+              currentEditFile = null;
+              isEditFileFullyUploaded = false;
+              editUploadSection.style.display = "block";
+              editPreviewContainer.style.display = "none";
 
-            // Close modal (assuming jQuery is present)
-            $("#articleEditModal").modal("hide");
+              // Close modal (assuming jQuery is present)
+              $("#articleEditModal").modal("hide");
 
-            // Refresh the table
-            document.dt_article.ajax.reload(null, false);
-          });
+              // Refresh the table
+              document.dt_article.ajax.reload(null, false);
+            });
+          }, 500);
         },
         error: function (xhr, status, error) {
           console.error(xhr.responseText);
+          clearInterval(progressInterval);
+          processingSwal.close();
+          
           Swal.fire({
             title: "Error!",
             text: "An error occurred. Please try again.",
@@ -454,7 +551,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       Swal.fire({
         title: "Error!",
-        text: "Please complete the following: " + missingFields.join(", "),
+        html: "Please complete the following fields: <br><br><ul><li>" + missingFields.join("</li><li>") + "</li></ul>",
         icon: "error",
         customClass: {
           confirmButton: "btn btn-primary waves-effect waves-light"
@@ -473,10 +570,24 @@ document.addEventListener("DOMContentLoaded", function () {
       field.value = "";
       field.classList.remove("is-invalid");
     });
-    editTitleCounter.textContent = "0/150";
+    editTitleCounter.textContent = "0/50";
     editDescCounter.textContent = "0/5000";
     editUploadSection.style.display = "block";
     editPreviewContainer.style.display = "none";
+    
+    // Reset progress bar
+    const progressBar = editPreviewContainer.querySelector(".upload-progress-bar");
+    if (progressBar) {
+      progressBar.style.width = '0%';
+      progressBar.style.background = "#0d6efd";
+      progressBar.style.animation = "none";
+      progressBar.style.boxShadow = "none";
+    }
+    const progressPercent = document.getElementById('edit-article-upload-percentage');
+    if (progressPercent) {
+      progressPercent.textContent = '0%';
+      progressPercent.style.color = "#0d6efd";
+    }
   });
 });
 </script>

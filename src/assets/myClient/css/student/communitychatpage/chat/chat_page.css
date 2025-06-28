@@ -1,0 +1,21 @@
+.unread-badge  { font-size:0.65rem; vertical-align:middle; }
+.last-msg-time { font-size:0.65rem; }
+.muted-icon    { font-size:0.75rem; }
+/* in your stylesheet, not inline */
+.app-chat-history .chat-history-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;             /* fill the height of the .app-chat-history column */
+  }
+
+  .app-chat-history .chat-history-body {
+    flex: 1 1 auto;           /* take up remaining space */
+    overflow-y: auto;         /* make the messages scrollable */
+  }
+
+  .app-chat-history .chat-history-footer {
+    flex-shrink: 0;           /* stay at its natural height at the bottom */
+    /* optional visual polish: */
+    background: #fff;
+    border-top: 1px solid #e9ecef;
+  }

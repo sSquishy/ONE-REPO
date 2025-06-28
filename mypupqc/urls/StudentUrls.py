@@ -15,6 +15,26 @@ urlpatterns = [
         name="sys-student-StudentGuide",
     ),
 
+    # Student Backpack
+    path(
+        "Student-Tracker/",
+        UsersView.as_view(template_name="sysClient/Student/Backpack/sysStudent_Assignment-Tracker.html"),
+        name="sys-student-StudentTracker",
+    ),
+
+    path(
+        "Student-ChatGroup/Chat/",
+        UsersView.as_view(template_name="sysClient/Student/Backpack/ChatGroup/sysStudent_Chat.html"),
+        name="sys-student-StudentChat",
+    ),
+    path(
+        "Student-ChatGroup/",
+        UsersView.as_view(template_name="sysClient/Student/Backpack/sysStudent_ChatGroup-Community.html"),
+        name="sys-student-StudentChatGroup",
+    ),
+
+
+
     # Student Profile Paths
     path(
         "Profile/",

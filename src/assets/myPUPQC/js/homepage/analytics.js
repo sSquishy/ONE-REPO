@@ -175,13 +175,10 @@ function createStudentsPerProgramChart() {
     },
     labels: programs,
     series: studentCounts, // Percentage distribution
-    colors: [
-      '#ff7675', // BSIT
-      '#74b9ff', // BSCS
-      '#55efc4', // BSECE
-      '#fdcb6e', // BSEd
-      '#e17055' // BSBA
-    ],
+    colors: programs.map((_, i) => {
+      const hue = (i * 360 / programs.length) % 360;
+      return `hsl(${hue}, 70%, 60%)`; // Generates a unique color per program
+    }),
     stroke: {
       show: false,
       curve: 'straight'

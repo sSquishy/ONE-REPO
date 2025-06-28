@@ -1,0 +1,508 @@
+{% extends 'layout/sysStudent/sysStudent_layout.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Academy - My Courses - App{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/plyr/plyr.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/dropzone/dropzone.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/bootstrap-select/bootstrap-select.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/typeahead-js/typeahead.css' %}" />
+
+<link rel="stylesheet" href="{% static 'vendor/libs/animate-css/animate.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/plyr/plyr.js' %}"></script>
+
+<script src="{% static 'vendor/libs/dropzone/dropzone.js' %}"></script>
+
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/bootstrap-select/bootstrap-select.js' %}"></script>
+<script src="{% static 'vendor/libs/typeahead-js/typeahead.js' %}"></script>
+<script src="{% static 'vendor/libs/bloodhound/bloodhound.js' %}"></script>
+
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/css/pages/app-academy.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/app-academy-course.js' %}"></script>
+
+<script src="{% static 'js/forms-tagify.js' %}"></script>
+<script src="{% static 'myClient/js/student/communitychatpage/community_card.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+<!-- BEGIN .app-academy -->
+<div class="app-academy">
+
+  <!-- BEGIN .card (hero) -->
+  <div class="card p-0 mb-4">
+    <!-- BEGIN .card-body (hero wrapper) -->
+    <div class="card-body d-flex flex-column flex-md-row justify-content-between p-0 pt-4">
+
+      <!-- BEGIN .app-academy-md-25 (hero-left image) -->
+      <div class="app-academy-md-25 card-body py-0">
+        <img src="{% static 'img/illustrations/bulb-' %}{{ COOKIES.style|default:style }}.png"
+             class="img-fluid app-academy-img-height scaleX-n1-rtl"
+             alt="Bulb in hand"
+             data-app-light-img="illustrations/bulb-light.png"
+             data-app-dark-img="illustrations/bulb-dark.png"
+             height="90" />
+      </div>
+      <!-- END .app-academy-md-25 (hero-left image) -->
+
+      <!-- BEGIN .app-academy-md-50 (hero text & search) -->
+      <div class="app-academy-md-50 card-body d-flex align-items-md-center flex-column text-md-center mb-4">
+        <span class="card-title mb-3 lh-lg px-md-5 display-6 text-heading">
+          Connect, share, and engage with communities.
+          <span class="text-primary text-nowrap">Find your chat room</span>.
+        </span>
+        <p class="mb-3 px-2">
+          Discover vibrant communities where you can share insights, collaborate, and enjoy engaging conversations with like-minded individuals.
+        </p>
+
+        <!-- BEGIN .search-bar -->
+        <div class="d-flex align-items-center justify-content-between app-academy-md-80">
+          <input id="cardSearch" type="search" placeholder="Search chat rooms" class="form-control me-2">
+          <button class="btn btn-primary btn-icon"><i class="mdi mdi-magnify"></i></button>
+        </div>
+        <!-- END .search-bar -->
+      </div>
+      <!-- END .app-academy-md-50 (hero text & search) -->
+
+      <!-- BEGIN .app-academy-md-25 (hero-right image) -->
+      <div class="app-academy-md-25 d-flex align-items-end justify-content-end">
+        <img src="{% static 'img/illustrations/pencil-rocket.png' %}" alt="pencil rocket" height="188" class="scaleX-n1-rtl" />
+      </div>
+      <!-- END .app-academy-md-25 (hero-right image) -->
+
+    </div>
+    <!-- END .card-body (hero wrapper) -->
+  </div>
+  <!-- END .card (hero) -->
+
+  <!-- BEGIN .card (list wrapper) -->
+  <div class="card mb-4">
+
+    <!-- BEGIN .card-header -->
+    <div class="card-header d-flex flex-wrap justify-content-between gap-3">
+
+      <!-- BEGIN .card-title -->
+      <div class="card-title mb-0 me-1">
+        <h5 class="mb-1">Community Chats</h5>
+        <p class="mb-0">Total 6 chat rooms available</p>
+      </div>
+      <!-- END .card-title -->
+
+      <!-- BEGIN .card-header-actions -->
+      <div class="d-flex justify-content-md-end align-items-center gap-3 flex-wrap">
+        {% comment %} <select id="select2_chat_select" class="select2 form-select" data-placeholder="All Categories">…</select> {% endcomment %}
+        {% comment %} <label class="switch">…</label> {% endcomment %}
+        <button type="button" class="btn btn-primary ps-4" data-bs-toggle="modal" data-bs-target="#createPortalModal">+ Add Community</button>
+        <div class="modal fade" id="createCommunityChat" tabindex="-1" aria-hidden="true"></div>
+      </div>
+      <!-- END .card-header-actions -->
+
+    </div>
+    <!-- END .card-header -->
+
+    <!-- BEGIN .card-body (list body) -->
+    <div class="card-body">
+
+      <!-- BEGIN .row (cards grid) -->
+      <div class="row gy-4 mb-4">
+
+        <!-- BEGIN #noResult -->
+        <div id="noResult" class="col-12 d-none">
+          <div class="text-center py-5">
+            <svg width="110" height="110" class="mb-4" viewBox="0 0 24 24" fill="none">
+              <circle cx="10.5" cy="10.5" r="7.5" stroke="#ffc107" stroke-width="3"/>
+              <line x1="15.5" y1="15.5" x2="21" y2="21" stroke="#6c757d" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <h5 class="mb-1">Sorry, we couldn't find any matches for <span id="noTerm" class="fw-semibold"></span></h5>
+            <p class="text-muted mb-0">Please try searching with another term</p>
+          </div>
+        </div>
+        <!-- END #noResult -->
+
+        <!-- BEGIN .col-chat-1 -->
+        <div class="col-sm-6 col-lg-4">
+          <!-- BEGIN .chat-card-1 -->
+          <div class="card p-2 shadow-none border h-100 chat-card">
+            <!-- BEGIN .cover -->
+            <div class="rounded-2 text-center mb-3">
+              <img class="img-fluid"
+                   src="{% static 'img/myPUPQC-Client/student/chats/commits.jpg' %}"
+                   alt="Junior Marketing Society"
+                   style="width:500px;height:200px;object-fit:cover;">
+            </div>
+            <!-- END .cover -->
+
+            <!-- BEGIN .card-body -->
+            <div class="card-body p-3 pt-2 d-flex flex-column h-100">
+
+              <!-- BEGIN .details -->
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge rounded-pill bg-label-primary">Marketing</span>
+                  <p class="d-flex align-items-center justify-content-center gap-1 mb-0">
+                    150 <span class="text-warning"><i class="mdi mdi-account-multiple me-1"></i></span>
+                  </p>
+                </div>
+
+                <a href="#" class="h5 chat-title d-block mb-2">Junior Marketing Society</a>
+
+                <p class="chat-desc mb-0">
+                  Connect with fellow marketing enthusiasts and share innovative ideas. Join our workshops and
+                  networking events. Elevate your skills and career prospects in marketing.
+                </p>
+              </div>
+              <!-- END .details -->
+
+              <!-- BEGIN .card-footer -->
+              <div class="d-flex flex-column flex-md-row gap-3 mt-auto pt-3">
+                <button class="w-100 btn btn-outline-secondary d-flex align-items-center view-info-btn"
+                        data-bs-toggle="modal" data-bs-target="#viewCommunityModal"
+                        data-name="Junior Marketing Society"
+                        data-tags="Marketing,Workshops,Networking"
+                        data-desc="Connect with fellow marketing enthusiasts and share innovative ideas…"
+                        data-members="150"
+                        data-active="Active 24/7"
+                        data-cover="{% static 'img/myPUPQC-Client/student/chats/commits.jpg' %}"
+                        data-avatar="{% static 'img/myPUPQC-Client/student/chats/commits.jpg' %}">
+                  <i class="mdi mdi-information-outline align-middle me-1"></i><span>View Info</span>
+                </button>
+                <a class="w-100 btn btn-outline-primary d-flex align-items-center"
+                   href="{% url 'sys-student-StudentChat' %}">
+                  <span class="me-1">Join Chat</span><i class="mdi mdi-chat-processing lh-1"></i>
+                </a>
+              </div>
+              <!-- END .card-footer -->
+
+            </div>
+            <!-- END .card-body -->
+          </div>
+          <!-- END .chat-card-1 -->
+        </div>
+        <!-- END .col-chat-1 -->
+
+        <!-- BEGIN .col-chat-2 -->
+        <div class="col-sm-6 col-lg-4">
+          <!-- BEGIN .chat-card-2 -->
+          <div class="card shadow-none border p-2 h-100 chat-card">
+
+            <!-- BEGIN .cover -->
+            <div class="rounded-2 text-center mb-3">
+              <img class="img-fluid"
+                   src="{% static 'img/myPUPQC-Client/student/chats/chrs.png' %}"
+                   alt="PUPQC Sports Club"
+                   style="width:500px;height:200px;object-fit:cover;">
+            </div>
+            <!-- END .cover -->
+
+            <!-- BEGIN .card-body -->
+            <div class="card-body p-3 pt-2 d-flex flex-column h-100">
+
+              <!-- BEGIN .details -->
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge rounded-pill bg-label-danger">Sports</span>
+                  <p class="d-flex align-items-center gap-1 mb-0">
+                    120 <span class="text-warning"><i class="mdi mdi-account-multiple me-1"></i></span>
+                  </p>
+                </div>
+
+                <a href="#" class="h5 chat-title d-block mb-2">PUPQC Sports Club</a>
+
+                <p class="chat-desc mb-0">
+                  Engage with active members who love sports and fitness. Discuss upcoming events, training sessions,
+                  and matches. Stay motivated and be part of our vibrant sports community.
+                </p>
+              </div>
+              <!-- END .details -->
+
+              <!-- BEGIN .card-footer -->
+              <div class="d-flex flex-column flex-md-row gap-3 mt-auto pt-3">
+                <button class="w-100 btn btn-outline-secondary d-flex align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#viewCommunityModal">
+                  <i class="mdi mdi-information-outline me-1"></i><span>View Info</span>
+                </button>
+                <a class="w-100 btn btn-outline-primary d-flex align-items-center"
+                   href="{% url 'sys-student-StudentChat' %}">
+                  <span class="me-1">Join Chat</span><i class="mdi mdi-chat-processing lh-1"></i>
+                </a>
+              </div>
+              <!-- END .card-footer -->
+
+            </div>
+            <!-- END .card-body -->
+          </div>
+          <!-- END .chat-card-2 -->
+        </div>
+        <!-- END .col-chat-2 -->
+
+        <!-- BEGIN .col-chat-3 -->
+        <div class="col-sm-6 col-lg-4">
+          <!-- BEGIN .chat-card-3 -->
+          <div class="card shadow-none border p-2 h-100 chat-card">
+
+            <!-- BEGIN .cover -->
+            <div class="rounded-2 text-center mb-3">
+              <img class="img-fluid"
+                   src="{% static 'img/myPUPQC-Client/student/chats/Vox Nova.png' %}"
+                   alt="Comm IT Society"
+                   style="width:500px;height:200px;object-fit:cover;">
+            </div>
+            <!-- END .cover -->
+
+            <!-- BEGIN .card-body -->
+            <div class="card-body p-3 pt-2 d-flex flex-column h-100">
+
+              <!-- BEGIN .details -->
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge rounded-pill bg-label-success">IT</span>
+                  <p class="d-flex align-items-center gap-1 mb-0">
+                    75 <span class="text-warning"><i class="mdi mdi-account-multiple me-1"></i></span>
+                  </p>
+                </div>
+
+                <a href="#" class="h5 chat-title d-block mb-2">
+                  Commonwealth Information Technology Society
+                </a>
+
+                <p class="chat-desc mb-0">
+                  Discuss cutting-edge technology trends and share IT knowledge. Collaborate on projects and
+                  innovative solutions. Connect with peers passionate about IT.
+                </p>
+              </div>
+              <!-- END .details -->
+
+              <!-- BEGIN .card-footer -->
+              <div class="d-flex flex-column flex-md-row gap-3 mt-auto pt-3">
+                <button class="w-100 btn btn-outline-secondary d-flex align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#viewCommunityModal">
+                  <i class="mdi mdi-information-outline me-1"></i><span>View Info</span>
+                </button>
+                <a class="w-100 btn btn-outline-primary d-flex align-items-center"
+                   href="{% url 'sys-student-StudentChat' %}">
+                  <span class="me-1">Join Chat</span><i class="mdi mdi-chat-processing lh-1"></i>
+                </a>
+              </div>
+              <!-- END .card-footer -->
+
+            </div>
+            <!-- END .card-body -->
+          </div>
+          <!-- END .chat-card-3 -->
+        </div>
+        <!-- END .col-chat-3 -->
+
+        <!-- BEGIN .col-chat-4 -->
+        <div class="col-sm-6 col-lg-4">
+          <!-- BEGIN .chat-card-4 -->
+          <div class="card shadow-none border p-2 h-100 chat-card">
+
+            <!-- BEGIN .cover -->
+            <div class="rounded-2 text-center mb-3">
+              <img class="img-fluid"
+                   src="{% static 'img/myPUPQC-Client/student/chats/sportsclub.png' %}"
+                   alt="HR Students"
+                   style="width:500px;height:200px;object-fit:cover;">
+            </div>
+            <!-- END .cover -->
+
+            <!-- BEGIN .card-body -->
+            <div class="card-body p-3 pt-2 d-flex flex-column h-100">
+
+              <!-- BEGIN .details -->
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge rounded-pill bg-label-info">HR</span>
+                  <p class="d-flex align-items-center gap-1 mb-0">
+                    200 <span class="text-warning"><i class="mdi mdi-account-multiple me-1"></i></span>
+                  </p>
+                </div>
+
+                <a href="#" class="h5 chat-title d-block mb-2">
+                  Community of Human Resource Students
+                </a>
+
+                <p class="chat-desc mb-0">
+                  Network with peers in human resources and learn best practices. Participate in seminars and
+                  career-building events. Enhance your HR expertise and professional growth.
+                </p>
+              </div>
+              <!-- END .details -->
+
+              <!-- BEGIN .card-footer -->
+              <div class="d-flex flex-column flex-md-row gap-3 mt-auto pt-3">
+                <button class="w-100 btn btn-outline-secondary d-flex align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#viewCommunityModal">
+                  <i class="mdi mdi-information-outline me-1"></i><span>View Info</span>
+                </button>
+                <a class="w-100 btn btn-outline-primary d-flex align-items-center"
+                   href="{% url 'sys-student-StudentChat' %}">
+                  <span class="me-1">Join Chat</span><i class="mdi mdi-chat-processing lh-1"></i>
+                </a>
+              </div>
+              <!-- END .card-footer -->
+
+            </div>
+            <!-- END .card-body -->
+          </div>
+          <!-- END .chat-card-4 -->
+        </div>
+        <!-- END .col-chat-4 -->
+
+        <!-- BEGIN .col-chat-5 -->
+        <div class="col-sm-6 col-lg-4">
+          <!-- BEGIN .chat-card-5 -->
+          <div class="card shadow-none border p-2 h-100 chat-card">
+
+            <!-- BEGIN .cover -->
+            <div class="rounded-2 text-center mb-3">
+              <img class="img-fluid"
+                   src="{% static 'img/myPUPQC-Client/student/chats/yes.png' %}"
+                   alt="YES"
+                   style="width:500px;height:200px;object-fit:cover;">
+            </div>
+            <!-- END .cover -->
+
+            <!-- BEGIN .card-body -->
+            <div class="card-body p-3 pt-2 d-flex flex-column h-100">
+
+              <!-- BEGIN .details -->
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge rounded-pill bg-label-warning">Entrepreneurship</span>
+                  <p class="d-flex align-items-center gap-1 mb-0">
+                    95 <span class="text-warning"><i class="mdi mdi-account-multiple me-1"></i></span>
+                  </p>
+                </div>
+
+                <a href="#" class="h5 chat-title d-block mb-2">
+                  Youth Entrepreneurs Society&nbsp;- PUPQC
+                </a>
+
+                <p class="chat-desc mb-0">
+                  Empowering young entrepreneurs to innovate and lead. Share business ideas and gain
+                  valuable mentorship. Collaborate and drive change in our entrepreneurial community.
+                </p>
+              </div>
+              <!-- END .details -->
+
+              <!-- BEGIN .card-footer -->
+              <div class="d-flex flex-column flex-md-row gap-3 mt-auto pt-3">
+                <button class="w-100 btn btn-outline-secondary d-flex align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#viewCommunityModal">
+                  <i class="mdi mdi-information-outline me-1"></i><span>View Info</span>
+                </button>
+                <a class="w-100 btn btn-outline-primary d-flex align-items-center"
+                   href="{% url 'sys-student-StudentChat' %}">
+                  <span class="me-1">Join Chat</span><i class="mdi mdi-chat-processing lh-1"></i>
+                </a>
+              </div>
+              <!-- END .card-footer -->
+
+            </div>
+            <!-- END .card-body -->
+          </div>
+          <!-- END .chat-card-5 -->
+        </div>
+        <!-- END .col-chat-5 -->
+
+        <!-- BEGIN .col-chat-6 -->
+        <div class="col-sm-6 col-lg-4">
+          <!-- BEGIN .chat-card-6 -->
+          <div class="card shadow-none border p-2 h-100 chat-card">
+
+            <!-- BEGIN .cover -->
+            <div class="rounded-2 text-center mb-3">
+              <img class="img-fluid"
+                   src="{% static 'img/myPUPQC-Client/student/chats/jms.png' %}"
+                   alt="Vox Nova"
+                   style="width:500px;height:200px;object-fit:cover;">
+            </div>
+            <!-- END .cover -->
+
+            <!-- BEGIN .card-body -->
+            <div class="card-body p-3 pt-2 d-flex flex-column h-100">
+
+              <!-- BEGIN .details -->
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <span class="badge rounded-pill bg-label-danger">Creative</span>
+                  <p class="d-flex align-items-center gap-1 mb-0">
+                    180 <span class="text-warning"><i class="mdi mdi-account-multiple me-1"></i></span>
+                  </p>
+                </div>
+
+                <a href="#" class="h5 chat-title d-block mb-2">Vox Nova</a>
+
+                <p class="chat-desc mb-0">
+                  Celebrate arts, music, and creative expression. Engage in inspiring discussions and cultural events.
+                  Share your talents and be inspired by fellow creatives.
+                </p>
+              </div>
+              <!-- END .details -->
+
+              <!-- BEGIN .card-footer -->
+              <div class="d-flex flex-column flex-md-row gap-3 mt-auto pt-3">
+                <button class="w-100 btn btn-outline-secondary d-flex align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#viewCommunityModal">
+                  <i class="mdi mdi-information-outline me-1"></i><span>View Info</span>
+                </button>
+                <a class="w-100 btn btn-outline-primary d-flex align-items-center"
+                   href="{% url 'sys-student-StudentChat' %}">
+                  <span class="me-1">Join Chat</span><i class="mdi mdi-chat-processing lh-1"></i>
+                </a>
+              </div>
+              <!-- END .card-footer -->
+
+            </div>
+            <!-- END .card-body -->
+          </div>
+          <!-- END .chat-card-6 -->
+        </div>
+        <!-- END .col-chat-6 -->
+
+      </div>
+      <!-- END .row (cards grid) -->
+
+      <!-- BEGIN .pagination -->
+      <nav aria-label="Page navigation" class="d-flex align-items-center justify-content-center mt-4">
+        <ul id="cardPagination" class="pagination"></ul>
+      </nav>
+      <!-- END .pagination -->
+
+    </div>
+    <!-- END .card-body (list body) -->
+  </div>
+  <!-- END .card (list wrapper) -->
+
+</div>
+<!-- END .app-academy -->
+
+{% include 'sysClient/partials/student/community-chat/modal_add_chat.html' %}
+{% include 'sysClient/partials/student/community-chat/modal_view_info-chatgroup.html' %}
+
+{% endblock %}

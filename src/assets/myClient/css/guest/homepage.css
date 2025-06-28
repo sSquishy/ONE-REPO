@@ -7,3 +7,20 @@
     background-size: cover;
     background-position: center;
   }
+
+  /* Custom Swiper Navigation Buttons */
+  /* Improve color contrast and add subtle background */
+  .swiper-button-next.custom-icon,
+  .swiper-button-prev.custom-icon {
+    color: #ffffff; /* Brighter icon color */
+    background-color: rgba(0, 0, 0, 0.3); /* Subtle dark background */
+    filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.7)); /* Slight glow/shadow */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* On hover, darken background and brighten color */
+  .swiper-button-next.custom-icon:hover,
+  .swiper-button-prev.custom-icon:hover {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #ffeb3b; /* Optional: yellow-ish hover to stand out */
+  }

@@ -224,10 +224,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    if(document.getElementById("article-upload-percentage").textContent === "100%") {
-      isFileFullyUploaded = true;
-    }
-
     // Check file presence & upload completion
     if (!currentArticleFile) {
       uploadSection.classList.add("border", "border-danger");
@@ -282,15 +278,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
         currentArticleFile = file;
         isFileFullyUploaded = false; // reset upload status
+        
+        // Reset progress bar for animation
+        const progressBar = previewContainer.querySelector(".upload-progress-bar");
+        progressBar.style.width = "0%";
+        progressBar.style.background = "#0d6efd"; // Reset color
+        document.getElementById("article-upload-percentage").textContent = "0%";
+        document.getElementById("article-upload-percentage").style.color = "#0d6efd"; // Reset color
+        // Force reflow to enable CSS transition
+        void progressBar.offsetWidth;
+        
         validateFields();
       });
 
       // Live progress updates
       this.on("uploadprogress", function (file, progress) {
-        const progressBar = document.querySelector(".upload-progress-bar");
+        const progressBar = previewContainer.querySelector(".upload-progress-bar");
         const percentage = Math.round(progress);
         progressBar.style.width = percentage + "%";
         document.getElementById("article-upload-percentage").textContent = percentage + "%";
+        
+        // Pulse animation effect during upload
+        if (percentage > 0 && percentage < 100) {
+          progressBar.style.animation = "pulse 1.5s infinite";
+        } else {
+          progressBar.style.animation = "none";
+        }
+      });
+
+      // When upload completes
+      this.on("complete", function(file) {
+        if (file.status === "success") {
+          isFileFullyUploaded = true;
+          const progressBar = previewContainer.querySelector(".upload-progress-bar");
+          progressBar.style.animation = "none";
+          progressBar.style.background = "#28a745"; // Success color
+          document.getElementById("article-upload-percentage").style.color = "#28a745"; // Success color
+          
+          // Success animation
+          progressBar.style.transition = "all 0.5s ease";
+          setTimeout(() => {
+            progressBar.style.boxShadow = "0 0 0 8px rgba(40, 167, 69, 0.3)";
+            setTimeout(() => {
+              progressBar.style.boxShadow = "none";
+            }, 500);
+          }, 300);
+          
+          validateFields();
+        }
       });
 
       // If file is removed
@@ -341,6 +376,35 @@ document.addEventListener("DOMContentLoaded", function () {
     const { isValid, missingFields } = validateFields();
 
     if (isValid) {
+      // Show processing modal with progress bar
+      let progressInterval;
+      let progress = 0;
+      let processingSwal = Swal.fire({
+        title: "Processing...",
+        html: `
+          <div class="progress mt-3" style="height: 20px; border-radius: 10px;">
+            <div id="swal-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                 role="progressbar" style="width: 0%; background: #28a745;"></div>
+          </div>
+          <p class="mt-3 mb-0" id="swal-progress-text">Uploading article...</p>
+        `,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        didOpen: () => {
+          progressInterval = setInterval(() => {
+            progress += 10;
+            if (progress > 90) progress = 90; // Leave room for final step
+            const progressBar = document.getElementById('swal-progress-bar');
+            const progressText = document.getElementById('swal-progress-text');
+            if (progressBar) progressBar.style.width = `${progress}%`;
+            if (progressText) progressText.textContent = `Processing: ${progress}%`;
+          }, 300);
+        },
+        willClose: () => {
+          clearInterval(progressInterval);
+        }
+      });
+
       let formData = new FormData();
       formData.append("articleImage", currentArticleFile);
       formData.append("articleTitle", titleInput.value);
@@ -357,42 +421,55 @@ document.addEventListener("DOMContentLoaded", function () {
         processData: false,
         contentType: false,
         success: function (response) {
-          console.log(response);
-          Swal.fire({
-            title: "Success!",
-            text: "Article uploaded successfully.",
-            icon: "success",
-            customClass: {
-              confirmButton: "btn btn-primary waves-effect waves-light"
-            },
-            buttonsStyling: false
-          }).then(() => {
-            // Reset all fields
-            titleInput.value = "";
-            descInput.value = "";
-            document.getElementById("articleStartDate").value = "";
-            document.getElementById("articleEndDate").value = "";
-            document.getElementById("articleStatus").selectedIndex = 0;
-            titleCounter.textContent = "0/150";
-            descCounter.textContent = "0/5000";
-            requiredFields.forEach(field => field.classList.remove("is-invalid"));
+          clearInterval(progressInterval);
+          // Complete the progress bar
+          const progressBar = document.getElementById('swal-progress-bar');
+          const progressText = document.getElementById('swal-progress-text');
+          if (progressBar) progressBar.style.width = '100%';
+          if (progressText) progressText.textContent = 'Completed!';
+          
+          setTimeout(() => {
+            processingSwal.close();
+            
+            Swal.fire({
+              title: "Success!",
+              text: "Article uploaded successfully.",
+              icon: "success",
+              customClass: {
+                confirmButton: "btn btn-primary waves-effect waves-light"
+              },
+              buttonsStyling: false
+            }).then(() => {
+              // Reset all fields
+              titleInput.value = "";
+              descInput.value = "";
+              document.getElementById("articleStartDate").value = "";
+              document.getElementById("articleEndDate").value = "";
+              document.getElementById("articleStatus").selectedIndex = 0;
+              titleCounter.textContent = "0/150";
+              descCounter.textContent = "0/5000";
+              requiredFields.forEach(field => field.classList.remove("is-invalid"));
 
-            // Reset file upload
-            articleDropzone.removeAllFiles(true);
-            currentArticleFile = null;
-            isFileFullyUploaded = false;
-            uploadSection.style.display = "block";
-            previewContainer.style.display = "none";
+              // Reset file upload
+              articleDropzone.removeAllFiles(true);
+              currentArticleFile = null;
+              isFileFullyUploaded = false;
+              uploadSection.style.display = "block";
+              previewContainer.style.display = "none";
 
-            // Close modal (assuming jQuery is present)
-            $("#articleUploadModal").modal("hide");
+              // Close modal (assuming jQuery is present)
+              $("#articleUploadModal").modal("hide");
 
-            // Refresh the table
-            document.dt_article.ajax.reload(null, false);
-          })
+              // Refresh the table
+              document.dt_article.ajax.reload(null, false);
+            });
+          }, 500);
         },
         error: function (xhr, status, error) {
           console.log(xhr.responseText);
+          clearInterval(progressInterval);
+          processingSwal.close();
+          
           Swal.fire({
             title: "Error!",
             text: "An error occurred while uploading the article.",
@@ -407,7 +484,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       Swal.fire({
         title: "Error!",
-        text: "Please complete the following: " + missingFields.join(", "),
+        html: "Please complete the following fields: <br><br><ul><li>" + missingFields.join("</li><li>") + "</li></ul>",
         icon: "error",
         customClass: {
           confirmButton: "btn btn-primary waves-effect waves-light"
@@ -430,6 +507,31 @@ document.addEventListener("DOMContentLoaded", function () {
     descCounter.textContent = "0/5000";
     uploadSection.style.display = "block";
     previewContainer.style.display = "none";
+    
+    // Reset progress bar
+    const progressBar = previewContainer.querySelector(".upload-progress-bar");
+    if (progressBar) {
+      progressBar.style.width = '0%';
+      progressBar.style.background = "#0d6efd";
+      progressBar.style.animation = "none";
+      progressBar.style.boxShadow = "none";
+    }
+    const progressPercent = document.getElementById('article-upload-percentage');
+    if (progressPercent) {
+      progressPercent.textContent = '0%';
+      progressPercent.style.color = "#0d6efd";
+    }
   });
+  
+  // Add pulse animation for progress bar
+  const style = document.createElement('style');
+  style.innerHTML = `
+    @keyframes pulse {
+      0% { opacity: 0.9; }
+      50% { opacity: 0.6; }
+      100% { opacity: 0.9; }
+    }
+  `;
+  document.head.appendChild(style);
 });
 </script>
