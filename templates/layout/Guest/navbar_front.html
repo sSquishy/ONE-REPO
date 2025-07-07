@@ -17,15 +17,16 @@
       <!-- Navbar items wrapper: Start -->
       <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav align-items-center">
-          <!-- How To Dropdown (Right-Aligned) -->
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle fw-bold text-black" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: black !important;">
-              How To
-            </a>
-            <ul id="howToDropdown" class="dropdown-menu dropdown-menu-end" aria-labelledby="howToDropdown">
-              <!-- How To will be dynamically added here -->
-            </ul>
-          </li>
+<!-- How To Dropdown (Right-Aligned), hidden by default -->
+<li id="howToDropdownWrapper" class="nav-item dropdown" style="display: none;">
+  <a class="nav-link dropdown-toggle fw-bold text-black" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: black !important;">
+    How To
+  </a>
+  <ul id="howToDropdown" class="dropdown-menu dropdown-menu-end" aria-labelledby="howToDropdown">
+    <!-- How To will be dynamically added here -->
+  </ul>
+</li>
+
 
           <!-- Login Button (Right-Aligned) -->
           <li class="nav-item">

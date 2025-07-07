@@ -1,4 +1,3 @@
-// Account Creation Statistics
 $(document).ready(function () {
   let studentCounts = [];
   let alumniCounts = [];
@@ -95,33 +94,24 @@ $(document).ready(function () {
 $(document).ready(function () {
   const newUsersCategoryChartEl = $('#newUsersCategoryChart');
 
+  // Checks if the chart element exists to avoid runtime errors
   if (!newUsersCategoryChartEl.length) {
-    console.error('❌ Chart element not found.');
+    console.error('❌ New Registered Users Chart cannot be found!');
     return;
   }
 
-  // Inject SKELETON directly (simulates loading chart area)
-  newUsersCategoryChartEl.html(`
-    <div id="chartSkeleton" class="d-flex flex-column align-items-center justify-content-center" style="height: 100%; gap: 20px;">
-      <div style="width: 60%; height: 24px; background: #e0e0e0; border-radius: 4px; animation: pulse 1.5s infinite;"></div>
-      <div style="width: 100%; height: 300px; background: #f0f0f0; border-radius: 6px; animation: pulse 1.5s infinite;"></div>
-    </div>
-
-    <style>
-      @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.4; }
-        100% { opacity: 1; }
-      }
-    </style>
-  `);
-
-  // Dummy arrays
-  let studentCounts = [], alumniCounts = [], facultyCounts = [], personnelCounts = [], months = [];
+  // Chart Data
+  let studentCounts = [];
+  let alumniCounts = [];
+  let facultyCounts = [];
+  let personnelCounts = [];
+  let months = [];
 
   function createChart() {
-    newUsersCategoryChartEl.empty(); // Remove skeleton
+    // Remove the loading message
+    newUsersCategoryChartEl.html('');
 
+    // Create the chart instance
     const newUsersCategoryChart = new ApexCharts(newUsersCategoryChartEl[0], {
       chart: {
         type: 'line',
@@ -137,18 +127,23 @@ $(document).ready(function () {
       ],
       colors: ['#ff5733', '#33c3ff', '#33ff57', '#f5a623'],
       stroke: { curve: 'smooth', width: 3 },
-      xaxis: { categories: months },
+      xaxis: {
+        categories: months,
+      },
       yaxis: { labels: { formatter: val => Math.round(val) } },
       legend: { position: 'top', horizontalAlign: 'right' }
     });
 
     newUsersCategoryChart.render();
+    console.log('✅ Chart successfully rendered!');
   }
 
+  // Get the data from the server
   $.ajax({
     url: '/sysAdmin/Admin/Dashboard/getTotalRegisteredUsers/',
     type: 'GET',
     success: function (data) {
+      // console.log("Data: ", data);
       studentCounts = data.students;
       alumniCounts = data.alumni;
       facultyCounts = data.faculties;
@@ -157,9 +152,8 @@ $(document).ready(function () {
 
       createChart();
     },
-    error: function (xhr) {
-      console.error('❌ Failed to load chart data:', xhr.responseText);
-      newUsersCategoryChartEl.html('<div class="text-danger">Failed to load chart data.</div>');
+    error: function (xhr, status, error) {
+      console.error(xhr.responseText);
     }
   });
 });
