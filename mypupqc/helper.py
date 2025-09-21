@@ -24,6 +24,7 @@ def is_faculty(user: CustomUser):
         return False
 
     status = user.is_authenticated and 'Faculty' in userRole
+    print(f"isFaculty: {userRole}, status: {status}")
     return status
 
 
@@ -39,6 +40,7 @@ def is_personnel(user: CustomUser):
         return False
 
     status = user.is_authenticated and 'Personnel' in userRole
+    print(f"isPersonnel: {userRole}, status: {status}")
     return status
 
 

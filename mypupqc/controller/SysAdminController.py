@@ -2423,7 +2423,7 @@ def addPersonnel(request, **kwargs):
             addPermissionList('Admin', ipersonnelID=newUser)
 
         # Default personnel permission
-        addPermissionList('Personnel', ifacultyID=newUser)
+        addPermissionList('Personnel', ipersonnelID=newUser)
 
         email_sent = send_email(
             subject='Account Registration',

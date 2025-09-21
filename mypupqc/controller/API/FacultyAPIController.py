@@ -99,64 +99,67 @@ def addFaculty(request):
     from mypupqc.controller import HistoryLogsController
     with transaction.atomic():
         if verifyAccessToken(request):
-            # customuser
-            user_number = request.POST.get('facultyNumberAdd')
-            password = generatePassword()
+            try:
+                # customuser
+                user_number = request.POST.get('facultyNumberAdd')
+                password = generatePassword()
 
-            newUser = CustomUser.objects.create_user(
-                user_number=user_number,
-                password=password,
-            )
+                newUser = CustomUser.objects.create_user(
+                    user_number=user_number,
+                    password=password,
+                )
 
-            # mypupqc_faculty
-            facultyNumberID = newUser
-            firstname = request.POST.get('firstNameAdd')
-            middlename = request.POST.get('middleNameAdd')
-            lastname = request.POST.get('lastNameAdd')
-            suffix = request.POST.get('suffixAdd')
-            dateOfBirth = buildBirthday(
-                request.POST.get('birthYearAdd'),
-                request.POST.get('birthMonthAdd'),
-                request.POST.get('birthDayAdd'),
-            )
-            mobileNo = request.POST.get('mobileNoAdd')
-            emailAddress = request.POST.get('emailAddressAdd')
-            webMail = request.POST.get('webmailAdd')
+                # mypupqc_faculty
+                facultyNumberID = newUser
+                firstname = request.POST.get('firstNameAdd')
+                middlename = request.POST.get('middleNameAdd')
+                lastname = request.POST.get('lastNameAdd')
+                suffix = request.POST.get('suffixAdd')
+                dateOfBirth = buildBirthday(
+                    request.POST.get('birthYearAdd'),
+                    request.POST.get('birthMonthAdd'),
+                    request.POST.get('birthDayAdd'),
+                )
+                mobileNo = request.POST.get('mobileNoAdd')
+                emailAddress = request.POST.get('emailAddressAdd')
+                webMail = request.POST.get('webmailAdd')
 
-            newFaculty = Faculty.objects.create(
-                credID=facultyNumberID,
-                firstname=firstname,
-                middlename=middlename,
-                lastname=lastname,
-                suffix=suffix,
-                dateOfBirth=dateOfBirth,
-                mobileNo=mobileNo,
-                emailAddress=emailAddress,
-                webMail=webMail,
-                isFromBulkUpload = 0,
-            )
+                newFaculty = Faculty.objects.create(
+                    credID=facultyNumberID,
+                    firstname=firstname,
+                    middlename=middlename,
+                    lastname=lastname,
+                    suffix=suffix,
+                    dateOfBirth=dateOfBirth,
+                    mobileNo=mobileNo,
+                    emailAddress=emailAddress,
+                    webMail=webMail,
+                    isFromBulkUpload = 0,
+                )
 
-            # Default faculty permission
-            addPermissionList('Faculty', ifacultyID=newUser, isActive=1)
+                # Default faculty permission
+                addPermissionList('Faculty', ifacultyID=newUser, isActive=1)
 
-            email_sent = send_email(
-                subject='Account Registration',
-                message=f'Your account has been successfully registered.\n\n' \
-                        f'Username: {user_number} \n' \
-                        f'Password: {password} \n' \
-                        f'Please change your password as soon as possible.',
-                recipient_list=[emailAddress, webMail],
-            )
+                email_sent = send_email(
+                    subject='Account Registration',
+                    message=f'Your account has been successfully registered.\n\n' \
+                            f'Username: {user_number} \n' \
+                            f'Password: {password} \n' \
+                            f'Please change your password as soon as possible.',
+                    recipient_list=[emailAddress, webMail],
+                )
 
-            # history log purposes
-            isLoggingSuccess = HistoryLogsController.addHistoryLog(
-                request,
-                system = "MyScheduler",
-                actionType = "Create",
-                actionDesc = f'Added new faculty: {firstname} {middlename if middlename else ""}{"." if middlename else ""} {lastname}',
-            )
+                # history log purposes
+                isLoggingSuccess = HistoryLogsController.addHistoryLog(
+                    request,
+                    system = "MyScheduler",
+                    actionType = "Create",
+                    actionDesc = f'Added new faculty: {firstname} {middlename if middlename else ""}{"." if middlename else ""} {lastname}',
+                )
 
-            return JsonResponse({"status": "Success", "facultyID": newFaculty.userID})
+                return JsonResponse({"status": "Success", "facultyID": newFaculty.userID})
+            except Exception as e:
+                return JsonResponse({"status": "Failed", "message": str(e)}, status=500)
         else:
             return JsonResponse({"error": "Invalid access token."}, status=401)
     

@@ -139,15 +139,15 @@ def showSysAdminLogin(request):
             remainingAttempts = 3 - getAccessAttempts(request)
             return JsonResponse({'status': 'Failed', 'remainingAttempts': remainingAttempts})
 
-        if not is_faculty(user):
-            print("User is not a faculty")
+        if not is_faculty(user) and not is_personnel(user):
+            print("User is not a faculty or personnel")
             remainingAttempts = 3 - addAccessAttempt(request)
             return JsonResponse({'status': 'Failed', 'remainingAttempts': remainingAttempts})
 
         userRole = PermissionList.objects.filter(
-                facultyID=user,
-                isActive=1,
-                ).values_list('permissionName', flat=True)
+            Q(facultyID=user) | Q(personnelID=user),
+            isActive=1
+        ).values_list('permissionName', flat=True)
 
         if 'Admin' in userRole:
             request.session.cycle_key()  # Generate a new session key
@@ -158,7 +158,10 @@ def showSysAdminLogin(request):
                 pass  # Handle the case where the AccessAttempt does not exist
 
             # history log purposes
-            sys_admin = Faculty.objects.get(credID=user.user_id)
+            try:
+                sys_admin = Faculty.objects.get(credID=user.user_id)
+            except ObjectDoesNotExist:
+                sys_admin = Personnel.objects.get(credID=user.user_id)
             firstname: str = sys_admin.firstname
             middlename: str = sys_admin.middlename
             lastname: str = sys_admin.lastname
