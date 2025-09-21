@@ -1,0 +1,3 @@
+﻿user_type (Student | Alumni),user_number (Student Number | Alumni Number),birthYear (YYYY),birthMonth (mm),birthDay (dd),mobileNo,emailAddress,webMail,programShortName,programName,firstname,middleinitial,lastname,suffix
+Alumni,2011-00930-CM-0,1990,1,10,9384990901,nelsonmartinez@example.com,nelsonmnerio@iskolarngbayan.pup.edu.ph ,BTLEDICT,Bachelor of Business Technology and Livelihood Education major in Information Communication and Technology ,Nelson,Martinez,Nerio,
+Alumni,2013-00168-CM-0,1991,2,20,9384990902,harrymartinez@example.com,harrylmartinez@iskolarngbayan.pup.edu.ph ,BTLEDICT,Bachelor of Business Technology and Livelihood Education major in Information Communication and Technology ,Harry,Lee,Martinez,

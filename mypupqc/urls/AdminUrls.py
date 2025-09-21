@@ -10,13 +10,13 @@ urlpatterns = [
         name="sysAdminLogin",
     ),
     path(
-        'authentication/Login/LoginSysAdmin/', 
-        AuthController.showSysAdminLogin, 
+        'authentication/Login/LoginSysAdmin/',
+        AuthController.showSysAdminLogin,
         name='sysAdminLogin.Post',
     ),
     path(
-        'authentication/Login/LogoutSysAdmin/', 
-        AuthController.sysAdminLogout, 
+        'authentication/Login/LogoutSysAdmin/',
+        AuthController.sysAdminLogout,
         name='sysAdminLogout',
     ),
     path(
@@ -419,6 +419,11 @@ urlpatterns = [
         "Admin/Audit/",
         UsersView.as_view(template_name="sysAdmin/Admin/sysAdmin_Audit.html"),
         name="sysAdminAudit",
+    ),
+    path(
+        "Admin/Downloadables/",
+        UsersView.as_view(template_name="sysAdmin/Admin/sysAdmin_Downloadables.html"),
+        name="sysAdminDownloadables",
     ),
 
     # System Admin Profile Paths

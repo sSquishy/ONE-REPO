@@ -216,6 +216,19 @@
                 <!-- Post Container -->
                 <div id="feedContainer" class="card border-0 bg-transparent shadow-none">
                   <!-- Pending posts will be dynamically added here -->
+
+                    <!-- Container with full height -->
+                    <div class="col-12 d-none" id="noPendingPosts" style="height: 50vh;"> <!-- or any desired height -->
+                      <div class="d-flex flex-column justify-content-center align-items-center text-center h-100">
+                        <svg width="110" height="110" class="mb-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="10.5" cy="10.5" r="7.5" stroke="#ffc107" stroke-width="3" />
+                          <line x1="15.5" y1="15.5" x2="21" y2="21" stroke="#6c757d" stroke-width="3" stroke-linecap="round" />
+                        </svg>
+                        <h5 class="mb-1">No pending posts available</h5>
+                        <p class="text-muted mb-0">All pending posts have been moderated.</p>
+                      </div>
+                    </div>
+
                 </div>
                 <!-- Skeleton Loader for pending posts -->
                 <div id="loadingTrigger" class="py-4" style="display: none;">

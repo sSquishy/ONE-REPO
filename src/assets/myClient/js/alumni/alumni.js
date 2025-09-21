@@ -18,8 +18,8 @@ $(document).ready(function() {
                                             style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px;"
                                             alt="${chika.chikaTitle}">
                                     </div>
-                                    <div class="card-body" style="text-align: left;">
-                                        <h5 class="card-title" style="font-size: small; color: black;">${chika.chikaTitle}</h5>
+                                    <div class="card-body" style="text-align: left; min-width: 100%; max-width: 100%; box-sizing: border-box;">
+                                        <h5 class="card-title" style="font-weight: bold; font-size: small; color: black; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box; margin: 0 0 7px 0;">${chika.chikaTitle}</h5>
                                         <p class="card-text" style="font-size: small; margin: 0; flex-grow: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: black;">
                                             ${chika.chikaDescription}
                                         </p>
@@ -40,7 +40,7 @@ $(document).ready(function() {
                                         alt="Wala pa tayong chika ngayon.">
                                 </div>
                                 <div class="card-body" style="text-align: left;">
-                                    <h5 class="card-title" style="font-size: small; color: black;">Wala pa tayong chika ngayon.</h5>
+                                    <h5 class="card-title" style="font-size: small; color: black; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; width: 100%; box-sizing: border-box; margin: 0 0 7px 0;">Wala pa tayong chika ngayon.</h5>
                                     <p class="card-text" style="font-size: small; margin: 0; flex-grow: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; color: black;">
                                         Sagap muna tayo balita!
                                     </p>

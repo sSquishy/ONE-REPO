@@ -130,6 +130,29 @@
   .menu-link::before {
     display: none !important;
   }
+  /* Make sidebar a column so footer can be pinned */
+  #layout-menu {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* fill vertical space so footer sticks to bottom */
+  }
+  /* Allow inner menu to scroll when tall */
+  #layout-menu .menu-inner {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+  /* Style for the manual list item that should stick to the bottom */
+  #layout-menu .menu-item.manual-footer {
+    margin-top: auto;             /* push to bottom in flex */
+    position: sticky;             /* stick inside scrollable area */
+    bottom: 0;                    /* pin at bottom */
+    background: #fff;             /* solid background (adjust if needed) */
+    border-top: 1px solid rgba(0,0,0,0.05);
+    padding-top: 8px;
+    z-index: 2;                   /* ensure it stays above scrolling items */
+  }
 </style>
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
@@ -206,6 +229,7 @@
       </a>
     </li>
 
+
     <!-- About PUPQC -->
     <li class="menu-item open">
       <a href="javascript:void(0);" class="menu-link menu-toggle d-flex align-items-center gap-2">
@@ -251,5 +275,15 @@
         </li>
       </ul>
     </li>
+    <!-- Footer/manual pinned as last li (uses margin-top:auto) -->
+    <li class="menu-item manual-footer">
+      <a href="{% static 'myClient/pdf/FACULTY-myPUPQC-Manual.pdf' %}"
+        class="menu-link d-flex align-items-center gap-2"
+        download="STUDENT-myPUPQC-Manual.pdf">
+        <img width="20" height="20" src="https://img.icons8.com/color/20/book.png" alt="manual"/>
+        <div>System Manual</div>
+      </a>
+    </li>
+
   </ul>
 </aside>

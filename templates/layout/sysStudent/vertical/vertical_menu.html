@@ -229,6 +229,32 @@
   .menu-item {
     list-style-type: none;
   }
+
+  /* Sidebar flex layout so footer sticks to bottom */
+  #layout-menu {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  /* Scrollable inner section */
+  #layout-menu .menu-inner {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+
+  /* Manual pinned at bottom */
+  #layout-menu .menu-item.manual-footer {
+    margin-top: auto;
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    padding-top: 8px;
+    z-index: 2;
+  }
 </style>
 
 
@@ -356,5 +382,14 @@
       </ul>
     </li>
 
+    <!-- Footer/manual pinned as last li -->
+    <li class="menu-item manual-footer">
+      <a href="{% static 'myClient/pdf/STUDENT-myPUPQC-Manual.pdf' %}"
+        class="menu-link d-flex align-items-center gap-2"
+        download="STUDENT-myPUPQC-Manual.pdf">
+        <img width="20" height="20" src="https://img.icons8.com/color/20/book.png" alt="manual"/>
+        <div>System Manual</div>
+      </a>
+    </li>
   </ul>
 </aside>

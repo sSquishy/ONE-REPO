@@ -176,6 +176,21 @@ document.addEventListener('DOMContentLoaded', function () {
   // Check password match on confirm password input.
   confirmPasswordEl.addEventListener('input', checkPasswordMatch);
 
+  // Trigger submit when Enter key is pressed in password fields
+  newPasswordEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      e.preventDefault();
+      btnSubmit.click();
+    }
+  });
+
+  confirmPasswordEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      e.preventDefault();
+      btnSubmit.click();
+    }
+  });
+
   // Combined submit handler with AJAX functionality
   btnSubmit.addEventListener('click', function (e) {
     e.preventDefault();

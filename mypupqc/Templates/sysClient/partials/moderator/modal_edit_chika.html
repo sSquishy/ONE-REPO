@@ -100,7 +100,7 @@
 
         <!-- Chika Details -->
         <div class="row g-4">
-          <!-- Title (Max 50 characters) -->
+          <!-- Title (Max 150 characters) -->
           <div class="col-12">
             <div class="form-floating form-floating-outline">
               <input
@@ -109,13 +109,14 @@
                 name="editChikaTitle"
                 class="form-control required-field-edit"
                 placeholder="Chika Title"
+                maxlength="150"
               />
               <label for="editChikaTitle">Title</label>
-              <small class="char-counter" id="editTitleCounter">0/50 characters</small>
+              <small class="char-counter" id="editTitleCounter">0/150 characters</small>
             </div>
           </div>
 
-          <!-- Description (Max 500 characters) -->
+          <!-- Description (Max 5000 characters) -->
           <div class="col-12">
             <div class="form-floating form-floating-outline">
               <textarea
@@ -123,11 +124,11 @@
                 name="editChikaDescription"
                 class="form-control required-field-edit"
                 placeholder="Chika Description"
-                maxlength="500"
+                maxlength="5000"
                 style="height: 100px;"
               ></textarea>
               <label for="editChikaDescription">Description</label>
-              <small class="char-counter" id="editDescriptionCounter">0/500 characters</small>
+              <small class="char-counter" id="editDescriptionCounter">0/5000 characters</small>
             </div>
           </div>
 
@@ -253,16 +254,16 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentChikaFile = null;
   let isFileFullyUploaded = true;
 
-  // Update character counter for Title field (max 50 characters)
+  // Update character counter for Title field (max 150 characters)
   titleInput.addEventListener("input", function () {
     const charCount = this.value.length;
-    titleCounter.textContent = charCount + "/50 characters";
+    titleCounter.textContent = charCount + "/150 characters";
   });
 
-  // Update character counter for Description field (max 500 characters)
+  // Update character counter for Description field (max 5000 characters)
   descriptionInput.addEventListener("input", function () {
     const charCount = this.value.length;
-    descriptionCounter.textContent = charCount + "/500 characters";
+    descriptionCounter.textContent = charCount + "/5000 characters";
   });
 
   // Initialize flatpickr for Start Date and End Date
@@ -304,19 +305,19 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // Title length check (max 50 characters)
-    if (titleInput.value.trim() && titleInput.value.length > 50) {
+    // Title length check (max 150 characters)
+    if (titleInput.value.trim() && titleInput.value.length > 150) {
       titleInput.classList.add("is-invalid");
-      missingFields.push("Title (maximum 50 characters)");
+      missingFields.push("Title (maximum 150 characters)");
       isValid = false;
     } else {
       titleInput.classList.remove("is-invalid");
     }
 
-    // Description length check (max 500 characters)
-    if (descriptionInput.value.trim() && descriptionInput.value.length > 500) {
+    // Description length check (max 5000 characters)
+    if (descriptionInput.value.trim() && descriptionInput.value.length > 5000) {
       descriptionInput.classList.add("is-invalid");
-      missingFields.push("Description (maximum 500 characters)");
+      missingFields.push("Description (maximum 5000 characters)");
       isValid = false;
     } else {
       descriptionInput.classList.remove("is-invalid");
@@ -521,7 +522,7 @@ document.addEventListener("DOMContentLoaded", function () {
           formData.append("status", document.getElementById("editChikaStatus").value);
           formData.append("chikaImage", currentChikaFile);
           formData.append("csrfmiddlewaretoken", csrf);
-         
+
           $.ajax({
             url: editChika,
             type: "POST",
@@ -546,8 +547,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("editChikaStartDate").value = "";
                 document.getElementById("editChikaEndDate").value = "";
                 document.getElementById("editChikaStatus").selectedIndex = 0;
-                titleCounter.textContent = "0/50 characters";
-                descriptionCounter.textContent = "0/500 characters";
+                titleCounter.textContent = "0/150 characters";
+                descriptionCounter.textContent = "0/5000 characters";
                 requiredFields.forEach(field => field.classList.remove("is-invalid"));
 
                 // Reset file upload
@@ -601,8 +602,8 @@ document.addEventListener("DOMContentLoaded", function () {
       field.value = "";
       field.classList.remove("is-invalid");
     });
-    titleCounter.textContent = "0/50 characters";
-    descriptionCounter.textContent = "0/500 characters";
+    titleCounter.textContent = "0/150 characters";
+    descriptionCounter.textContent = "0/5000 characters";
     uploadSection.style.display = "block";
     previewContainer.style.display = "none";
   });

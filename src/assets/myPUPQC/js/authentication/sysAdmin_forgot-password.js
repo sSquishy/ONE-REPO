@@ -1,30 +1,28 @@
 $(document).ready(function() {
     $('#btnSubmit').on('click', function() {
-        const email = $('#email').val();
-        if (email === '' || email === null) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Email Required',
-                text: 'Please enter your email address',
-                showCancelButton: false,
-                confirmButtonText: 'Confirm',
-                customClass: { confirmButton: 'btn btn-primary' },
-                buttonsStyling: false
-            })
+        const $email = $('#email');
+        const email = $email.val() ? $email.val().trim() : '';
+
+        // Clear any previous inline feedback
+        $email.removeClass('is-invalid');
+        $email.next('.invalid-feedback').remove();
+
+        // Empty -> only mark field red (no feedback label)
+        if (email === '') {
+            $email.addClass('is-invalid');
             return;
         }
 
+        // Validate email pattern; if invalid, mark red and show message below
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(email)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Invalid Email',
-                text: 'Please enter a valid email address',
-                showCancelButton: false,
-                confirmButtonText: 'Confirm',
-                customClass: { confirmButton: 'btn btn-primary' },
-                buttonsStyling: false
-            })
+            $email.addClass('is-invalid');
+            // add feedback if not present
+            if ($email.next('.invalid-feedback').length === 0) {
+                $('<div class="invalid-feedback">Please enter valid email address</div>').insertAfter($email);
+            } else {
+                $email.next('.invalid-feedback').text('Please enter valid email address');
+            }
             return;
         }
 
@@ -58,5 +56,19 @@ $(document).ready(function() {
                 console.log(xhr.responseText);
             },
         })
+    })
+
+    // Clear error state as the user types
+    $('#email').on('input', function() {
+        $(this).removeClass('is-invalid');
+        $(this).next('.invalid-feedback').remove();
+    });
+
+    // Trigger send when Enter key is pressed in the email field
+    $('#email').on('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            $('#btnSubmit').trigger('click');
+        }
     })
 });

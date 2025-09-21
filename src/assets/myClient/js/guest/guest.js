@@ -436,29 +436,64 @@ $(document).ready(function() {
     // ======================================================================================================================
 
     // =====================     Forgot Password     =========================
+    // Helper: show inline email feedback under the field
+    function showEmailFeedback(field, message) {
+        var $field = $(field);
+        var $wrapper = $field.parent();
+        var $feedback = $wrapper.find('.email-feedback');
+        if ($feedback.length === 0) {
+            $feedback = $('<div class="invalid-feedback d-block email-feedback" style="font-size:12px; margin-top:4px;"></div>');
+            $wrapper.append($feedback);
+        }
+        $feedback.text(message);
+        $field.addClass('is-invalid');
+    }
+
+    function clearEmailFeedback(field) {
+        var $field = $(field);
+        var $wrapper = $field.parent();
+        $wrapper.find('.email-feedback').remove();
+        $field.removeClass('is-invalid');
+    }
+
+    function isValidEmail(value) {
+        var genericEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!genericEmailRegex.test(value)) return false;
+        if (value.indexOf('pup.edu.ph') !== -1 && !value.endsWith('@iskolarngbayan.pup.edu.ph')) return false;
+        return true;
+    }
+
     $(document).on('click', '.forgot-password', function() {
         const role = $(this).data('role');
         let email = null;
+        let $emailField = null;
 
         if(role === 'Student') {
-            email = $('#studentEmail').val();
+            $emailField = $('#studentEmail');
+            email = $emailField.val();
         } else if(role === 'Faculty') {
-            email = $('#facultyEmail').val();
+            $emailField = $('#facultyEmail');
+            email = $emailField.val();
         } else if(role === 'Alumni') {
-            email = $('#alumniEmail').val();
+            $emailField = $('#alumniEmail');
+            email = $emailField.val();
         }
 
+        // Clear previous inline feedback
+        if ($emailField) clearEmailFeedback($emailField);
+
+        // Client-side validations with inline feedback (no Swal on missing/invalid)
         if(!email) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Please enter your email address',
-                customClass: { confirmButton: 'btn btn-primary waves-effect' },
-                buttonsStyling: false
-            })
+            if ($emailField) showEmailFeedback($emailField, 'Please enter your email address');
             return;
         }
 
+        if(!isValidEmail(email)) {
+            if ($emailField) showEmailFeedback($emailField, 'Please enter valid email address');
+            return;
+        }
+
+        // At this point email is present and format looks valid. Proceed with AJAX.
         let swalTimeouts = showProcessingSwal(
             "Requesting Password Reset",
             "Please wait while we process your request",
@@ -476,13 +511,18 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response);
                 stopProcessingSwal(swalTimeouts);
+                // Clear input and feedback on success
+                if ($emailField) {
+                    $emailField.val('');
+                    clearEmailFeedback($emailField);
+                }
                 Swal.fire({
                     icon: 'success',
                     title: 'Success',
-                    text: response.message,
+                    text: response.message || 'Password reset link sent.',
                     customClass: { confirmButton: 'btn btn-primary waves-effect' },
                     buttonsStyling: false
-                })
+                });
             },
             error: function(xhr, status, error) {
                 console.log(xhr.responseJSON);
@@ -490,7 +530,7 @@ $(document).ready(function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: xhr.responseJSON.message,
+                    text: (xhr.responseJSON && xhr.responseJSON.message) ? xhr.responseJSON.message : 'An error occurred.',
                     customClass: { confirmButton: 'btn btn-primary waves-effect' },
                     buttonsStyling: false
                 })

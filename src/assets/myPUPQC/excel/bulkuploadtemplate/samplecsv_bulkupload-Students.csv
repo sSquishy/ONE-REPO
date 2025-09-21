@@ -1,0 +1,5 @@
+﻿user_type (Student | Alumni),user_number (Student Number | Alumni Number),birthYear (YYYY),birthMonth (mm),birthDay (dd),mobileNo,emailAddress,webMail,programShortName,programName,firstname,middleinitial,lastname,suffix
+Student,1955-00300-CM-0,2000,2,27,9489895683,marloybanez@example.com,marlonybanez@iskolarngbayan.pup.edu.ph ,BSBAHRM,Bachelor of Science in Business Administration major in Human Resource Management ,Marlo,Navarro,Ybanez,
+Student,1955-00301-CM-0,2000,11,28,9293089391,kristinesantos@example.com,kristinewsantos@iskolarngbayan.pup.edu.ph ,BSBA-MM,Bachelor of Science in Business Administration major in Marketing Management,Kristine,Wang,Santos,
+Student,1955-00302-CM-0,2004,8,22,9340399342,nathanvillanueva@example.com,nathanxvillanueva@iskolarngbayan.pup.edu.ph ,BSBA-MM,Bachelor of Science in Business Administration major in Marketing Management,Nathan,Xavier,Villanueva,
+Student,1955-00303-CM-0,2003,1,10,9302949291,ryanreyes@example.com,ryanzreyes@iskolarngbayan.pup.edu.ph ,BSBA-MM,Bachelor of Science in Business Administration major in Marketing Management,Ryan,Zander,Reyes,

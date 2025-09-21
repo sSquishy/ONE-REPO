@@ -65,6 +65,16 @@ $(document).ready(function() {
     });
   });
 
+  // Trigger login when Enter key is pressed in username or password fields
+  $('#username, #password').on('keydown', function(e) {
+    // 13 is Enter key
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      e.preventDefault();
+      // Delegate to the existing click handler so behavior remains consistent
+      $('#btnSubmit').trigger('click');
+    }
+  });
+
   // Function to reset button state
   function resetButton($btn, $btnText, $spinner) {
     $btnText.show();

@@ -663,32 +663,74 @@
     // --- End of login shortcut code ---
 
     // --- Added: Keydown event listeners for forgot password (Email field) ---
+    // Helper: show inline email feedback under the field
+    function showEmailFeedback(field, message) {
+      // Find or create feedback element inside the field's parent (form-floating)
+      var wrapper = field.parentNode;
+      var feedback = wrapper.querySelector('.email-feedback');
+      if (!feedback) {
+        feedback = document.createElement('div');
+        feedback.className = 'invalid-feedback d-block email-feedback';
+        feedback.style.fontSize = '12px';
+        feedback.style.marginTop = '4px';
+        wrapper.appendChild(feedback);
+      }
+      feedback.textContent = message;
+      field.classList.add('is-invalid');
+    }
+
+    function clearEmailFeedback(field) {
+      var wrapper = field.parentNode;
+      var feedback = wrapper.querySelector('.email-feedback');
+      if (feedback) feedback.textContent = '';
+      field.classList.remove('is-invalid');
+    }
+
     // Student Forgot Password: Enter key triggers request new password.
-    {% comment %} document.getElementById('studentEmail').addEventListener('keydown', function(e) {
+    document.getElementById('studentEmail').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
-        if (validateForm(this.form)) {
-          var btn = this.form.querySelector('button[type="submit"]');
-          if (btn) {
-            showSpinner(btn, function(){
-              Swal.fire({ title: 'Request Sent!', text: 'Please check your email for password reset instructions.', icon: 'success', timer: 2000, showConfirmButton: false });
-            });
-          }
+        var emailField = this;
+        var form = this.form;
+        clearEmailFeedback(emailField);
+        if (!emailField.value) {
+          showEmailFeedback(emailField, 'Please enter your email address');
+          return;
+        }
+        if (!isValidEmail(emailField.value)) {
+          showEmailFeedback(emailField, 'Please enter valid email address');
+          return;
+        }
+        // Valid: proceed
+        var btn = form.querySelector('.forgot-password');
+        if (btn) {
+          showSpinner(btn, function(){
+            Swal.fire({ title: 'Request Sent!', text: 'Please check your email for password reset instructions.', icon: 'success', timer: 2000, showConfirmButton: false });
+          });
         }
       }
-    }); {% endcomment %}
+    });
 
     // Faculty Forgot Password: Enter key triggers request new password.
     document.getElementById('facultyEmail').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
-        if (validateForm(this.form)) {
-          var btn = this.form.querySelector('button[type="submit"]');
-          if (btn) {
-            showSpinner(btn, function(){
-              Swal.fire({ title: 'Request Sent!', text: 'Please check your email for password reset instructions.', icon: 'success', timer: 2000, showConfirmButton: false });
-            });
-          }
+        var emailField = this;
+        var form = this.form;
+        clearEmailFeedback(emailField);
+        if (!emailField.value) {
+          showEmailFeedback(emailField, 'Please enter your email address');
+          return;
+        }
+        if (!isValidEmail(emailField.value)) {
+          showEmailFeedback(emailField, 'Please enter valid email address');
+          return;
+        }
+        var btn = form.querySelector('button[type="submit"]');
+        if (btn) {
+          showSpinner(btn, function(){
+            Swal.fire({ title: 'Request Sent!', text: 'Please check your email for password reset instructions.', icon: 'success', timer: 2000, showConfirmButton: false });
+          });
         }
       }
     });
@@ -697,17 +739,57 @@
     document.getElementById('alumniEmail').addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
-        if (validateForm(this.form)) {
-          var btn = this.form.querySelector('button[type="submit"]');
-          if (btn) {
-            showSpinner(btn, function(){
-              Swal.fire({ title: 'Request Sent!', text: 'Please check your email for password reset instructions.', icon: 'success', timer: 2000, showConfirmButton: false });
-            });
-          }
+        var emailField = this;
+        var form = this.form;
+        clearEmailFeedback(emailField);
+        if (!emailField.value) {
+          showEmailFeedback(emailField, 'Please enter your email address');
+          return;
+        }
+        if (!isValidEmail(emailField.value)) {
+          showEmailFeedback(emailField, 'Please enter valid email address');
+          return;
+        }
+        var btn = form.querySelector('button[type="submit"]');
+        if (btn) {
+          showSpinner(btn, function(){
+            Swal.fire({ title: 'Request Sent!', text: 'Please check your email for password reset instructions.', icon: 'success', timer: 2000, showConfirmButton: false });
+          });
         }
       }
     });
     // --- End of forgot password shortcut code ---
+
+    // Unified click handler for all "Request New Password" buttons (.forgot-password)
+    document.querySelectorAll('.forgot-password').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        var form = this.closest('form');
+        if (!form) return;
+        var emailField = form.querySelector('input[type="email"]');
+        if (!emailField) return;
+
+        // Clear previous feedback
+        clearEmailFeedback(emailField);
+
+        // Validate email presence and format
+        if (!emailField.value) {
+          showEmailFeedback(emailField, 'Please enter your email address');
+          return;
+        }
+        if (!isValidEmail(emailField.value)) {
+          showEmailFeedback(emailField, 'Please enter valid email address');
+          return;
+        }
+
+        // Remove invalid state and proceed
+        clearEmailFeedback(emailField);
+        showSpinner(this, function() {
+          Swal.fire({ title: 'Request Sent!', text: 'Please check your email for password reset instructions.', icon: 'success', timer: 2000, showConfirmButton: false });
+        });
+      });
+    });
+
   });
 
   // Email validation function.

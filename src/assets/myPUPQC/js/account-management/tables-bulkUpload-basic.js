@@ -116,6 +116,16 @@ $(function () {
     }
     dt_pending.on('select deselect', toggleActionBar);
 
+    // Also update action bar when table redraws (after ajax reload) or when checkboxes change
+    dt_pending.on('draw', function () {
+      toggleActionBar();
+    });
+
+    // Listen for raw checkbox changes in case selection plugin and DOM get out of sync
+    $(document).on('change', '.pending-checkbox', function () {
+      toggleActionBar();
+    });
+
     // Close Action Bar
     $('#closeActionBar').click(() => {
       dt_pending.rows().deselect();
@@ -134,7 +144,12 @@ $(function () {
       text: `Are you sure you want to activate ${count} item${count !== 1 ? 's' : ''}?`,
       showCancelButton: true,
       confirmButtonText: 'Yes, Activate',
-      cancelButtonText: 'Cancel'
+      cancelButtonText: 'Cancel',
+      customClass: {
+        confirmButton: 'btn btn-success me-3 waves-effect waves-light',
+        cancelButton: 'btn btn-outline-secondary waves-effect'
+      },
+      buttonsStyling: false
     }).then(result => {
       if (result.isConfirmed) {
         Swal.fire({
@@ -149,7 +164,7 @@ $(function () {
             customClass: { confirmButton: '', cancelButton: '' },
             buttonsStyling: false
         });
-        
+
         // Set a timeout to show a warning message if the process takes too long
         let timeout = setTimeout(() => {
             Swal.update({
@@ -165,7 +180,7 @@ $(function () {
             });
             Swal.showLoading();
         }, 120000); // Change 120000 to any delay you want in milliseconds
-        
+
           // Set a timeout to show a warning message if the process takes too long
         let timeout2 = setTimeout(() => {
             Swal.close();
@@ -200,7 +215,13 @@ $(function () {
               buttonsStyling: false
             })
             .then(() => {
+              // Reload data and clear any selections to ensure action bar resets
               dt_pending.ajax.reload(null, false);
+              // Deselect any selected rows via API
+              try { dt_pending.rows().deselect(); } catch (e) { /* ignore */ }
+              // Uncheck raw checkbox inputs in the DOM in case plugin didn't update
+              $('.pending-checkbox').prop('checked', false);
+              // Ensure action bar visibility and selected count updated
               toggleActionBar();
             })
           },
@@ -231,7 +252,12 @@ $(function () {
       text: `Are you sure you want to delete ${count} item${count !== 1 ? 's' : ''}?`,
       showCancelButton: true,
       confirmButtonText: 'Yes, Delete',
-      cancelButtonText: 'Cancel'
+      cancelButtonText: 'Cancel',
+      customClass: {
+        confirmButton: 'btn btn-danger me-3 waves-effect waves-light',
+        cancelButton: 'btn btn-outline-secondary waves-effect'
+      },
+      buttonsStyling: false
     }).then(result => {
       if (result.isConfirmed) {
         Swal.fire({
@@ -246,7 +272,7 @@ $(function () {
             customClass: { confirmButton: '', cancelButton: '' },
             buttonsStyling: false
         });
-        
+
         // Set a timeout to show a warning message if the process takes too long
         let timeout = setTimeout(() => {
             Swal.update({
@@ -262,7 +288,7 @@ $(function () {
             });
             Swal.showLoading();
         }, 5000); // Change 5000 to any delay you want in milliseconds
-        
+
           // Set a timeout to show a warning message if the process takes too long
         let timeout2 = setTimeout(() => {
             Swal.close();
@@ -297,7 +323,10 @@ $(function () {
               buttonsStyling: false
             })
             .then(() => {
+              // Reload data and clear any selections to ensure action bar resets
               dt_pending.ajax.reload(null, false);
+              try { dt_pending.rows().deselect(); } catch (e) { /* ignore */ }
+              $('.pending-checkbox').prop('checked', false);
               toggleActionBar();
             })
           },
@@ -344,7 +373,7 @@ $(function () {
         customClass: { confirmButton: '', cancelButton: '' },
         buttonsStyling: false
     });
-    
+
     // Set a timeout to show a warning message if the process takes too long
     let timeout = setTimeout(() => {
         Swal.update({
@@ -360,7 +389,7 @@ $(function () {
         });
         Swal.showLoading();
     }, 5000); // Change 5000 to any delay you want in milliseconds
-    
+
       // Set a timeout to show a warning message if the process takes too long
     let timeout2 = setTimeout(() => {
         Swal.close();
@@ -449,7 +478,7 @@ $(function () {
     console.log("birthDay: ", birthDay);
     console.log("birthMonth: ", birthMonth);
     console.log("birthYear: ", birthYear);
-    
+
     Swal.fire({
       icon: 'question',
       text: `Are you sure you want to update this alumni account?`,
@@ -470,7 +499,7 @@ $(function () {
             customClass: { confirmButton: '', cancelButton: '' },
             buttonsStyling: false
         });
-        
+
         // Set a timeout to show a warning message if the process takes too long
         let timeout = setTimeout(() => {
             Swal.update({
@@ -486,7 +515,7 @@ $(function () {
             });
             Swal.showLoading();
         }, 5000); // Change 5000 to any delay you want in milliseconds
-        
+
           // Set a timeout to show a warning message if the process takes too long
         let timeout2 = setTimeout(() => {
             Swal.close();
@@ -501,7 +530,7 @@ $(function () {
                 location.reload();
             })
         }, 30000); // Change 5000 to any delay you want in milliseconds
-        
+
         $.ajax({
           url: "/sysAdmin/Admin/Account-Management/Manage-Bulk-Upload/editBulkUploadAccount/",
           type: "POST",
@@ -581,7 +610,7 @@ $(function () {
             customClass: { confirmButton: '', cancelButton: '' },
             buttonsStyling: false
         });
-        
+
         // Set a timeout to show a warning message if the process takes too long
         let timeout = setTimeout(() => {
             Swal.update({
@@ -597,7 +626,7 @@ $(function () {
             });
             Swal.showLoading();
         }, 5000); // Change 5000 to any delay you want in milliseconds
-        
+
           // Set a timeout to show a warning message if the process takes too long
         let timeout2 = setTimeout(() => {
             Swal.close();
@@ -653,7 +682,7 @@ $(function () {
         })
       }
     })
-  });     
+  });
 
   $(document).on('click', '.item-delete', function() {
     Swal.fire({
@@ -680,7 +709,7 @@ $(function () {
             customClass: { confirmButton: '', cancelButton: '' },
             buttonsStyling: false
         });
-        
+
         // Set a timeout to show a warning message if the process takes too long
         let timeout = setTimeout(() => {
             Swal.update({
@@ -696,7 +725,7 @@ $(function () {
             });
             Swal.showLoading();
         }, 5000); // Change 5000 to any delay you want in milliseconds
-        
+
           // Set a timeout to show a warning message if the process takes too long
         let timeout2 = setTimeout(() => {
             Swal.close();

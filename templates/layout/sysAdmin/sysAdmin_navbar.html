@@ -43,6 +43,11 @@
                 Activity Log
             </a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link fw-medium {% if request.resolver_match.url_name == 'sysAdminDownloadables' %}active{% endif %}" href="{% url 'sysAdminDownloadables' %}">
+                Downloadables
+            </a>
+        </li>
     </ul>
 
     </div>
@@ -106,6 +111,12 @@
           </li> {% endcomment %}
           <li>
             <a class="dropdown-item" href="{% url 'sysAdmin-Profile-Page' %}">
+              <i class="mdi mdi-account-outline me-2"></i>
+              <span class="align-middle">My Profile</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="{% url 'sysAdmin-Security-Page' %}">
               <i class="mdi mdi-cog-outline me-2"></i>
               <span class="align-middle">Settings</span>
             </a>

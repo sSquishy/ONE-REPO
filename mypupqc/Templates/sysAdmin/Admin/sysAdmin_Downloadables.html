@@ -1,0 +1,219 @@
+{% extends 'layout/sysAdmin/sysAdmin_layout_vertical.html' %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}myPUPQC | Downloadables{% endblock %}
+
+
+{% block vendor_css %}
+{{ block.super }}
+
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+
+
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'myPUPQC/js/homepage/analytics.js' %}"></script>
+<script src="{% static 'myPUPQC/js/homepage/cards.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+<div style="width: 90%; margin: 0 auto; box-sizing: border-box;">
+
+  <!-- ===================== SYSTEM MANUALS SECTION ===================== -->
+  <div class="col-md mt-4">
+    <!-- Header -->
+    <h1 class="text-bolder display-6 mb-0" style="color:#700001;font-weight:bold;">
+      myPUPQC System Manuals
+    </h1>
+    <!--/ Header -->
+
+    <!-- ===================== MANUALS TABLE ===================== -->
+    <div class="card mt-4">
+      <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Manual</th>
+              <th>Description</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+
+            <!-- Whole Manual -->
+            <tr>
+              <td><i class="mdi mdi-book-open-page-variant mdi-20px text-success me-2"></i>
+                <span class="fw-medium">Whole System Manual</span>
+              </td>
+              <td>Complete documentation of the system</td>
+              <td class="text-center">
+                <a href="{% static 'myClient/pdf/myPUPQC-Whole-Manual.pdf' %}" download class="text-primary">
+                  <i class="mdi mdi-download mdi-20px"></i>
+                </a>
+              </td>
+            </tr>
+
+            <!-- Operational Manual -->
+            <tr>
+              <td><i class="mdi mdi-cog-outline mdi-20px text-dark me-2"></i>
+                <span class="fw-medium">Operational Manual</span>
+              </td>
+              <td>Operational procedures for the system</td>
+              <td class="text-center">
+                <a href="{% static 'myClient/pdf/myPUPQC-Operational-Manual.pdf' %}" download class="text-primary">
+                  <i class="mdi mdi-download mdi-20px"></i>
+                </a>
+              </td>
+            </tr>
+
+            <!-- System Admin Manual -->
+            <tr>
+              <td><i class="mdi mdi-shield-account mdi-20px text-danger me-2"></i>
+                <span class="fw-medium">System Administrator Manual</span>
+              </td>
+              <td>Guidelines for system administrators</td>
+              <td class="text-center">
+                <a href="{% static 'myClient/pdf/SYSTEM-ADMINISTRATOR-myPUPQC-Manual.pdf' %}" download class="text-primary">
+                  <i class="mdi mdi-download mdi-20px"></i>
+                </a>
+              </td>
+            </tr>
+
+            <!-- Student Manual -->
+            <tr>
+              <td><i class="mdi mdi-school mdi-20px text-primary me-2"></i>
+                <span class="fw-medium">Student Manual</span>
+              </td>
+              <td>Guidelines for students</td>
+              <td class="text-center">
+                <a href="{% static 'myClient/pdf/STUDENT-myPUPQC-Manual.pdf' %}" download class="text-primary">
+                  <i class="mdi mdi-download mdi-20px"></i>
+                </a>
+              </td>
+            </tr>
+
+            <!-- Alumni Manual -->
+            <tr>
+              <td><i class="mdi mdi-account-group mdi-20px text-warning me-2"></i>
+                <span class="fw-medium">Alumni Manual</span>
+              </td>
+              <td>Guidelines for alumni users</td>
+              <td class="text-center">
+                <a href="{% static 'myClient/pdf/ALUMNI-myPUPQC-Manual.pdf' %}" download class="text-primary">
+                  <i class="mdi mdi-download mdi-20px"></i>
+                </a>
+              </td>
+            </tr>
+
+            <!-- Faculty Manual -->
+            <tr>
+              <td><i class="mdi mdi-school-outline mdi-20px text-info me-2"></i>
+                <span class="fw-medium">Faculty Manual</span>
+              </td>
+              <td>Guidelines for faculty</td>
+              <td class="text-center">
+                <a href="{% static 'myClient/pdf/FACULTY-myPUPQC-Manual.pdf' %}" download class="text-primary">
+                  <i class="mdi mdi-download mdi-20px"></i>
+                </a>
+              </td>
+            </tr>
+
+            <!-- Guest Manual -->
+            <tr>
+              <td><i class="mdi mdi-account mdi-20px text-secondary me-2"></i>
+                <span class="fw-medium">Guest Manual</span>
+              </td>
+              <td>Guidelines for guest users</td>
+              <td class="text-center">
+                <a href="{% static 'myClient/pdf/GUEST-myPUPQC-Manual.pdf' %}" download class="text-primary">
+                  <i class="mdi mdi-download mdi-20px"></i>
+                </a>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!--/ Manuals Table -->
+  </div>
+  <!-- ===================== END SYSTEM MANUALS SECTION ===================== -->
+
+  <br><br>
+
+  <!-- ===================== BULK UPLOAD TEMPLATES SECTION ===================== -->
+  <div class="col-md mt-4">
+    <!-- Header -->
+    <h1 class="text-bolder display-6 mb-0" style="color:#700001;font-weight:bold;">
+      Bulk Upload Templates
+    </h1>
+    <!--/ Header -->
+
+    <!-- ===================== BULK TEMPLATE TABLE ===================== -->
+    <div class="card mt-4">
+      <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>File Template</th>
+              <th>Description</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody class="table-border-bottom-0">
+
+            <!-- Student Bulk Upload Template -->
+            <tr>
+              <td>
+                <i class="mdi mdi-file-excel mdi-20px text-success me-2"></i>
+                <span class="fw-medium">Student Bulk Upload Template</span>
+              </td>
+              <td>Sample CSV format for bulk uploading student users</td>
+              <td class="text-center">
+                <a href="{% static 'myPUPQC/excel/bulkuploadtemplate/samplecsv_bulkupload-Students.csv' %}"
+                  download class="text-primary">
+                  <i class="mdi mdi-download mdi-20px"></i>
+                </a>
+              </td>
+            </tr>
+
+            <!-- Alumni Bulk Upload Template -->
+            <tr>
+              <td>
+                <i class="mdi mdi-file-excel mdi-20px text-success me-2"></i>
+                <span class="fw-medium">Alumni Bulk Upload Template</span>
+              </td>
+              <td>Sample CSV format for bulk uploading alumni users</td>
+              <td class="text-center">
+                <a href="{% static 'myPUPQC/excel/bulkuploadtemplate/samplecsv_bulkupload-Alumni.csv' %}"
+                  download class="text-primary">
+                  <i class="mdi mdi-download mdi-20px"></i>
+                </a>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!--/ Bulk Template Table -->
+  </div>
+  <!-- ===================== END BULK UPLOAD TEMPLATES SECTION ===================== -->
+
+<br>
+</div>
+{% endblock %}
