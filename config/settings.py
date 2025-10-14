@@ -331,7 +331,7 @@ import cloudinary.api
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://default:e42yxpE2meOuuxNmI8gGN0wuZXN1THP7@redis-18655.c1.ap-southeast-1-1.ec2.redns.redis-cloud.com:18655/0",
+        "LOCATION": "redis://default:mghjx1TUMWXi9Q20VMWXQtMDtVXthgNS@redis-16142.c244.us-east-1-2.ec2.redns.redis-cloud.com:16142",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
